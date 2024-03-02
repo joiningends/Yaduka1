@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RingLoader } from "react-spinners";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 const AddEmployee = () => {
   const initialValues = {
     name: "",
@@ -16,9 +15,13 @@ const AddEmployee = () => {
     isTerminate: false,
   };
 
+  const [userTypeId, setTypeId] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const userId = localStorage.getItem("id");
 
   const validatePhoneNumber = value => {
     const phoneNumberPattern = /^\d{10}$/;
@@ -34,6 +37,23 @@ const AddEmployee = () => {
       : "Please enter a valid Gmail address.";
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5001/api/v1/users/getbyid/${userId}`
+        );
+        setTypeId(response.data.userTypeId);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, []);
+
+
   const handleSubmit = async values => {
     setLoading(true);
     const postData = {
@@ -47,7 +67,7 @@ const AddEmployee = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/v1/users/3/94",
+        `http://localhost:5001/api/v1/users/${userTypeId}/${userId}`,
         postData
       );
       console.log("Server Response:", response.data);

@@ -12,9 +12,9 @@ const EditEmployee = () => {
     name: "",
     phoneNumber: "",
     email: "",
-    companyName: "",
-    companyAddress: "",
-    isTerminate: false,
+    companyname: "",
+    address: "",
+    terminate: false,
   });
 
   const navigate = useNavigate();
@@ -23,12 +23,25 @@ const EditEmployee = () => {
   const handleSave = async values => {
     setLoading(true);
 
+    // Map old keys to new keys
+    const updatedValues = {
+      name: values.name,
+      mobileNumber: values.phoneNumber,
+      email: values.email,
+      companyname: values.companyName,
+      address: values.companyAddress,
+      terminate: values.isTerminate,
+    };
+
     try {
       const response = await axios.put(
         `http://localhost:5001/api/v1/users/${id}`,
-        values
+        updatedValues
       );
+
       console.log(response);
+      console.log(updatedValues);
+
       if (response.status === 200) {
         toast.success("Employee details saved successfully!", {
           onClose: () => {
@@ -125,6 +138,7 @@ const EditEmployee = () => {
                             className="form-control rounded-pill"
                             id="phoneNumber"
                             name="phoneNumber"
+                            disabled
                           />
                         </div>
                       </div>

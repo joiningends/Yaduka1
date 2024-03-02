@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -13,29 +13,28 @@ import {
   TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Location = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [locations, setLocations] = useState([]);
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
-  // Sample data for the table (Locations)
-  const locations = [
-    {
-      id: 1,
-      storageName: "Storage A",
-      address: "123 Main St",
-      rentable: true,
-    },
-    {
-      id: 2,
-      storageName: "Storage B",
-      address: "456 Broadway",
-      rentable: false,
-    },
-    // Add more location data as needed
-  ];
+  const userId = localStorage.getItem("id");
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5001/api/v1/location/${userId}`)
+      .then(response => {
+        setLocations(response.data);
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, [userId]);
 
   const addButtonStyle = {
     background: "linear-gradient(263deg, #34b6df, #34d0be)",
@@ -50,7 +49,7 @@ const Location = () => {
     setPage(value);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     setPage(1);
     setSearch(event.target.value);
   };
@@ -63,13 +62,13 @@ const Location = () => {
   const indexOfFirstLocation = indexOfLastLocation - rowsPerPage;
   const currentLocations = locations
     .filter(
-      (location) =>
-        location.storageName.toLowerCase().includes(search.toLowerCase()) ||
+      location =>
+        location.storagename.toLowerCase().includes(search.toLowerCase()) ||
         location.address.toLowerCase().includes(search.toLowerCase())
     )
     .slice(indexOfFirstLocation, indexOfLastLocation);
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     console.log(`Deleting location with ID: ${id}`);
   };
 
@@ -134,13 +133,10 @@ const Location = () => {
             {currentLocations.map((location, index) => (
               <TableRow key={location.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{location.storageName}</TableCell>
+                <TableCell>{location.storagename}</TableCell>
                 <TableCell>{location.address}</TableCell>
                 <TableCell>{location.rentable ? "Yes" : "No"}</TableCell>
                 <TableCell>
-                  <Button variant="contained" style={addButtonStyle}>
-                    Edit
-                  </Button>
                   <Button
                     variant="contained"
                     style={{

@@ -1,27 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaHome,
-  FaInfo,
   FaCog,
   FaEnvelope,
   FaBars,
   FaSearch,
   FaUser,
   FaShoppingCart,
+  FaTruck,
+  FaBox,
+  FaGlobe,
+  FaListAlt,
+  FaArchive,
+  FaCubes,
+  FaTags,
+  FaWrench,
+  FaBuilding,
+  FaHandHoldingUsd,
+  FaExchangeAlt,
+  FaClock,
+  FaMapMarker,
 } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [menuItems, setMenuItems] = useState([
-    { name: "Dashboard", icon: <FaHome /> },
-    { name: "Emplyee", icon: <FaUser /> },
-    { name: "Party", icon: <FaEnvelope /> },
-    { name: "Settings", icon: <FaCog /> },
-    { name: "Shop", icon: <FaShoppingCart /> },
-    // Add other menu items here
-  ]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [userRole, setUserRole] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    setUserRole(storedRole);
+
+    switch (storedRole) {
+      case "coldstorageadmin":
+        setMenuItems([
+          { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
+          { name: "Employee", icon: <FaUser />, path: "/employee" },
+          { name: "Party", icon: <FaEnvelope />, path: "/party" },
+          { name: "Settings", icon: <FaCog />, path: "/settings" },
+          { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
+          { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
+          { name: "Size", icon: <FaWrench />, path: "/Size" },
+          { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
+          { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
+          { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Location", icon: <FaMapMarker />, path: "/Location" },
+          { name: "Contract", icon: <FaExchangeAlt />, path: "/Contract" },
+          {
+            name: "Material Movement",
+            icon: <FaArchive />,
+            path: "/MaterialMovement",
+          },
+          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+        ]);
+        break;
+      case "manufectureadmin":
+        setMenuItems([
+          {
+            name: "Ongoing Contract",
+            icon: <FaTruck />,
+            path: "/OngoingContract",
+          },
+        ]);
+        break;
+      case "coldstorageemployee":
+        setMenuItems([]);
+        break;
+      case "manufectureemployee":
+        setMenuItems([]);
+        break;
+      default:
+        setMenuItems([]);
+        break;
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -29,6 +85,10 @@ const SideBar = () => {
 
   const handleSearchChange = e => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleMenuItemClick = path => {
+    navigate(path);
   };
 
   const filteredMenuItems = menuItems.filter(item =>
@@ -68,9 +128,13 @@ const SideBar = () => {
           <ul>
             {filteredMenuItems.map((item, index) => (
               <li key={index}>
-                <a className="sd-link">
+                <Link
+                  to={item.path}
+                  className="sd-link"
+                  onClick={() => handleMenuItemClick(item.path)}
+                >
                   {item.icon} {item.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

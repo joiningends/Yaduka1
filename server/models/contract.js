@@ -1,5 +1,7 @@
 const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../util/database");
+const party = require("../models/party");
+const userTable = require("../models/user");
 
 const contract= sequelize.define("Contract", {
   id: {
@@ -12,6 +14,7 @@ const contract= sequelize.define("Contract", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  
   renewaldays: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -24,13 +27,27 @@ const contract= sequelize.define("Contract", {
     type: DataTypes.BOOLEAN,
     allowNull: false, 
   },
-  GstRate:{
-
+  status:{
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  Gsttype:{
-
+  invoiceno:{
+    type: DataTypes.INTEGER,
+    allowNull: false, 
+    defaultValue: 0,
+  },
+  slno:{
+    type: DataTypes.STRING,
+    allowNull:true,
+  },
+  nextinvoicedate:{
+    type: DataTypes.DATE,
+    
+    allowNull: true,
   }
-  });
+});
+  
+  
 
 
 

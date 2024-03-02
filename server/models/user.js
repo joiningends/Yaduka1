@@ -7,6 +7,12 @@ const userTable = sequelize.define("userTable", {
     autoIncrement: true,
     allowNull: false,
   },
+  uid:{
+    type: DataTypes.STRING,
+    
+   
+    allowNull: true,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -22,7 +28,7 @@ const userTable = sequelize.define("userTable", {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   passwords: {
     type: DataTypes.STRING,
@@ -95,6 +101,11 @@ const userTable = sequelize.define("userTable", {
       
       allowNull: true,
     },
+    otp:{
+      type: DataTypes.STRING,
+     
+      allowNull: true,
+    }
    
 });
 

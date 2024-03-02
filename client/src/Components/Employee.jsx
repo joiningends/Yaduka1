@@ -22,12 +22,19 @@ const Employee = () => {
   const [search, setSearch] = useState("");
   const [userData, setUserData] = useState([]);
   const [isDeleted, setIsDeleted] = useState(false);
+
+  const userId = localStorage.getItem("id");
+
+  console.log(userId);
+
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/api/v1/users/94");
+      const response = await axios.get(
+        `http://localhost:5001/api/v1/users/${userId}`
+      );
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);

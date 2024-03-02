@@ -11,8 +11,11 @@ import {
   Typography,
   Pagination,
   TextField,
+  Modal,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Party() {
   const [page, setPage] = useState(1);
@@ -20,9 +23,11 @@ function Party() {
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
-  // Sample data for the table (similar to Employee data)
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
+  const [searchResultMessage, setSearchResultMessage] = useState("");
+
   const rows = [
-    // Sample data for Party, adjust as needed
     {
       id: 1,
       name: "Party A",
@@ -30,7 +35,6 @@ function Party() {
       email: "partyA@example.com",
       companyName: "Party Co.",
       companyAddress: "123 Party St",
-      // ... other fields related to Party
     },
     {
       id: 2,
@@ -39,7 +43,6 @@ function Party() {
       email: "partyB@example.com",
       companyName: "Celebration Corp.",
       companyAddress: "456 Festive Ave",
-      // ... other fields related to Party
     },
     // Add more dummy data as needed
   ];
@@ -63,7 +66,6 @@ function Party() {
   };
 
   const handleAddParty = () => {
-    // Navigate to the Add Party route or functionality
     navigate("/party/AddParty");
   };
 
@@ -82,6 +84,30 @@ function Party() {
 
   const handleDelete = id => {
     console.log(`Deleting party with ID: ${id}`);
+  };
+
+  const handleSearchClick = () => {
+    axios
+      .get(`http://localhost:5001/api/v1/users/party/${phoneNumberInput}`)
+      .then(response => {
+        console.log(response);
+        if (response.data.record !== null && response.data) {
+          navigate(`/party/AddParty/${phoneNumberInput}`);
+          console.log("hello");
+        } else {
+          setSearchResultMessage("No phone number found in records.");
+        }
+      })
+      .catch(error => {
+        console.error("Error in API request:", error);
+        setSearchResultMessage("Error in API request.");
+      });
+  };
+
+  const handleCancelSearch = () => {
+    setPopupOpen(false);
+    setPhoneNumberInput("");
+    setSearchResultMessage("");
   };
 
   return (
@@ -106,6 +132,13 @@ function Party() {
             onClick={handleAddParty}
           >
             Add Party
+          </Button>
+          <Button
+            variant="contained"
+            style={editButtonStyle}
+            onClick={() => setPopupOpen(true)}
+          >
+            Search
           </Button>
         </div>
       </div>
@@ -181,6 +214,39 @@ function Party() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Modal open={isPopupOpen} onClose={handleCancelSearch}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 300,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 2,
+          }}
+        >
+          <TextField
+            label="Enter Phone Number"
+            variant="outlined"
+            fullWidth
+            value={phoneNumberInput}
+            onChange={e => setPhoneNumberInput(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            style={editButtonStyle}
+            onClick={handleSearchClick}
+          >
+            Search
+          </Button>
+          <Button onClick={handleCancelSearch}>Cancel</Button>
+          <Typography color="error">{searchResultMessage}</Typography>
+        </Box>
+      </Modal>
+
       <div
         style={{
           display: "flex",
