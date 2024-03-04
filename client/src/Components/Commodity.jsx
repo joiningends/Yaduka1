@@ -26,7 +26,7 @@ const Commodity = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/commodity/all")
+      .get("http://13.233.231.174/commodity/all")
       .then(response => {
         setCommodities(response.data);
       })
@@ -55,7 +55,7 @@ const Commodity = () => {
 
   const handleDelete = id => {
     axios
-      .delete(`http://localhost:5001/api/v1/commodity/delete/${id}`)
+      .delete(`http://13.233.231.174/commodity/delete/${id}`)
       .then(response => {
         if (response.status === 200) {
           toast.success("Commodity deleted successfully");

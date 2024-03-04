@@ -13,17 +13,20 @@ function AddCommodityType() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5001/api/v1/commodityType/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      const response = await fetch(
+        "http://13.233.231.174/commodityType/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
       if (response.ok) {
         toast.success("Commodity Type added successfully!");
@@ -48,7 +51,10 @@ function AddCommodityType() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-20 col-lg-12 col-xl-40" style={{ maxWidth: "800px" }}>
+        <div
+          className="col-md-20 col-lg-12 col-xl-40"
+          style={{ maxWidth: "800px" }}
+        >
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
               <h4 className="card-title">Add Commodity Type</h4>

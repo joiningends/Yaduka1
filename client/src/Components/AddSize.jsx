@@ -18,13 +18,10 @@ function AddSize() {
   const handleSubmit = async values => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/v1/size/create",
-        {
-          size: values.size,
-          varientId: values.variant,
-        }
-      );
+      const response = await axios.post("http://13.233.231.174/size/create", {
+        size: values.size,
+        varientId: values.variant,
+      });
       setLoading(false);
       if (response.status === 201) {
         toast.success("Size created successfully!");
@@ -45,7 +42,7 @@ function AddSize() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/varient/all")
+      .get("http://13.233.231.174/varient/all")
       .then(response => {
         setVariants(response.data);
       })

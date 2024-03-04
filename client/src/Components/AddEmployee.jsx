@@ -41,7 +41,7 @@ const AddEmployee = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/users/getbyid/${userId}`
+          `http://13.233.231.174/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
       } catch (error) {
@@ -52,7 +52,6 @@ const AddEmployee = () => {
     // Call the fetchData function when the component mounts
     fetchData();
   }, []);
-
 
   const handleSubmit = async values => {
     setLoading(true);
@@ -67,7 +66,7 @@ const AddEmployee = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5001/api/v1/users/${userTypeId}/${userId}`,
+        `http://13.233.231.174/users/${userTypeId}/${userId}`,
         postData
       );
       console.log("Server Response:", response.data);

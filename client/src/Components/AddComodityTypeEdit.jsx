@@ -19,7 +19,7 @@ function AddCommodityTypeEdit() {
       try {
         if (id) {
           const response = await axios.get(
-            `http://localhost:5001/api/v1/commodityType/${id}`
+            `http://13.233.231.174/commodityType/${id}`
           );
 
           setInitialValues(response.data);
@@ -36,7 +36,7 @@ function AddCommodityTypeEdit() {
   const handleSubmit = async values => {
     try {
       await axios.put(
-        `http://localhost:5001/api/v1/commodityType/update/${id}`,
+        `http://13.233.231.174/commodityType/update/${id}`,
         values
       );
 

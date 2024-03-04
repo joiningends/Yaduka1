@@ -15,7 +15,7 @@ function EditPackagingType() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/v1/unit/${id}`);
+        const response = await axios.get(`http://13.233.231.174/unit/${id}`);
         setData(response.data);
         setPackagingType(response.data.unit);
       } catch (error) {
@@ -26,14 +26,14 @@ function EditPackagingType() {
     fetchData();
   }, [id]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     setPackagingType(event.target.value);
   };
 
   const handleSave = async () => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5001/api/v1/unit/update/${id}`, {
+      await axios.put(`http://13.233.231.174/unit/update/${id}`, {
         unit: packagingType,
       });
       toast.success("Packaging Type updated successfully!");
@@ -53,7 +53,10 @@ function EditPackagingType() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-12 col-lg-12 col-xl-12" style={{ width: "200rem" }}>
+        <div
+          className="col-md-12 col-lg-12 col-xl-12"
+          style={{ width: "200rem" }}
+        >
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
               <h4 className="card-title">Edit Packaging Type</h4>
@@ -81,7 +84,7 @@ function EditPackagingType() {
                     type="button"
                     className="btn btn-danger rounded-pill me-2"
                     onClick={handleCancel}
-                    style={{marginRight:"0.5rem"}}
+                    style={{ marginRight: "0.5rem" }}
                   >
                     Cancel
                   </button>
@@ -89,7 +92,9 @@ function EditPackagingType() {
                     type="button"
                     className="btn btn-primary rounded-pill"
                     onClick={handleSave}
-                    style={{ background: "linear-gradient(263deg, #34b6df, #34d0be)" }}
+                    style={{
+                      background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                    }}
                   >
                     {loading ? (
                       <Spinner animation="border" variant="light" size="sm" />

@@ -29,9 +29,7 @@ function Quality() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/quality/all"
-        );
+        const response = await axios.get("http://13.233.231.174/quality/all");
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -63,7 +61,7 @@ function Quality() {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://localhost:5001/api/v1/quality/delete/${id}`);
+      await axios.delete(`http://13.233.231.174/quality/delete/${id}`);
       toast.success("Item deleted successfully", {
         onClose: () => window.location.reload(), // Reload the page when the toast is closed
       });

@@ -19,7 +19,7 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/users/getbyid/${userId}`
+          `http://13.233.231.174/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
       } catch (error) {
@@ -57,7 +57,7 @@ function AddParty() {
       };
 
       await axios.post(
-        `http://localhost:5001/api/v1/users/${userTypeId}/${userId}/party`,
+        `http://13.233.231.174/users/${userTypeId}/${userId}/party`,
         postData
       );
 

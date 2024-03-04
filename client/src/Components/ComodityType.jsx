@@ -28,7 +28,7 @@ const ComodityType = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/commoditytype/all")
+      .get("http://13.233.231.174/commoditytype/all")
       .then(response => {
         setRows(response.data);
         setLoading(false);
@@ -50,14 +50,14 @@ const ComodityType = () => {
 
   const handleDeleteCommodityType = id => {
     axios
-      .delete(`http://localhost:5001/api/v1/commodityType/delete/${id}`)
+      .delete(`http://13.233.231.174/commodityType/delete/${id}`)
       .then(response => {
         console.log(`Commodity type with ID ${id} has been deleted.`);
         toast.success("Commodity type deleted successfully!", {
           position: toast.POSITION.TOP_CENTER,
         });
         axios
-          .get("http://localhost:5001/api/v1/commoditytype/all")
+          .get("http://13.233.231.174/commoditytype/all")
           .then(response => {
             setRows(response.data);
           })

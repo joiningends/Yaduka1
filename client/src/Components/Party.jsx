@@ -88,7 +88,7 @@ function Party() {
 
   const handleSearchClick = () => {
     axios
-      .get(`http://localhost:5001/api/v1/users/party/${phoneNumberInput}`)
+      .get(`http://13.233.231.174/users/party/${phoneNumberInput}`)
       .then(response => {
         console.log(response);
         if (response.data.record !== null && response.data) {

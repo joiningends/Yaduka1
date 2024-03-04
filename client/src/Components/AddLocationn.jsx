@@ -41,9 +41,7 @@ function AddLocationn() {
   useEffect(() => {
     const fetchSpaceTypes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/spacetype"
-        );
+        const response = await axios.get("http://13.233.231.174/spacetype");
         setSpaceTypes(response.data);
       } catch (error) {
         console.error("Error fetching space types:", error);
@@ -53,7 +51,7 @@ function AddLocationn() {
     const fetchUnderOptions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/under/${userId}`
+          `http://13.233.231.174/under/${userId}`
         );
         const { under, under1 } = response.data;
 
@@ -88,7 +86,7 @@ function AddLocationn() {
       });
 
       // Send POST request to the specified API endpoint
-      await axios.post(`http://localhost:5001/api/v1/location/${userId}`, {
+      await axios.post(`http://13.233.231.174/location/${userId}`, {
         storagename: values.storageName,
         address: values.address,
         spacedetails: formattedSpaceDetails,
@@ -115,13 +113,13 @@ function AddLocationn() {
     ) {
       try {
         // POST request to add a new space to the "under" endpoint
-        await axios.post(`http://localhost:5001/api/v1/under/${userId}`, {
+        await axios.post(`http://13.233.231.174/under/${userId}`, {
           name: currentSpaceDetail.space,
         });
 
         // GET request to fetch updated options for the "under" dropdown
         const response = await axios.get(
-          `http://localhost:5001/api/v1/under/${userId}`
+          `http://13.233.231.174/under/${userId}`
         );
         const { under, under1 } = response.data;
         const combinedOptions = [...under, under1];

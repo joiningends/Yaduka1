@@ -40,9 +40,7 @@ function AddProduct() {
   useEffect(() => {
     const fetchCommodities = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/commodity/all"
-        );
+        const response = await axios.get("http://13.233.231.174/commodity/all");
         setCommodities(response.data);
       } catch (error) {
         console.error("Error fetching commodities:", error);
@@ -51,9 +49,7 @@ function AddProduct() {
 
     const fetchPackagingTypes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/unit/all"
-        );
+        const response = await axios.get("http://13.233.231.174/unit/all");
         setPackagingTypes(response.data);
         console.log(response.data);
       } catch (error) {
@@ -69,7 +65,7 @@ function AddProduct() {
     if (commodityId) {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/varient/commodity/${commodityId}`
+          `http://13.233.231.174/varient/commodity/${commodityId}`
         );
         setVariants(response.data);
       } catch (error) {
@@ -85,7 +81,7 @@ function AddProduct() {
     if (variantId) {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/quality/${variantId}/qualities`
+          `http://13.233.231.174/quality/${variantId}/qualities`
         );
         setQualities(response.data);
       } catch (error) {
@@ -94,7 +90,7 @@ function AddProduct() {
 
       try {
         const sizeResponse = await axios.get(
-          `http://localhost:5001/api/v1/size/${variantId}/sizes`
+          `http://13.233.231.174/size/${variantId}/sizes`
         );
         setSizes(sizeResponse.data);
       } catch (error) {
@@ -134,11 +130,11 @@ function AddProduct() {
         quantifiedBy: values.quantifiedBy,
         newUnit: values.unit,
       };
-      console.log(postData)
+      console.log(postData);
 
       // Making the Axios POST request
       const response = await axios.post(
-        "http://localhost:5001/api/v1/product/create",
+        "http://13.233.231.174/product/create",
         postData
       );
 

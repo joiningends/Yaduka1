@@ -28,7 +28,7 @@ function PackagingType() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/unit/all")
+      .get("http://13.233.231.174/unit/all")
       .then(response => {
         setPackagingTypes(response.data);
       })
@@ -53,7 +53,7 @@ function PackagingType() {
   const handleDeletePackagingType = id => {
     setLoading(true);
     axios
-      .delete(`http://localhost:5001/api/v1/unit/delete/${id}`)
+      .delete(`http://13.233.231.174/unit/delete/${id}`)
       .then(response => {
         const updatedPackagingTypes = packagingTypes.filter(
           item => item.id !== id

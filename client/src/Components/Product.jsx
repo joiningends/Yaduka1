@@ -11,7 +11,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/commodity/all1")
+      .get("http://13.233.231.174/commodity/all1")
       .then(response => {
         setCommodities(response.data);
         console.log(response.data);

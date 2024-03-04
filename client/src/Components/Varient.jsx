@@ -31,7 +31,7 @@ const Variant = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:5001/api/v1/varient/all")
+      .get("http://13.233.231.174/varient/all")
       .then(response => {
         setVariantData(response.data);
       })
@@ -59,7 +59,7 @@ const Variant = () => {
   const handleDelete = id => {
     setLoading(true);
     axios
-      .delete(`http://localhost:5001/api/v1/varient/delete/${id}`)
+      .delete(`http://13.233.231.174/varient/delete/${id}`)
       .then(response => {
         console.log(`Variant with ID ${id} deleted successfully`);
         toast.success("Variant deleted successfully!");
