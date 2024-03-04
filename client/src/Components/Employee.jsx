@@ -32,7 +32,9 @@ const Employee = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`http://13.233.231.174/users/${userId}`);
+      const response = await axios.get(
+        `http://13.235.51.98/api/v1/users/${userId}`
+      );
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -66,7 +68,7 @@ const Employee = () => {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://13.233.231.174/users/${id}`);
+      await axios.delete(`http://13.235.51.98/api/v1/users/${id}`);
       setIsDeleted(true); // Trigger reload and show success message
     } catch (error) {
       console.error("Error deleting user:", error);

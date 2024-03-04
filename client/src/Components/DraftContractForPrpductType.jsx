@@ -27,13 +27,13 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.233.231.174/contracts/${userId}/draft/${id}`
+          `http://13.235.51.98/api/v1/contracts/${userId}/draft/${id}`
         );
         setContractData(response.data);
         setLocation(response.data.location.id);
         console.log(response.location);
         const productResponse = await axios.get(
-          "http://13.233.231.174/product/all"
+          "http://13.235.51.98/api/v1/product/all"
         );
         setProductOptions(productResponse.data);
       } catch (error) {
@@ -48,7 +48,7 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const spaceResponse = await axios.get(
-          `http://13.233.231.174/location/space/${location}`
+          `http://13.235.51.98/api/v1/location/space/${location}`
         );
         setSpaceOptions(spaceResponse.data);
       } catch (error) {
@@ -124,7 +124,7 @@ function DraftContractForProductType() {
     try {
       // Example: Make a PUT request to your API endpoint
       const response = await axios.put(
-        `http://13.233.231.174/contracts/draft/${id}/${userId}/product`,
+        `http://13.235.51.98/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 

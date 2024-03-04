@@ -26,7 +26,7 @@ function Requisition() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `http://13.233.231.174/ref/getByPartyId/${userId}`
+          `http://13.235.51.98/api/v1/ref/getByPartyId/${userId}`
         );
         setData(response.data);
         console.log(response.data);

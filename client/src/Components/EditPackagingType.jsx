@@ -15,7 +15,9 @@ function EditPackagingType() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://13.233.231.174/unit/${id}`);
+        const response = await axios.get(
+          `http://13.235.51.98/api/v1/unit/${id}`
+        );
         setData(response.data);
         setPackagingType(response.data.unit);
       } catch (error) {
@@ -33,7 +35,7 @@ function EditPackagingType() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await axios.put(`http://13.233.231.174/unit/update/${id}`, {
+      await axios.put(`http://13.235.51.98/api/v1/unit/update/${id}`, {
         unit: packagingType,
       });
       toast.success("Packaging Type updated successfully!");

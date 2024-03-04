@@ -48,7 +48,7 @@ const App = () => {
         )}
 
         {/* Redirect to login if no matching route */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

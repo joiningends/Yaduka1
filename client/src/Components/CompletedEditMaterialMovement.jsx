@@ -27,7 +27,7 @@ function CompletedEditMaterialMovement() {
   console.log(userId);
 
   useEffect(() => {
-    const apiUrl = `http://13.233.231.174/ref/complete/${userId}`;
+    const apiUrl = `http://13.235.51.98/api/v1/ref/complete/${userId}`;
 
     axios
       .get(apiUrl)

@@ -21,7 +21,7 @@ function DraftContractForAreaType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.233.231.174/contracts/100/draft/${id}`
+          `http://13.235.51.98/api/v1/contracts/100/draft/${id}`
         );
         setDraftContract(response.data);
         console.log(response);
@@ -40,7 +40,7 @@ function DraftContractForAreaType() {
     const fetchStorageSpaces = async () => {
       try {
         const response = await axios.get(
-          `http://13.233.231.174/location/space/${storageId}`
+          `http://13.235.51.98/api/v1/location/space/${storageId}`
         );
         setStorageSpaces(response.data);
       } catch (error) {
@@ -89,7 +89,7 @@ function DraftContractForAreaType() {
       };
 
       const response = await axios.put(
-        `http://13.233.231.174/contracts/draft/${id}/100`,
+        `http://13.235.51.98/api/v1/contracts/draft/${id}/100`,
         dataToSend
       );
 

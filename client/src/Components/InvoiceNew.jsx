@@ -28,7 +28,7 @@ function InvoiceNew() {
   const fetchPartyOptions = async () => {
     try {
       const response = await fetch(
-        `http://13.233.231.174/users/invoice/${userId}`
+        `http://13.235.51.98/api/v1/users/invoice/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -49,7 +49,7 @@ function InvoiceNew() {
   const fetchStorageLocationOptions = async partyId => {
     try {
       const response = await fetch(
-        `http://13.233.231.174/contracts/invoice/${partyId}/${userId}`
+        `http://13.235.51.98/api/v1/contracts/invoice/${partyId}/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -70,7 +70,7 @@ function InvoiceNew() {
   const fetchContractOptions = async (partyId, storageId) => {
     try {
       const response = await fetch(
-        `http://13.233.231.174/contracts/invoice/storags/${partyId}/${storageId}`
+        `http://13.235.51.98/api/v1/contracts/invoice/storags/${partyId}/${storageId}`
       );
 
       if (response.ok) {
@@ -98,7 +98,7 @@ function InvoiceNew() {
   const fetchInvoiceDetails = async contractId => {
     try {
       const response = await fetch(
-        `http://13.233.231.174/contracts/invoices/all/${contractId}`
+        `http://13.235.51.98/api/v1/contracts/invoices/all/${contractId}`
       );
 
       if (response.ok) {
@@ -154,8 +154,8 @@ function InvoiceNew() {
 
   const handleViewClick = async invoiceName => {
     try {
-      const pdfUrl = `http://13.233.231.174/contracts/view/${invoiceName}.pdf`;
-      const inUrl = `http://13.233.231.174/contracts/in/${invoiceName}.pdf`;
+      const pdfUrl = `http://13.235.51.98/api/v1/contracts/view/${invoiceName}.pdf`;
+      const inUrl = `http://13.235.51.98/api/v1/contracts/in/${invoiceName}.pdf`;
 
       const openInNewTab = url => {
         if (typeof window !== "undefined") {

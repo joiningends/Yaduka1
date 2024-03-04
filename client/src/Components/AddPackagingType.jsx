@@ -23,9 +23,12 @@ function AddPackagingType() {
   const handleSubmit = async values => {
     setLoading(true);
     try {
-      const response = await axios.post("http://13.233.231.174/unit/create", {
-        unit: values.packagingType,
-      });
+      const response = await axios.post(
+        "http://13.235.51.98/api/v1/unit/create",
+        {
+          unit: values.packagingType,
+        }
+      );
 
       console.log("API Response:", response.data);
       toast.success("Packaging Type added successfully!");

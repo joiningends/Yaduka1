@@ -28,7 +28,7 @@ function AddCommodity() {
     const fetchCommodityTypes = async () => {
       try {
         const response = await axios.get(
-          "http://13.233.231.174/commoditytype/all"
+          "http://13.235.51.98/api/v1/commoditytype/all"
         );
         setCommodityTypes(response.data);
       } catch (error) {
@@ -47,10 +47,13 @@ function AddCommodity() {
       formData.append("commodityTypeId", values.commodityType);
       formData.append("image", values.image);
 
-      const response = await fetch("http://13.233.231.174/commodity/create", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://13.235.51.98/api/v1/commodity/create",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         toast.success("Commodity added successfully!");

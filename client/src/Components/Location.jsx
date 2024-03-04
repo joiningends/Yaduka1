@@ -26,7 +26,7 @@ const Location = () => {
 
   useEffect(() => {
     axios
-      .get(`http://13.233.231.174/location/${userId}`)
+      .get(`http://13.235.51.98/api/v1/location/${userId}`)
       .then(response => {
         setLocations(response.data);
         console.log(response.data);

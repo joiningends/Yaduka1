@@ -27,7 +27,7 @@ function Contract() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.233.231.174/contracts/${userId}/draft`
+          `http://13.235.51.98/api/v1/contracts/${userId}/draft`
         );
         setContracts(response.data);
         console.log(response.data);

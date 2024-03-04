@@ -24,7 +24,7 @@ function AddVariant() {
 
   const fetchCommodities = async () => {
     try {
-      const response = await fetch("http://13.233.231.174/commodity/all");
+      const response = await fetch("http://13.235.51.98/api/v1/commodity/all");
       if (response.ok) {
         const data = await response.json();
         setCommodities(data);
@@ -62,10 +62,13 @@ function AddVariant() {
       formData.append("farmable", convertedIsFarmable);
       formData.append("image", uploadImage); // Assuming uploadImage is a File object
 
-      const response = await fetch("http://13.233.231.174/varient/create", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://13.235.51.98/api/v1/varient/create",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const responseData = await response.json();
