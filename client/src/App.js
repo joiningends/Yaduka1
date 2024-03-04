@@ -23,7 +23,7 @@ const App = () => {
     <Router>
       <Routes>
         {/* Common Routes or Login Routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/otp/:number" element={<Otp />} />
         <Route path="/password/:number/:otp" element={<Password />} />
         <Route path="/setPassword/:id/:number/:otp" element={<SetPassword />} />
