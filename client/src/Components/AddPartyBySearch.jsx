@@ -22,7 +22,7 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/users/getbyid/${userId}`
+          `http://3.6.248.144/api/v1/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
       } catch (error) {
@@ -38,7 +38,7 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/users/party/${phoneNumber}`
+          `http://3.6.248.144/api/v1/users/party/${phoneNumber}`
         );
         const { record } = response.data;
         const updatedFormData = {
@@ -87,7 +87,7 @@ function AddParty() {
       console.log(postData);
 
       await axios.post(
-        `http://13.235.51.98/api/v1/users/${userTypeId}/${userId}/party`,
+        `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party`,
         postData
       );
 

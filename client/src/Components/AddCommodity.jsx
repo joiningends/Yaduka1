@@ -28,7 +28,7 @@ function AddCommodity() {
     const fetchCommodityTypes = async () => {
       try {
         const response = await axios.get(
-          "http://13.235.51.98/api/v1/commoditytype/all"
+          "http://3.6.248.144/api/v1/commoditytype/all"
         );
         setCommodityTypes(response.data);
       } catch (error) {
@@ -48,7 +48,7 @@ function AddCommodity() {
       formData.append("image", values.image);
 
       const response = await fetch(
-        "http://13.235.51.98/api/v1/commodity/create",
+        "http://3.6.248.144/api/v1/commodity/create",
         {
           method: "POST",
           body: formData,

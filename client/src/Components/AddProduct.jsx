@@ -41,7 +41,7 @@ function AddProduct() {
     const fetchCommodities = async () => {
       try {
         const response = await axios.get(
-          "http://13.235.51.98/api/v1/commodity/all"
+          "http://3.6.248.144/api/v1/commodity/all"
         );
         setCommodities(response.data);
       } catch (error) {
@@ -51,7 +51,7 @@ function AddProduct() {
 
     const fetchPackagingTypes = async () => {
       try {
-        const response = await axios.get("http://13.235.51.98/api/v1/unit/all");
+        const response = await axios.get("http://3.6.248.144/api/v1/unit/all");
         setPackagingTypes(response.data);
         console.log(response.data);
       } catch (error) {
@@ -67,7 +67,7 @@ function AddProduct() {
     if (commodityId) {
       try {
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/varient/commodity/${commodityId}`
+          `http://3.6.248.144/api/v1/varient/commodity/${commodityId}`
         );
         setVariants(response.data);
       } catch (error) {
@@ -83,7 +83,7 @@ function AddProduct() {
     if (variantId) {
       try {
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/quality/${variantId}/qualities`
+          `http://3.6.248.144/api/v1/quality/${variantId}/qualities`
         );
         setQualities(response.data);
       } catch (error) {
@@ -92,7 +92,7 @@ function AddProduct() {
 
       try {
         const sizeResponse = await axios.get(
-          `http://13.235.51.98/api/v1/size/${variantId}/sizes`
+          `http://3.6.248.144/api/v1/size/${variantId}/sizes`
         );
         setSizes(sizeResponse.data);
       } catch (error) {
@@ -136,7 +136,7 @@ function AddProduct() {
 
       // Making the Axios POST request
       const response = await axios.post(
-        "http://13.235.51.98/api/v1/product/create",
+        "http://3.6.248.144/api/v1/product/create",
         postData
       );
 

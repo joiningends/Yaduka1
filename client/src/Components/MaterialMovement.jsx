@@ -22,9 +22,7 @@ function MaterialMovement() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(
-          `http://13.235.51.98/api/v1/ref/${userId}`
-        );
+        const response = await fetch(`http://3.6.248.144/api/v1/ref/${userId}`);
         const data = await response.json();
         setJsonData(data);
       } catch (error) {

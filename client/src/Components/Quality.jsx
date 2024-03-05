@@ -30,7 +30,7 @@ function Quality() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          "http://13.235.51.98/api/v1/quality/all"
+          "http://3.6.248.144/api/v1/quality/all"
         );
         setData(response.data);
         setLoading(false);
@@ -63,7 +63,7 @@ function Quality() {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://13.235.51.98/api/v1/quality/delete/${id}`);
+      await axios.delete(`http://3.6.248.144/api/v1/quality/delete/${id}`);
       toast.success("Item deleted successfully", {
         onClose: () => window.location.reload(), // Reload the page when the toast is closed
       });

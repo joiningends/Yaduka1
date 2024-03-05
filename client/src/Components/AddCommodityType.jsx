@@ -18,7 +18,7 @@ function AddCommodityType() {
       setLoading(true);
 
       const response = await fetch(
-        "http://13.235.51.98/api/v1/commodityType/create",
+        "http://3.6.248.144/api/v1/commodityType/create",
         {
           method: "POST",
           headers: {

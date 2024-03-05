@@ -29,7 +29,7 @@ function Size() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://13.235.51.98/api/v1/size/all")
+      .get("http://3.6.248.144/api/v1/size/all")
       .then(response => {
         setData(response.data);
         setLoading(false);
@@ -59,7 +59,7 @@ function Size() {
 
   const handleDelete = id => {
     axios
-      .delete(`http://13.235.51.98/api/v1/size/delete/${id}`)
+      .delete(`http://3.6.248.144/api/v1/size/delete/${id}`)
       .then(() => {
         setData(data.filter(item => item.id !== id));
         toast.success("Item deleted successfully");

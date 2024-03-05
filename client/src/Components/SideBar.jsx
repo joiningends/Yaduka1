@@ -6,20 +6,18 @@ import {
   FaBars,
   FaSearch,
   FaUser,
-  FaShoppingCart,
-  FaTruck,
   FaBox,
   FaGlobe,
-  FaListAlt,
   FaArchive,
   FaCubes,
   FaTags,
   FaWrench,
   FaBuilding,
-  FaHandHoldingUsd,
   FaExchangeAlt,
   FaClock,
   FaMapMarker,
+  FaFileInvoice,
+  FaFileContract,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -49,29 +47,67 @@ const SideBar = () => {
           { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
           { name: "Product", icon: <FaCubes />, path: "/product" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
-          { name: "Contract", icon: <FaExchangeAlt />, path: "/Contract" },
+          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
           {
             name: "Material Movement",
             icon: <FaArchive />,
             path: "/MaterialMovement",
           },
           { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
         ]);
         break;
       case "manufectureadmin":
         setMenuItems([
+          { name: "Employee", icon: <FaUser />, path: "/employee" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
           {
-            name: "Ongoing Contract",
-            icon: <FaTruck />,
-            path: "/OngoingContract",
+            name: "Requisition",
+            icon: <FaCog />, // Adjusted icon to FaCog for relevance
+            path: "/Requisition",
           },
+          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
         ]);
         break;
       case "coldstorageemployee":
-        setMenuItems([]);
+        setMenuItems([
+          { name: "Party", icon: <FaEnvelope />, path: "/party" },
+          { name: "Size", icon: <FaWrench />, path: "/Size" },
+          { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
+          { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Location", icon: <FaMapMarker />, path: "/Location" },
+          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
+          {
+            name: "Material Movement",
+            icon: <FaArchive />,
+            path: "/MaterialMovement",
+          },
+          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+        ]);
         break;
       case "manufectureemployee":
-        setMenuItems([]);
+        setMenuItems([
+          { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
+          { name: "Employee", icon: <FaUser />, path: "/employee" },
+          { name: "Party", icon: <FaEnvelope />, path: "/party" },
+          { name: "Settings", icon: <FaCog />, path: "/settings" },
+          { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
+          { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
+          { name: "Size", icon: <FaWrench />, path: "/Size" },
+          { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
+          { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
+          { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Location", icon: <FaMapMarker />, path: "/Location" },
+          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
+          {
+            name: "Material Movement",
+            icon: <FaArchive />,
+            path: "/MaterialMovement",
+          },
+          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+        ]);
         break;
       default:
         setMenuItems([]);
@@ -99,7 +135,9 @@ const SideBar = () => {
     <div className="container-fluid mt-3">
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-md">
         <div className="container-fluid p-2">
-          <a className="navbar-brand text-primary mr-0">Company Logo</a>
+          <Link to="/" className="navbar-brand text-primary mr-0">
+            Company Logo
+          </Link>
           <div className="form-inline ml-auto">
             <div className="btn btn-primary" onClick={toggleSidebar}>
               <FaBars />
@@ -109,9 +147,9 @@ const SideBar = () => {
       </nav>
       <div className={`sidebar ${isOpen ? "active" : ""}`}>
         <div className="sd-header">
-          <h4 className="mb-0">Sidebar Header</h4>
+          <h4 className="mb-0">Yaduka</h4>
           <div className="btn btn-primary" onClick={toggleSidebar}>
-            <i className="fa fa-times"></i>
+            <FaBars />
           </div>
         </div>
         <div className="sd-body">

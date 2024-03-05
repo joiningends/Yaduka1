@@ -11,7 +11,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get("http://13.235.51.98/api/v1/commodity/all1")
+      .get("http://3.6.248.144/api/v1/commodity/all1")
       .then(response => {
         setCommodities(response.data);
         console.log(response.data);
@@ -45,7 +45,7 @@ const Product = () => {
             style={{ margin: "0.5rem", textAlign: "center" }}
           >
             <img
-              src={`http://localhost:5001/images/${commodity.image}.jpg`}
+              src={`http://3.6.248.144/images/${commodity.image}.jpg`}
               alt={commodity.commodity}
               style={{
                 maxWidth: "200px",

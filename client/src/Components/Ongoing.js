@@ -29,7 +29,7 @@ function Ongoing() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://13.235.51.98/api/v1/contracts/${userId}/ongoinf`)
+      .get(`http://3.6.248.144/api/v1/contracts/${userId}/ongoinf`)
       .then(response => {
         setContracts(response.data);
         console.log(response.data);

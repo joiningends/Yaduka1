@@ -15,7 +15,7 @@ function OngoingByProduct() {
 
   useEffect(() => {
     axios
-      .get(`http://13.235.51.98/api/v1/contracts/onging/${userId}/${id}`)
+      .get(`http://3.6.248.144/api/v1/contracts/onging/${userId}/${id}`)
       .then(response => {
         setContractData(response.data);
         console.log(response.data);

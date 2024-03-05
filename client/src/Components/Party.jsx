@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -26,30 +26,24 @@ function Party() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [searchResultMessage, setSearchResultMessage] = useState("");
+  const [partyData, setPartyData] = useState([]);
 
-  const rows = [
-    {
-      id: 1,
-      name: "Party A",
-      phoneNumber: "91-12345-67890",
-      email: "partyA@example.com",
-      companyName: "Party Co.",
-      companyAddress: "123 Party St",
-    },
-    {
-      id: 2,
-      name: "Party B",
-      phoneNumber: "91-98765-43210",
-      email: "partyB@example.com",
-      companyName: "Celebration Corp.",
-      companyAddress: "456 Festive Ave",
-    },
-    // Add more dummy data as needed
-  ];
+  useEffect(() => {
+    const userId = localStorage.getItem("id");
+    axios
+      .get(`http://3.6.248.144/api/v1/users/getparty/${userId}`)
+      .then(response => {
+        setPartyData(response.data);
+      })
+      .catch(error => {
+        console.error("Error in API request:", error);
+      });
+  }, []);
 
   const editButtonStyle = {
     background: "linear-gradient(263deg, #34b6df, #34d0be)",
     color: "#fff",
+    marginRight: "0.5rem",
     borderRadius: "8px",
     "&:hover": {
       background: "linear-gradient(263deg, #34b6df, #34d0be)",
@@ -71,14 +65,17 @@ function Party() {
 
   const indexOfLastRow = page * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = rows
+  const currentRows = partyData
     .filter(
       row =>
-        row.name.toLowerCase().includes(search.toLowerCase()) ||
-        row.phoneNumber.toLowerCase().includes(search.toLowerCase()) ||
-        row.email.toLowerCase().includes(search.toLowerCase()) ||
-        row.companyName.toLowerCase().includes(search.toLowerCase()) ||
-        row.companyAddress.toLowerCase().includes(search.toLowerCase())
+        row.party.name.toLowerCase().includes(search.toLowerCase()) ||
+        row.party.mobileNumber.toString().includes(search.toLowerCase()) ||
+        (row.party.email &&
+          row.party.email.toLowerCase().includes(search.toLowerCase())) ||
+        (row.party.companyname &&
+          row.party.companyname.toLowerCase().includes(search.toLowerCase())) ||
+        (row.party.address &&
+          row.party.address.toLowerCase().includes(search.toLowerCase()))
     )
     .slice(indexOfFirstRow, indexOfLastRow);
 
@@ -88,7 +85,7 @@ function Party() {
 
   const handleSearchClick = () => {
     axios
-      .get(`http://13.235.51.98/api/v1/users/party/${phoneNumberInput}`)
+      .get(`http://3.6.248.144/api/v1/users/party/${phoneNumberInput}`)
       .then(response => {
         console.log(response);
         if (response.data.record !== null && response.data) {
@@ -181,14 +178,14 @@ function Party() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentRows.map(row => (
-              <TableRow key={row.id}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.phoneNumber}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.companyName}</TableCell>
-                <TableCell>{row.companyAddress}</TableCell>
+            {currentRows.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{row.party.name}</TableCell>
+                <TableCell>{row.party.mobileNumber}</TableCell>
+                <TableCell>{row.party.email}</TableCell>
+                <TableCell>{row.party.companyname}</TableCell>
+                <TableCell>{row.party.address}</TableCell>
                 <TableCell>
                   <Button variant="contained" style={editButtonStyle}>
                     Edit
@@ -255,7 +252,7 @@ function Party() {
         }}
       >
         <Pagination
-          count={Math.ceil(rows.length / rowsPerPage)}
+          count={Math.ceil(partyData.length / rowsPerPage)}
           page={page}
           onChange={handleChange}
           shape="rounded"

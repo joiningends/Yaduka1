@@ -40,7 +40,7 @@ function ProductVariant() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/product/all1/${id}`
+          `http://3.6.248.144/api/v1/product/all1/${id}`
         );
         setProductVariants(response.data);
       } catch (error) {

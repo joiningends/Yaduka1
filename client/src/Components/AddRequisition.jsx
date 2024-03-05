@@ -25,7 +25,7 @@ function AddRequisition() {
 
     axios
       .get(
-        `http://13.235.51.98/api/v1/contracts/invoices/manufacture/location/${userId}`
+        `http://3.6.248.144/api/v1/contracts/invoices/manufacture/location/${userId}`
       )
 
       .then(response => {
@@ -41,7 +41,7 @@ function AddRequisition() {
     if (selectedStorageId) {
       axios
         .get(
-          `http://13.235.51.98/api/v1/contracts/storags/${userId}/${selectedStorageId}`
+          `http://3.6.248.144/api/v1/contracts/storags/${userId}/${selectedStorageId}`
         )
         .then(response => {
           console.log(response.data);
@@ -61,7 +61,7 @@ function AddRequisition() {
     if (selectedContractId) {
       axios
         .get(
-          `http://13.235.51.98/api/v1/contracts/products/${selectedContractId}`
+          `http://3.6.248.144/api/v1/contracts/products/${selectedContractId}`
         )
         .then(response => {
           console.log(response.data);
@@ -124,7 +124,7 @@ function AddRequisition() {
     console.log(requestData);
 
     axios
-      .post(`http://13.235.51.98/api/v1/ref/create/${userId}`, requestData)
+      .post(`http://3.6.248.144/api/v1/ref/create/${userId}`, requestData)
       .then(response => {
         console.log("Post request successful:", response.data);
         console.log(response);

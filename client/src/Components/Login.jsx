@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button, Container, Grid, Typography, TextField } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,13 +13,16 @@ function Login() {
   const handleLogin = async () => {
     try {
       const mobileNumber = Number(phoneNumber);
-      const response = await fetch("http://13.235.51.98/api/v1/users/login/for/all/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ mobileNumber }),
-      });
+      const response = await fetch(
+        "http://3.6.248.144/api/v1/users/login/for/all/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ mobileNumber }),
+        }
+      );
 
       if (response.ok) {
         navigate(`/otp/${phoneNumber}`);
@@ -97,7 +100,7 @@ function Login() {
                 id="phoneNumberInput"
                 type="tel"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={e => setPhoneNumber(e.target.value)}
               />
               <div className="text-center pt-1 mb-5 pb-1">
                 <Button

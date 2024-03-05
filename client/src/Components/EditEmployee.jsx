@@ -35,7 +35,7 @@ const EditEmployee = () => {
 
     try {
       const response = await axios.put(
-        `http://13.235.51.98/api/v1/users/${id}`,
+        `http://3.6.248.144/api/v1/users/${id}`,
         updatedValues
       );
 
@@ -65,7 +65,7 @@ const EditEmployee = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://13.235.51.98/api/v1/users/employee/${id}`
+          `http://3.6.248.144/api/v1/users/employee/${id}`
         );
 
         const mappedData = {
