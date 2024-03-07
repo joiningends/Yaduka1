@@ -13,7 +13,7 @@ router.get('/:userId/allparty/forall', userController.getparty)
 router.post('/:usertypeid', userController.createColdstorageadmin);
 router.get('/employee/:id', userController.getemployeeby);
 router.put('/:id/update', userController.updateemployee);
-router.delete('/:id', userController.delectemployee)
+router.delete('/:id', userController.deleteEmployee)
 router.get('/party/:mobileNumber', userController.searchByMobileNumber)
 router.get('/', userController.getUsersByUserType)
 router.get('/all/:id', userController.getPartiesByUserIds)

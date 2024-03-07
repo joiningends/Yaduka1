@@ -49,6 +49,7 @@ const getAllLocationsWithDetails = async (req, res) => {
   try {
     // Fetch all locations with associated space details
     const locations = await Location.findAll({
+      where: { isActive: true },
       include: [{
         model: SpaceDetails,
         as: 'spaceDetails',
@@ -83,7 +84,9 @@ const getAllLocations = async (req, res) => {
       underofuser = user.under;
     }
     const locations = await Location.findAll({
-      where: { under: underofuser },
+      where: { under: underofuser,
+         isActive: true 
+      },
       include: [{
         model: SpaceDetails,
         as: 'spaceDetails',
@@ -117,22 +120,26 @@ const getSpaceDetailsByLocationId = async (req, res) => {
 
 const deleteLocationById = async (req, res) => {
   try {
+    // Extract the location ID from the request parameters
     const locationId = req.params.id;
 
-    // Check if the location exists
+    // Check if the location exists in the database
     const location = await Location.findByPk(locationId);
     if (!location) {
+      // If location does not exist, return 404 with an error message
       return res.status(404).json({ error: 'Location not found' });
     }
 
-    // Delete associated space details
-    await SpaceDetails.destroy({ where: { locationId } });
+    // If location exists, mark it as inactive
+    location.isActive = false;
 
-    // Delete the location
-    await Location.destroy({ where: { id: locationId } });
+    // Save the changes to the database
+    await location.save();
 
+    // Send a success response
     res.status(200).json({ message: 'Location deleted successfully' });
   } catch (error) {
+    // If an error occurs, log the error and send a 500 response
     console.error('Error deleting location:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }

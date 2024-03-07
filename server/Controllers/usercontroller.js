@@ -178,6 +178,7 @@ exports.getUsersUnderId = async (req, res) => {
     try {
         const usersUnderId = await userTable.findAll({
             where: {
+              isActive: true,
                 under: userId,
                 userTypeId:5,
             },
@@ -196,6 +197,7 @@ exports.getparty = async (req, res) => {
     try {
       const userTableRecord = await userTable.findOne({
         where: {
+          isActive: true,
           id: userId,
         },
       });
@@ -289,6 +291,7 @@ exports.searchByMobileNumber = async(req, res)=> {
     // Search in the "party" model by mobile number
     const partyRecord = await Party.findOne({
       where: {
+        
         mobileNumber: mobileNumberToSearch,
       },
     });
@@ -300,6 +303,7 @@ exports.searchByMobileNumber = async(req, res)=> {
       // If no party with the specified mobile number is found, check in "userTable"
       const userRecord = await userTable.findOne({
         where: {
+          
           mobileNumber: mobileNumberToSearch,
           userTypeId: 4,
         },
@@ -365,22 +369,29 @@ exports.updateemployee = async (req, res) => {
 }
 
 // Delete User by ID
-exports.delectemployee =  async (req, res) => {
+exports.deleteEmployee = async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const deletedRowCount = await userTable.destroy({
-      where: { id: userId },
-    });
-
-    if (deletedRowCount > 0) {
-      res.status(204).send(); // No content (successful deletion)
-    } else {
-      res.status(404).json({ message: 'User not found' });
+    // Find the user by their ID
+    const user = await userTable.findByPk(userId);
+    if (!user) {
+      // If user does not exist, return 404 with an error message
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    // If user exists, mark it as inactive
+    user.isActive = false;
+
+    // Save the changes to the database
+    await user.save();
+
+    // Send a success response
+    res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    // If an error occurs, log the error and send a 500 response
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -390,6 +401,7 @@ exports.getUsersByUserType = async (req, res) => {
 
     const users = await userTable.findAll({
       where: {
+       isActive: true ,
         userTypeId: parseInt(userType),
       },
     });
@@ -447,9 +459,16 @@ exports.getPartiesByUserIds = async (req, res) => {
 exports.getAllPartiesAndUsers = async (req, res) => {
   try {
     // Fetch parties and users with userTypeId = 4
-    const parties = await Party.findAll();
+    const parties = await Party.findAll(
+      {
+        where: {
+        isActive: true
+        }
+      }
+    );
     const users = await userTable.findAll({
       where: {
+        isActive: true,
         userTypeId: 4
       }
     });

@@ -19,6 +19,11 @@ const Location = sequelize.define("Location", {
   under:{
    type: DataTypes.INTEGER,
     allowNull: false, 
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull:false
   }
 });
 
