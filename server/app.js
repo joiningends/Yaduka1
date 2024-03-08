@@ -16,6 +16,7 @@ app.options("*", cors());
 // Middleware
 app.use(express.json());
 app.use(morgan("tiny"));
+const path = require("path");
 
 
 
@@ -147,6 +148,17 @@ Requisition.hasMany(Reproduct, { as: 'reproducts', foreignKey: 'requationId' });
 Requisition.belongsTo(userTable, { foreignKey: "underValues", as: "valueofunde" });
 
 Reproduct.belongsTo(Requisition, { as: 'requtaion', foreignKey: 'requationId' });
+const _dirname = path.dirname("");
+const buildPath = path.join(__dirname, "../client/build");
+app.use(express.static(buildPath));
+app.get("/*", (_, res) => {
+  res.sendFile(path.join(buildPath, "index.html")),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    };
+});
 sequelize.sync()
   .then(() => {
     console.log('Database synchronization complete.');
@@ -162,4 +174,3 @@ sequelize.sync()
   .catch((err) => {
     console.error('Error syncing the database:', err);
   });
-  
