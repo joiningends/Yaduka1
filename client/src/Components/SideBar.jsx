@@ -130,7 +130,11 @@ const SideBar = () => {
             subItems: [
               { name: "Draft", icon: <FaCog />, path: "/Contract" },
               { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
-              { name: "Completed", icon: <FaArchive />, path: "/Completed" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedContract",
+              },
             ],
           },
           {
