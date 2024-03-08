@@ -35,7 +35,9 @@ const Employee = () => {
       const response = await axios.get(
         `http://3.6.248.144/api/v1/users/${userId}`
       );
+      console.log(userId);
       setUserData(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }

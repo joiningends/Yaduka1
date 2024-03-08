@@ -152,7 +152,11 @@ const SetPasswordPage = () => {
             color="primary"
             fullWidth
             onClick={handleSubmit}
-            style={{ marginTop: "20px", fontFamily: "Poppins" }}
+            style={{
+              marginTop: "20px",
+              fontFamily: "Poppins",
+              background: "linear-gradient(263deg, #34b6df, #34d0be)",
+            }}
           >
             Set Password
           </Button>

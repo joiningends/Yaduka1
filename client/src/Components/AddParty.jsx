@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function AddParty() {
@@ -14,6 +15,7 @@ function AddParty() {
   });
   const [userTypeId, setTypeId] = useState(null);
   const userId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,15 +64,23 @@ function AddParty() {
       );
 
       toast.success("Form submitted successfully!");
+      setTimeout(() => {
+        navigate("/party");
+      }, 2000);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Error submitting form. Please try again.");
+      console.error("Error submitting form:", error.response.data.error);
+      toast.error(error.response.data.error);
     }
   };
 
   const handlePhoneNumberChange = e => {
     const inputValue = e.target.value.replace(/\D/g, "");
     setFormData({ ...formData, phoneNumber: inputValue });
+  };
+
+  const handleCancel = e => {
+    e.preventDefault();
+    navigate("/party");
   };
 
   return (
@@ -224,6 +234,7 @@ function AddParty() {
                     <button
                       type="button"
                       className="btn btn-danger rounded-pill me-2"
+                      onClick={handleCancel}
                     >
                       Cancel
                     </button>

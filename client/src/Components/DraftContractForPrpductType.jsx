@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function DraftContractForProductType() {
   const [contractData, setContractData] = useState(null);
@@ -15,6 +17,7 @@ function DraftContractForProductType() {
   const [rate, setRate] = useState("");
   const { id } = useParams();
   const [amount, setAmount] = useState("");
+  const navigate = useNavigate();
 
   console.log(storageSpaces);
   console.log(productOptions);
@@ -107,34 +110,38 @@ function DraftContractForProductType() {
   };
 
   const handleSubmit = async () => {
-    // Transform the data
     const transformedData = {
       storagespaces: storageSpaces.map(space => ({
         storagespace: space.spaceId,
         productid: space.productid,
-        lotNo: space.lotName,
+        lotno: space.lotName,
         qty: parseInt(space.quantity, 10),
         rate: parseInt(space.rate, 10),
         amount: space.amount,
       })),
     };
 
-    console.log("Form submitted:", transformedData);
-
     try {
-      // Example: Make a PUT request to your API endpoint
       const response = await axios.put(
         `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 
-      // Handle the response as needed
       console.log("Server response:", response.data);
 
-      // Add any additional logic after successful submission
+      // Show success toast
+      toast.success("Contract submitted successfully!");
+
+      // Navigate to the "/Contract" route
+      setTimeout(() => {
+        // Navigate to "/Contract" route
+        navigate("/Contract");
+      }, 2000);
     } catch (error) {
-      // Handle errors, e.g., display an error message to the user
       console.error("Error submitting form:", error);
+
+      // Show error toast
+      toast.error("Error submitting contract. Please try again.");
     }
   };
 
@@ -423,6 +430,7 @@ function DraftContractForProductType() {
             )}
           </div>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );

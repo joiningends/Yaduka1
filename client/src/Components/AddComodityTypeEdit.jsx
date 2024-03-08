@@ -41,6 +41,9 @@ function AddCommodityTypeEdit() {
       );
 
       toast.success("Commodity Type edited successfully!");
+      setTimeout(() => {
+        navigate("/commoditytype");
+      }, 2000);
     } catch (error) {
       console.error("Error editing data:", error);
       toast.error("Error editing commodity type");

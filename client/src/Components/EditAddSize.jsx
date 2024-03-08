@@ -3,45 +3,20 @@ import { Formik, Form, Field } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 
 function EditAddSize() {
   const navigate = useNavigate();
+  const { id } = useParams();
+
   const initialValues = {
     variant: "",
     size: "",
   };
+
   const [variants, setVariants] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async values => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://3.6.248.144/api/v1/size/create",
-        {
-          size: values.size,
-          varientId: values.variant,
-        }
-      );
-      setLoading(false);
-      if (response.status === 201) {
-        toast.success("Size created successfully!");
-        navigate("/Size");
-      } else {
-        toast.error("Failed to create size");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("Error creating size:", error);
-      toast.error("Error creating size");
-    }
-  };
-
-  const handleCancel = () => {
-    navigate("/Size");
-  };
 
   useEffect(() => {
     axios
@@ -52,7 +27,52 @@ function EditAddSize() {
       .catch(error => {
         console.error("Error fetching variants:", error);
       });
-  }, []);
+
+    axios
+      .get(`http://3.6.248.144/api/v1/size/${id}`)
+      .then(response => {
+        const sizeData = response.data;
+        setInitialValues(sizeData);
+      })
+      .catch(error => {
+        console.error("Error fetching size:", error);
+      });
+  }, [id]);
+
+  const setInitialValues = sizeData => {
+    initialValues.variant = sizeData.varientId;
+    initialValues.size = sizeData.size;
+  };
+
+  const handleSubmit = async values => {
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `http://3.6.248.144/api/v1/size/update/${id}`,
+        {
+          size: values.size,
+          varientId: values.variant,
+        }
+      );
+      setLoading(false);
+      if (response.status === 200) {
+        toast.success("Size updated successfully!");
+        setTimeout(() => {
+          navigate("/Size");
+        }, 2000);
+      } else {
+        toast.error("Failed to update size");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error updating size:", error);
+      toast.error("Error updating size");
+    }
+  };
+
+  const handleCancel = () => {
+    navigate("/Size");
+  };
 
   return (
     <div className="container mt-5">
@@ -60,7 +80,7 @@ function EditAddSize() {
         <div className="col-md-12 col-lg-12 col-xl-12">
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
-              <h4 className="card-title">Add Size</h4>
+              <h4 className="card-title">Edit Size</h4>
             </div>
             <div className="card-body">
               <Formik initialValues={initialValues} onSubmit={handleSubmit}>
@@ -111,6 +131,12 @@ function EditAddSize() {
                         type="submit"
                         className="btn btn-primary rounded-pill"
                         disabled={loading}
+                        style={{
+                          background:
+                            "linear-gradient(263deg, #34b6df, #34d0be)",
+                          color: "#fff",
+                          marginLeft: "0.3rem",
+                        }}
                       >
                         {loading ? (
                           <Spinner
@@ -119,7 +145,7 @@ function EditAddSize() {
                             size="sm"
                           />
                         ) : (
-                          "Submit"
+                          "Save"
                         )}
                       </button>
                     </div>

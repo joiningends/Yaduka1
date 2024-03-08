@@ -40,7 +40,9 @@ function EditPackagingType() {
       });
       toast.success("Packaging Type updated successfully!");
       setLoading(false);
-      window.location.reload(); // Refresh the page after successful update
+      setTimeout(() => {
+        navigate("/packagingtype"); // Redirect to "/packagingtype" after 2000 milliseconds (2 seconds)
+      }, 2000);
     } catch (error) {
       console.error("Error updating data:", error);
       toast.error("Failed to update Packaging Type");

@@ -141,9 +141,17 @@ function AddProduct() {
       );
 
       // Handle the response as needed
+      toast.success("Product Created Successfully ");
+
+      // Set a timeout to navigate after showing the toast message
+      setTimeout(() => {
+        navigate("/product");
+      }, 2000); // 2000 milliseconds (2 seconds)
       console.log("Response:", response.data);
     } catch (error) {
       // Handle any errors that occurred during the request
+      toast.success("Error while creating product!");
+
       console.error("Error:", error.message);
     }
   };

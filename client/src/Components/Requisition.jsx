@@ -49,6 +49,7 @@ function Requisition() {
   const handleView = id => {
     // Handle the view action, you can navigate to a detailed view or perform other actions
     console.log(`Viewing item with ID: ${id}`);
+    navigate(`/Requisition/ViewRequisition/${id}`);
   };
 
   return (
@@ -92,11 +93,12 @@ function Requisition() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Storage Name</b>
+                <b>Contract Name</b>
               </TableCell>
               <TableCell>
-                <b>Contract</b>
+                <b>Storage Name</b>
               </TableCell>
+
               <TableCell>
                 <b>Date</b>
               </TableCell>
@@ -111,8 +113,8 @@ function Requisition() {
           <TableBody>
             {data.map(item => (
               <TableRow key={item.id}>
+                <TableCell>{item.conf.slno}</TableCell>
                 <TableCell>{item.conf.location.storagename}</TableCell>
-                <TableCell>{item.conf.id}</TableCell>
                 <TableCell>
                   {new Date(item.date).toLocaleDateString("en-GB")}
                 </TableCell>

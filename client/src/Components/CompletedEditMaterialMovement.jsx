@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Table,
@@ -8,44 +8,43 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   Typography,
   Pagination,
+  Button,
 } from "@mui/material";
-
-function formatDateString(dateString) {
-  const [year, month, day] = dateString.split("-");
-  return `${day}-${month}-${year}`;
-}
+import { useNavigate } from "react-router-dom";
 
 function CompletedEditMaterialMovement() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(5);
+  const navigate = useNavigate();
   const userId = localStorage.getItem("id");
-
   console.log(userId);
 
   useEffect(() => {
-    const apiUrl = `http://3.6.248.144/api/v1/ref/complete/${userId}`;
-
-    axios
-      .get(apiUrl)
-      .then(response => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          `http://3.6.248.144/api/v1/ref/complete/${userId}`
+        );
         setData(response.data);
-      })
-      .catch(error => {
+        console.log(response.data);
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
-  }, []); // Empty dependency array ensures useEffect runs once after the initial render
+      }
+    }
+    fetchData();
+  }, [page, rowsPerPage, userId]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const indexOfLastRow = page * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentData = data.slice(indexOfFirstRow, indexOfLastRow);
+  const handleView = id => {
+    console.log(`Viewing item with ID: ${id}`);
+    navigate(`/MaterialMovement/ViewMaterialMovement/${id}`);
+  };
 
   return (
     <div style={{ margin: "0 1rem" }}>
@@ -59,22 +58,23 @@ function CompletedEditMaterialMovement() {
       >
         <div>
           <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-            Completed Edit Material Movement
+            Completed Material Movement
           </Typography>
         </div>
       </div>
+
       <TableContainer
         component={Paper}
-        sx={{ borderRadius: "12px", margin: "0 0 1rem 0" }}
+        sx={{ borderRadius: "12px", margin: "1rem 0" }}
       >
-        <Table sx={{ borderRadius: "12px" }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Storage Name</b>
+                <b>Contract Name</b>
               </TableCell>
               <TableCell>
-                <b>Contract</b>
+                <b>Storage Name</b>
               </TableCell>
               <TableCell>
                 <b>Date</b>
@@ -82,20 +82,42 @@ function CompletedEditMaterialMovement() {
               <TableCell>
                 <b>Status</b>
               </TableCell>
+              <TableCell>
+                <b>Action</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentData.map(item => (
+            {data.map(item => (
               <TableRow key={item.id}>
-                <TableCell>{item.conf.location.storagename}</TableCell>
-                <TableCell>{item.conf.id}</TableCell>
-                <TableCell>{formatDateString(item.date)}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                <TableCell>{item?.conf?.slno}</TableCell>
+                <TableCell>{item?.conf?.location?.storagename}</TableCell>
+                <TableCell>
+                  {new Date(item?.date).toLocaleDateString("en-GB")}
+                </TableCell>
+                <TableCell>{item?.status}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "#34b6df",
+                      color: "#fff",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        background: "#34b6df",
+                      },
+                    }}
+                    onClick={() => handleView(item?.id)}
+                  >
+                    View
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
       <div
         style={{
           display: "flex",
@@ -104,7 +126,7 @@ function CompletedEditMaterialMovement() {
         }}
       >
         <Pagination
-          count={Math.ceil(data.length / rowsPerPage)}
+          count={Math.ceil(data?.length / rowsPerPage)}
           page={page}
           onChange={handleChangePage}
           shape="rounded"

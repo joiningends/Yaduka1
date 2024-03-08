@@ -81,7 +81,7 @@ const AddEmployee = () => {
     } catch (error) {
       console.error("Error:", error);
       setLoading(false);
-      toast.error("Failed to submit form. Please try again.");
+      toast.error(error.response.data.error);
     }
   };
 

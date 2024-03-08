@@ -30,7 +30,10 @@ function AddCommodityType() {
 
       if (response.ok) {
         toast.success("Commodity Type added successfully!");
-        navigate("/commoditytype");
+
+        setTimeout(() => {
+          navigate("/commoditytype");
+        }, 2000);
       } else {
         const errorData = await response.json();
         console.error("Error:", errorData);

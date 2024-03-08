@@ -74,7 +74,7 @@ function OngoingByProduct() {
                     type="text"
                     className="form-control rounded-pill"
                     id="storageType"
-                    value={contractData.contract.storagetype}
+                    value={contractData?.contract?.storagetype}
                     readOnly
                   />
                 </div>
@@ -87,7 +87,7 @@ function OngoingByProduct() {
                   type="text"
                   className="form-control rounded-pill"
                   id="party"
-                  value={contractData.contract?.partyuser?.name}
+                  value={contractData?.contract?.partyuser?.name}
                   readOnly
                 />
               </div>
@@ -99,7 +99,7 @@ function OngoingByProduct() {
                   type="text"
                   className="form-control rounded-pill"
                   id="renewalDays"
-                  value={contractData.contract.renewaldays}
+                  value={contractData?.contract?.renewaldays}
                   readOnly
                 />
               </div>
@@ -111,7 +111,7 @@ function OngoingByProduct() {
                   type="text"
                   className="form-control rounded-pill"
                   id="contractStartDate"
-                  value={contractData.contract.contractstartdate}
+                  value={contractData?.contract?.contractstartdate}
                   readOnly
                 />
               </div>
@@ -123,7 +123,7 @@ function OngoingByProduct() {
                   type="text"
                   className="form-control rounded-pill"
                   id="gstApplicable"
-                  value={contractData.contract.Gstapplicable ? "Yes" : "No"}
+                  value={contractData?.contract?.Gstapplicable ? "Yes" : "No"}
                   readOnly
                 />
               </div>
@@ -135,7 +135,7 @@ function OngoingByProduct() {
                   type="text"
                   className="form-control rounded-pill"
                   id="status"
-                  value={contractData.contract.status}
+                  value={contractData?.contract?.status}
                   readOnly
                 />
               </div>
@@ -150,7 +150,7 @@ function OngoingByProduct() {
                     type="text"
                     className="form-control rounded-pill"
                     value={formatDateString(
-                      contractData.latestInvoice.createdAt
+                      contractData?.latestInvoice?.createdAt
                     )}
                     readOnly
                   />
@@ -160,7 +160,7 @@ function OngoingByProduct() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={contractData.invoiceCount}
+                    value={contractData?.invoiceCount}
                     readOnly
                   />
                 </div>
@@ -169,7 +169,7 @@ function OngoingByProduct() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={formatDateString(contractData.nextInvoiceDate)}
+                    value={formatDateString(contractData?.nextInvoiceDate)}
                     readOnly
                   />
                 </div>
@@ -178,7 +178,7 @@ function OngoingByProduct() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={contractData.nextRentalAmount}
+                    value={contractData?.nextRentalAmount}
                     readOnly
                   />
                 </div>

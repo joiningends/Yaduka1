@@ -42,7 +42,14 @@ import CompletedEditMaterialMovement from "../CompletedEditMaterialMovement";
 import DraftContractForAreaType from "../DraftContractForAreaType";
 import DraftContractForPrpductType from "../DraftContractForPrpductType";
 import InvoiceNew from "../InvoiceNew";
-
+import EditParty from "../EditParty";
+import EditQuality from "../EditQuality";
+import Completed from "../Completed";
+import CompletedAreaView from "../CompletedAreaView";
+import CompletedProductView from "../CompletedProductView";
+import DetailsCompleteArea from "../DetailsCompleteArea";
+import DetailsCompeteProduct from "../DetailsCompeteProduct";
+import ViewCompletedMaterialMovement from "../ViewCompletedMaterialMovement";
 
 const ColdStorageAdmin = () => {
   return (
@@ -55,6 +62,8 @@ const ColdStorageAdmin = () => {
         <Route path="/employee/EditEmployee/:id" element={<EditEmployee />} />
         <Route path="/Party" element={<Party />} />
         <Route path="/Party/AddParty" element={<AddParty />} />
+        <Route path="/Party/EditParty/:phoneNumber" element={<EditParty />} />
+
         <Route
           path="/Party/AddParty/:phoneNumber"
           element={<AddPartyBySearch />}
@@ -86,6 +95,8 @@ const ColdStorageAdmin = () => {
         <Route path="/Size/EditSize/:id" element={<EditAddSize />} />
         <Route path="/Quality" element={<Quality />} />
         <Route path="/Quality/AddQuality" element={<AddQuality />} />
+        <Route path="/Quality/EditAddQuality/:id" element={<EditQuality />} />
+
         <Route path="/Variant" element={<Variant />} />
         <Route path="/variant/AddVariant" element={<AddVariant />} />
         <Route path="/variant/AddVariant/:id" element={<EditAddVariant />} />
@@ -113,17 +124,39 @@ const ColdStorageAdmin = () => {
           element={<EditMaterialMovement />}
         />
         <Route
-          path="/MaterialMovementCompleted"
+          path="/CompletedMaterialMovement"
           element={<CompletedEditMaterialMovement />}
         />
         <Route
-          path="DraftContract/DraftContractProductType/:id"
+          path="/MaterialMovement/ViewMaterialMovement/:id"
+          element={<ViewCompletedMaterialMovement />}
+        />
+        <Route
+          path="Contract/DraftContractProductType/:id"
           element={<DraftContractForPrpductType />}
         />
         <Route
-          path="/Invoice"
-          element={<InvoiceNew />}
+          path="Contract/DraftContractAreaType/:id"
+          element={<DraftContractForAreaType />}
         />
+        <Route path="/CompletedContract" element={<Completed />} />
+        <Route
+          path="CompletedContract/Area/:id"
+          element={<CompletedAreaView />}
+        />
+        <Route
+          path="CompletedContract/Product/:id"
+          element={<CompletedProductView />}
+        />
+        <Route
+          path="CompletedContract/DetailsArea/:id"
+          element={<DetailsCompleteArea />}
+        />
+        <Route
+          path="CompletedContract/DetailsProduct/:id"
+          element={<DetailsCompeteProduct />}
+        />
+        <Route path="/Invoice" element={<InvoiceNew />} />
       </Routes>
     </div>
   );

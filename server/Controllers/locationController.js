@@ -1,16 +1,16 @@
-const  Location  = require('../models/location');
-const  SpaceDetails = require('../models/SpaceDetails');
+const Location = require("../models/location");
+const SpaceDetails = require("../models/SpaceDetails");
 const userTable = require("../models/user");
 const createLocationWithDetails = async (req, res) => {
   try {
-    const { storagename, address, spacedetails } = req.body;
+    const { storagename, address, spacedetails, rantable } = req.body;
     const userId = req.params.id;
 
     // Find user by ID
     const user = await userTable.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     let under = null;
@@ -22,13 +22,18 @@ const createLocationWithDetails = async (req, res) => {
       // If user type ID is 5, set under to the user's under value
       under = user.under;
     }
-console.log(under)
+    console.log(under);
     // Create the location with the associated under value
-    const location = await Location.create({ storagename, address, under });
+    const location = await Location.create({
+      storagename,
+      address,
+      under,
+      rantable,
+    });
 
     // Create the space details associated with the location
     await Promise.all(
-      spacedetails.map(async (detail) => {
+      spacedetails.map(async detail => {
         await SpaceDetails.create({
           ...detail,
           locationId: location.id,
@@ -36,30 +41,30 @@ console.log(under)
       })
     );
 
-    res.status(201).json({ message: 'Location created successfully' });
+    res.status(201).json({ message: "Location created successfully" });
   } catch (error) {
-    console.error('Error creating location:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error creating location:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 
 const getAllLocationsWithDetails = async (req, res) => {
   try {
     // Fetch all locations with associated space details
     const locations = await Location.findAll({
       where: { isActive: true },
-      include: [{
-        model: SpaceDetails,
-        as: 'spaceDetails',
-      }],
+      include: [
+        {
+          model: SpaceDetails,
+          as: "spaceDetails",
+        },
+      ],
     });
 
     res.status(200).json(locations);
   } catch (error) {
-    console.error('Error fetching locations:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching locations:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -71,7 +76,7 @@ const getAllLocations = async (req, res) => {
     const user = await userTable.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     let underofuser = null;
@@ -84,22 +89,21 @@ const getAllLocations = async (req, res) => {
       underofuser = user.under;
     }
     const locations = await Location.findAll({
-      where: { under: underofuser,
-         isActive: true 
-      },
-      include: [{
-        model: SpaceDetails,
-        as: 'spaceDetails',
-      }],
+      where: { under: underofuser, isActive: true },
+      include: [
+        {
+          model: SpaceDetails,
+          as: "spaceDetails",
+        },
+      ],
     });
 
     res.status(200).json(locations);
   } catch (error) {
-    console.error('Error fetching locations:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching locations:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const getSpaceDetailsByLocationId = async (req, res) => {
   try {
@@ -127,7 +131,7 @@ const deleteLocationById = async (req, res) => {
     const location = await Location.findByPk(locationId);
     if (!location) {
       // If location does not exist, return 404 with an error message
-      return res.status(404).json({ error: 'Location not found' });
+      return res.status(404).json({ error: "Location not found" });
     }
 
     // If location exists, mark it as inactive
@@ -137,14 +141,13 @@ const deleteLocationById = async (req, res) => {
     await location.save();
 
     // Send a success response
-    res.status(200).json({ message: 'Location deleted successfully' });
+    res.status(200).json({ message: "Location deleted successfully" });
   } catch (error) {
     // If an error occurs, log the error and send a 500 response
-    console.error('Error deleting location:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error deleting location:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 module.exports = {
   createLocationWithDetails,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Button } from "react-bootstrap";
 import {
   FaHome,
   FaCog,
@@ -18,8 +19,9 @@ import {
   FaMapMarker,
   FaFileInvoice,
   FaFileContract,
+  FaAngleDown,
 } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const SideBar = () => {
@@ -27,7 +29,13 @@ const SideBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [menuItems, setMenuItems] = useState([]);
   const [userRole, setUserRole] = useState("");
+  const [showContractDropdown, setShowContractDropdown] = useState(false);
+  const [showRequisitionDropdown, setShowRequisitionDropdown] = useState(false);
+  const [showMaterialMovementDropdown, setShowMaterialMovementDropdown] =
+    useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
@@ -39,7 +47,6 @@ const SideBar = () => {
           { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
           { name: "Employee", icon: <FaUser />, path: "/employee" },
           { name: "Party", icon: <FaEnvelope />, path: "/party" },
-          { name: "Settings", icon: <FaCog />, path: "/settings" },
           { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
           { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
           { name: "Size", icon: <FaWrench />, path: "/Size" },
@@ -47,26 +54,66 @@ const SideBar = () => {
           { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
           { name: "Product", icon: <FaCubes />, path: "/product" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
-          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
+          {
+            name: "Contract",
+            icon: <FaFileContract />,
+            path: "",
+            subItems: [
+              { name: "Draft", icon: <FaCog />, path: "/Contract" },
+              { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedContract",
+              },
+            ],
+          },
           {
             name: "Material Movement",
             icon: <FaArchive />,
-            path: "/MaterialMovement",
+            path: "",
+            subItems: [
+              { name: "Pending", icon: <FaCog />, path: "/MaterialMovement" },
+              {
+                name: "Completed",
+                icon: <FaClock />,
+                path: "/CompletedMaterialMovement",
+              },
+            ],
           },
-          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
         ]);
         break;
       case "manufectureadmin":
         setMenuItems([
           { name: "Employee", icon: <FaUser />, path: "/employee" },
+          {
+            name: "Contract",
+            icon: <FaFileContract />,
+            path: "",
+            subItems: [
+              { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedContract",
+              },
+            ],
+          },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
           {
             name: "Requisition",
-            icon: <FaCog />, // Adjusted icon to FaCog for relevance
-            path: "/Requisition",
+            icon: <FaCog />,
+            path: "",
+            subItems: [
+              { name: "Pending", icon: <FaCog />, path: "/Requisition" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedRequisition",
+              },
+            ],
           },
-          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
         ]);
         break;
       case "coldstorageemployee":
@@ -76,44 +123,68 @@ const SideBar = () => {
           { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
           { name: "Product", icon: <FaCubes />, path: "/product" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
-          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
+          {
+            name: "Contract",
+            icon: <FaFileContract />,
+            path: "",
+            subItems: [
+              { name: "Draft", icon: <FaCog />, path: "/Contract" },
+              { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+              { name: "Completed", icon: <FaArchive />, path: "/Completed" },
+            ],
+          },
           {
             name: "Material Movement",
             icon: <FaArchive />,
             path: "/MaterialMovement",
+            subItems: [
+              { name: "Pending", icon: <FaCog />, path: "/MaterialMovement" },
+              {
+                name: "Completed",
+                icon: <FaClock />,
+                path: "/CompletedMaterialMovement",
+              },
+            ],
           },
-          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
         ]);
         break;
       case "manufectureemployee":
         setMenuItems([
-          { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
-          { name: "Employee", icon: <FaUser />, path: "/employee" },
-          { name: "Party", icon: <FaEnvelope />, path: "/party" },
-          { name: "Settings", icon: <FaCog />, path: "/settings" },
-          { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
-          { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
-          { name: "Size", icon: <FaWrench />, path: "/Size" },
-          { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
-          { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
-          { name: "Product", icon: <FaCubes />, path: "/product" },
-          { name: "Location", icon: <FaMapMarker />, path: "/Location" },
-          { name: "Contract", icon: <FaFileContract />, path: "/Contract" },
           {
-            name: "Material Movement",
-            icon: <FaArchive />,
-            path: "/MaterialMovement",
+            name: "Contract",
+            icon: <FaFileContract />,
+            path: "",
+            subItems: [
+              { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedContract",
+              },
+            ],
           },
-          { name: "Ongoing", icon: <FaClock />, path: "/Ongoing" },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          {
+            name: "Requisition",
+            icon: <FaCog />,
+            path: "",
+            subItems: [
+              { name: "Pending", icon: <FaCog />, path: "/Requisition" },
+              {
+                name: "Completed",
+                icon: <FaArchive />,
+                path: "/CompletedRequisition",
+              },
+            ],
+          },
         ]);
         break;
       default:
         setMenuItems([]);
         break;
     }
-  }, []);
+  }, [location.pathname]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -125,6 +196,44 @@ const SideBar = () => {
 
   const handleMenuItemClick = path => {
     navigate(path);
+    setShowContractDropdown(false);
+    setShowRequisitionDropdown(false);
+    setShowMaterialMovementDropdown(false);
+  };
+
+  const handleContractClick = () => {
+    setShowContractDropdown(!showContractDropdown);
+    setShowRequisitionDropdown(false);
+    setShowMaterialMovementDropdown(false);
+  };
+
+  const handleRequisitionClick = () => {
+    setShowRequisitionDropdown(!showRequisitionDropdown);
+    setShowContractDropdown(false);
+    setShowMaterialMovementDropdown(false);
+  };
+
+  const handleMaterialMovementClick = () => {
+    setShowMaterialMovementDropdown(!showMaterialMovementDropdown);
+    setShowContractDropdown(false);
+    setShowRequisitionDropdown(false);
+  };
+
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const closeLogoutModal = () => {
+    setIsLogoutModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    closeLogoutModal();
+    localStorage.removeItem("user");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const filteredMenuItems = menuItems.filter(item =>
@@ -142,6 +251,9 @@ const SideBar = () => {
             <div className="btn btn-primary" onClick={toggleSidebar}>
               <FaBars />
             </div>
+            <button className="btn btn-danger ml-2" onClick={openLogoutModal}>
+              Logout
+            </button>
           </div>
         </div>
       </nav>
@@ -166,13 +278,97 @@ const SideBar = () => {
           <ul>
             {filteredMenuItems.map((item, index) => (
               <li key={index}>
-                <Link
-                  to={item.path}
-                  className="sd-link"
-                  onClick={() => handleMenuItemClick(item.path)}
-                >
-                  {item.icon} {item.name}
-                </Link>
+                {item.subItems ? (
+                  <div
+                    className={`sd-link ${
+                      location.pathname.startsWith(item.path) ? "active" : ""
+                    }`}
+                    onClick={
+                      item.name === "Contract"
+                        ? handleContractClick
+                        : item.name === "Requisition"
+                        ? handleRequisitionClick
+                        : item.name === "Material Movement"
+                        ? handleMaterialMovementClick
+                        : null
+                    }
+                  >
+                    {item.icon} {item.name}{" "}
+                    {item.name === "Contract" && <FaAngleDown />}
+                    {item.name === "Requisition" && <FaAngleDown />}
+                    {item.name === "Material Movement" && <FaAngleDown />}
+                    {showContractDropdown && item.name === "Contract" && (
+                      <ul className="sub-menu">
+                        {item.subItems.map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              to={subItem.path}
+                              className={`sd-link ${
+                                location.pathname === subItem.path
+                                  ? "active"
+                                  : ""
+                              }`}
+                              onClick={() => handleMenuItemClick(subItem.path)}
+                            >
+                              {subItem.icon} {subItem.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {showRequisitionDropdown && item.name === "Requisition" && (
+                      <ul className="sub-menu">
+                        {item.subItems.map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              to={subItem.path}
+                              className={`sd-link ${
+                                location.pathname === subItem.path
+                                  ? "active"
+                                  : ""
+                              }`}
+                              onClick={() => handleMenuItemClick(subItem.path)}
+                            >
+                              {subItem.icon} {subItem.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {showMaterialMovementDropdown &&
+                      item.name === "Material Movement" && (
+                        <ul className="sub-menu">
+                          {item.subItems.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              <Link
+                                to={subItem.path}
+                                className={`sd-link ${
+                                  location.pathname === subItem.path
+                                    ? "active"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleMenuItemClick(subItem.path)
+                                }
+                              >
+                                {subItem.icon} {subItem.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                  </div>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={`sd-link ${
+                      location.pathname === item.path ? "active" : ""
+                    }`}
+                    onClick={() => handleMenuItemClick(item.path)}
+                  >
+                    {item.icon} {item.name}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -182,6 +378,24 @@ const SideBar = () => {
         className={`sidebar-overlay ${isOpen ? "active" : ""}`}
         onClick={toggleSidebar}
       ></div>
+
+      {/* Logout Modal */}
+      <Modal show={isLogoutModalOpen} onHide={closeLogoutModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Logout Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to logout?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeLogoutModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

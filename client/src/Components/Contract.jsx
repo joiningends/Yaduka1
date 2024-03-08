@@ -44,9 +44,9 @@ function Contract() {
 
   const handleViewContract = (id, storagetype) => {
     if (storagetype === "Area") {
-      navigate(`/DraftContract/DraftContractAreaType/${id}`);
+      navigate(`/Contract/DraftContractAreaType/${id}`);
     } else if (storagetype === "Product") {
-      navigate(`/DraftContract/DraftContractProductType/${id}`);
+      navigate(`/Contract/DraftContractProductType/${id}`);
     }
   };
 

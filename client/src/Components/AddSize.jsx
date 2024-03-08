@@ -28,7 +28,9 @@ function AddSize() {
       setLoading(false);
       if (response.status === 201) {
         toast.success("Size created successfully!");
-        navigate("/Size");
+        setTimeout(() => {
+          navigate("/Size");
+        }, 2000);
       } else {
         toast.error("Failed to create size");
       }
@@ -111,6 +113,12 @@ function AddSize() {
                         type="submit"
                         className="btn btn-primary rounded-pill"
                         disabled={loading}
+                        style={{
+                          background:
+                            "linear-gradient(263deg, #34b6df, #34d0be)",
+                          color: "#fff",
+                          marginLeft: "0.3rem",
+                        }}
                       >
                         {loading ? (
                           <Spinner

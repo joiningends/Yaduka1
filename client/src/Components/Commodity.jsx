@@ -57,12 +57,10 @@ const Commodity = () => {
     axios
       .delete(`http://3.6.248.144/api/v1/commodity/delete/${id}`)
       .then(response => {
-        if (response.status === 200) {
-          toast.success("Commodity deleted successfully");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        }
+        toast.success("Commodity deleted successfully");
+        setTimeout(() => {
+          window.location.reload();
+        }, 20000);
       })
       .catch(error => {
         console.error("Error deleting commodity:", error);

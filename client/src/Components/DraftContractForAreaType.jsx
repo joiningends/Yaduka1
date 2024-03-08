@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function DraftContractForAreaType() {
   const [draftContract, setDraftContract] = useState(null);
@@ -14,6 +15,8 @@ function DraftContractForAreaType() {
   const [inQty, setInQty] = useState(1);
   const [rate, setRate] = useState(0);
   console.log(draftContract?.gstRate?.percentage);
+  const userId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -21,7 +24,7 @@ function DraftContractForAreaType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/100/draft/${id}`
+          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
         );
         setDraftContract(response.data);
         console.log(response);
@@ -39,6 +42,7 @@ function DraftContractForAreaType() {
   useEffect(() => {
     const fetchStorageSpaces = async () => {
       try {
+        console.log(`http://3.6.248.144/api/v1/location/space/${storageId}`);
         const response = await axios.get(
           `http://3.6.248.144/api/v1/location/space/${storageId}`
         );
@@ -89,19 +93,19 @@ function DraftContractForAreaType() {
       };
 
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/100`,
+        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
         dataToSend
       );
 
-      if (response.status === 200) {
-        toast.success("Data submitted successfully!");
-        // Add any additional logic or redirection as needed
-      } else {
-        throw new Error("Failed to submit data");
-      }
+      toast.success("Data submitted successfully!");
+      // Add any additional logic or redirection as needed
+      setTimeout(() => {
+        // Navigate to "/Contract" route
+        navigate("/Contract");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting data:", error);
-      toast.error("Failed to submit data");
+      toast.error("Failed to submit data. Please try again.");
     }
   };
 
@@ -138,7 +142,7 @@ function DraftContractForAreaType() {
                       type="text"
                       className="form-control rounded-pill"
                       id="party"
-                      value={draftContract?.user?.name}
+                      value={draftContract?.partyuser?.name}
                       readOnly
                     />
                   </div>
@@ -380,6 +384,7 @@ function DraftContractForAreaType() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

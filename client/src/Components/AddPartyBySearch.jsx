@@ -3,9 +3,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddParty() {
   const { phoneNumber } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,6 +17,7 @@ function AddParty() {
     companyAddress: "",
     isTerminate: false,
   });
+  console.log(formData);
   const [userTypeId, setTypeId] = useState(null);
   const userId = localStorage.getItem("id");
 
@@ -41,11 +44,12 @@ function AddParty() {
           `http://3.6.248.144/api/v1/users/party/${phoneNumber}`
         );
         const { record } = response.data;
+        console.log(response.data);
         const updatedFormData = {
-          name: record.contactPerson || "",
+          name: record.name || "",
           phoneNumber: String(record.mobileNumber) || "",
           email: record.email || "",
-          companyName: record.businessName || "",
+          companyName: record.companyname || "",
           companyAddress: record.address || "",
           isTerminate: record.isBlacklist || false,
         };
@@ -58,20 +62,6 @@ function AddParty() {
 
     fetchData();
   }, [phoneNumber]);
-
-  const validatePhoneNumber = value => {
-    const phoneNumberPattern = /^\d{10}$/;
-    return phoneNumberPattern.test(value)
-      ? undefined
-      : "Please enter a valid 10-digit phone number.";
-  };
-
-  const validateEmail = value => {
-    const emailPattern = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-    return emailPattern.test(value)
-      ? undefined
-      : "Please enter a valid Gmail address.";
-  };
 
   const handleSubmit = async () => {
     try {
@@ -92,9 +82,12 @@ function AddParty() {
       );
 
       toast.success("Form submitted successfully!");
+      setTimeout(() => {
+        navigate("/party");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Error submitting form. Please try again.");
+      toast.error(error?.response?.data?.error);
     }
   };
 
@@ -105,7 +98,7 @@ function AddParty() {
 
   const handleCancel = e => {
     e.preventDefault();
-    // Handle cancel behavior if needed
+    navigate("/party");
   };
 
   return (
@@ -152,7 +145,7 @@ function AddParty() {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handlePhoneNumberChange}
-                      required
+                      disabled
                     />
                   </div>
                 </div>

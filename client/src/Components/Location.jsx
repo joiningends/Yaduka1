@@ -11,6 +11,7 @@ import {
   Typography,
   Pagination,
   TextField,
+  Snackbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -19,6 +20,8 @@ const Location = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [locations, setLocations] = useState([]);
+  const [toastMessage, setToastMessage] = useState(null);
+  const [openToast, setOpenToast] = useState(false);
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
@@ -29,7 +32,6 @@ const Location = () => {
       .get(`http://3.6.248.144/api/v1/location/${userId}`)
       .then(response => {
         setLocations(response.data);
-        console.log(response.data);
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -69,7 +71,24 @@ const Location = () => {
     .slice(indexOfFirstLocation, indexOfLastLocation);
 
   const handleDelete = id => {
-    console.log(`Deleting location with ID: ${id}`);
+    axios
+      .delete(`http://3.6.248.144/api/v1/location/${id}`)
+      .then(() => {
+        setLocations(prevLocations =>
+          prevLocations.filter(location => location.id !== id)
+        );
+        setToastMessage("Location deleted successfully!");
+        setOpenToast(true);
+      })
+      .catch(error => {
+        setToastMessage("Error deleting location. Please try again.");
+        setOpenToast(true);
+        console.error("Error deleting location:", error);
+      });
+  };
+
+  const handleToastClose = () => {
+    setOpenToast(false);
   };
 
   return (
@@ -135,7 +154,7 @@ const Location = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{location.storagename}</TableCell>
                 <TableCell>{location.address}</TableCell>
-                <TableCell>{location.rentable ? "Yes" : "No"}</TableCell>
+                <TableCell>{location.rantable ? "Yes" : "No"}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
@@ -179,6 +198,12 @@ const Location = () => {
           }}
         />
       </div>
+      <Snackbar
+        open={openToast}
+        autoHideDuration={6000}
+        onClose={handleToastClose}
+        message={toastMessage}
+      />
     </div>
   );
 };

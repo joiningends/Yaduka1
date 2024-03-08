@@ -27,10 +27,13 @@ function DetailsProduct() {
       console.log(productDetails[0]);
       const { product } = productDetails[0];
       console.log(product);
-      const { commodity, varient, newUnit } = product;
-      setConcatenatedValue(
-        `${commodity?.commodity} | ${varient?.varient} || ${newUnit}`
-      );
+      if (product !== null) {
+        const { commodity, varient, unit } = product;
+        console.log();
+        setConcatenatedValue(
+          `${commodity?.commodity} | ${varient?.varient} || ${unit?.unit}`
+        );
+      }
     }
   }, [productDetails]);
 

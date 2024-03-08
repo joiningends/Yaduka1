@@ -17,6 +17,7 @@ function AddVariant() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [commodities, setCommodities] = useState([]);
+  console.log(commodities);
 
   useEffect(() => {
     fetchCommodities();
@@ -70,9 +71,10 @@ function AddVariant() {
       if (response.ok) {
         const responseData = await response.json();
         // Handle success response as needed
-        toast.success("Variant information submitted successfully!", {
-          onClose: () => navigate("/variant"), // Navigate to '/variant' after toast is closed
-        });
+        toast.success("Variant information submitted successfully!");
+        setTimeout(() => {
+          navigate("/Variant");
+        }, 2000);
       } else {
         const errorData = await response.json(); // Fetch and log the error data
         console.error("Failed to submit variant information:", errorData);

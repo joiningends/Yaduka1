@@ -58,7 +58,7 @@ function AddCommodity() {
       if (response.ok) {
         toast.success("Commodity added successfully!");
         setLoading(false);
-        navigate("/employee");
+        navigate("/Commodity");
       } else {
         throw new Error("Failed to add commodity");
       }

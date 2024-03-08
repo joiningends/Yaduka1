@@ -24,11 +24,12 @@ function AddLocationn() {
     height: "",
     rentable: "",
   });
-
+  console.log(currentSpaceDetail);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [spaceTypes, setSpaceTypes] = useState([]);
   const [underOptions, setUnderOptions] = useState([]);
+  console.log(underOptions);
 
   const override = css`
     display: block;
@@ -76,12 +77,10 @@ function AddLocationn() {
         length: Number(detail.length),
         breadth: Number(detail.breadth),
         height: Number(detail.height),
-        rentable: detail.rentable === "Yes",
+        rentable: detail.rentable == "Yes",
       }));
 
       console.log({
-        storagename: values.storageName,
-        address: values.address,
         spacedetails: formattedSpaceDetails,
       });
 
@@ -93,7 +92,7 @@ function AddLocationn() {
       });
 
       setLoading(false);
-      navigate("/locations");
+      navigate("/location");
     } catch (error) {
       console.error("Error processing form:", error);
       setLoading(false);
@@ -155,7 +154,7 @@ function AddLocationn() {
   };
 
   const handleCancel = () => {
-    navigate("/locations");
+    navigate("/location");
   };
 
   return (

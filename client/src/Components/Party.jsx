@@ -16,6 +16,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function Party() {
   const [page, setPage] = useState(1);
@@ -54,6 +57,10 @@ function Party() {
     setPage(value);
   };
 
+  const handleEdit = number => {
+    navigate(`/Party/EditParty/${number}`);
+  };
+
   const handleSearch = event => {
     setPage(1);
     setSearch(event.target.value);
@@ -79,8 +86,30 @@ function Party() {
     )
     .slice(indexOfFirstRow, indexOfLastRow);
 
+  console.log(currentRows);
   const handleDelete = id => {
     console.log(`Deleting party with ID: ${id}`);
+
+    axios
+      .delete(`http://3.6.248.144/api/v1/users/${id}`)
+      .then(response => {
+        console.log("Party deleted successfully:", response.data);
+
+        // Display success toast
+        toast.success("Party deleted successfully!");
+
+        // Update the partyData state to reflect the deletion
+        const updatedPartyData = partyData.filter(
+          party => party.partyid !== id
+        );
+        setPartyData(updatedPartyData);
+      })
+      .catch(error => {
+        console.error("Error deleting party:", error);
+
+        // Display error toast
+        toast.error("Error deleting party. Please try again.");
+      });
   };
 
   const handleSearchClick = () => {
@@ -181,13 +210,17 @@ function Party() {
             {currentRows.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{row.party.name}</TableCell>
-                <TableCell>{row.party.mobileNumber}</TableCell>
-                <TableCell>{row.party.email}</TableCell>
-                <TableCell>{row.party.companyname}</TableCell>
-                <TableCell>{row.party.address}</TableCell>
+                <TableCell>{row?.party?.name}</TableCell>
+                <TableCell>{row?.party?.mobileNumber}</TableCell>
+                <TableCell>{row?.party?.email}</TableCell>
+                <TableCell>{row?.party?.companyname}</TableCell>
+                <TableCell>{row?.party?.address}</TableCell>
                 <TableCell>
-                  <Button variant="contained" style={editButtonStyle}>
+                  <Button
+                    variant="contained"
+                    style={editButtonStyle}
+                    onClick={() => handleEdit(row.partyid)}
+                  >
                     Edit
                   </Button>
                   <Button
@@ -201,7 +234,7 @@ function Party() {
                         background: "#e23428",
                       },
                     }}
-                    onClick={() => handleDelete(row.id)}
+                    onClick={() => handleDelete(row.partyid)}
                   >
                     Delete
                   </Button>
@@ -265,6 +298,7 @@ function Party() {
           }}
         />
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -16,17 +16,20 @@ const Location = sequelize.define("Location", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  under:{
-   type: DataTypes.INTEGER,
-    allowNull: false, 
+  under: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  rantable: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+    allowNull: true,
   },
   isActive: {
     type: Sequelize.BOOLEAN,
     defaultValue: true,
-    allowNull:false
-  }
+    allowNull: false,
+  },
 });
 
-
-
-module.exports =Location;
+module.exports = Location;

@@ -13,6 +13,7 @@ function DetailsArea() {
           `http://3.6.248.144/api/v1/contracts/contract-area/${id}`
         );
         setProductDetails(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
@@ -38,7 +39,7 @@ function DetailsArea() {
       <div className="col-md-12 col-lg-12 col-xl-12">
         <div className="card" style={{ borderRadius: "2rem" }}>
           <div className="card-header">
-            <h4 className="card-title">Product Details</h4>
+            <h4 className="card-title">Area Details</h4>
           </div>
           <div className="card-body">
             <table className="table">

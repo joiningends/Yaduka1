@@ -14,6 +14,7 @@ import ColdStorageAdmin from "./Components/UsersRoutes/ColdStorageAdmin.js";
 import ManufactureAdmin from "./Components/UsersRoutes/ManufactureAdmin.js";
 import ColdStorageEmployee from "./Components/UsersRoutes/ColdStorageEmployee.js";
 import ManufactureEmployee from "./Components/UsersRoutes/ManufactureEmployee.js";
+import ForgotPassword from "./Components/ForgotPassword.jsx";
 
 const App = () => {
   const userRole = localStorage.getItem("role");
@@ -27,6 +28,10 @@ const App = () => {
         <Route path="/otp/:number" element={<Otp />} />
         <Route path="/password/:number/:otp" element={<Password />} />
         <Route path="/setPassword/:id/:number/:otp" element={<SetPassword />} />
+        <Route
+          path="/forgotPassword/:id/:number/:otp"
+          element={<ForgotPassword />}
+        />
 
         {/* User Role Specific Routes */}
         {userRole === "coldstorageadmin" && (

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditAddVariant() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [commodities, setCommodities] = useState([]);
   const [variantData, setVariantData] = useState({
@@ -63,10 +66,42 @@ function EditAddVariant() {
 
   const handleFileChange = e => {
     const file = e.target.files[0];
-    setVariantData(prevData => ({
-      ...prevData,
-      uploadImage: file,
-    }));
+
+    if (file) {
+      setVariantData(prevData => ({
+        ...prevData,
+        uploadImage: file,
+      }));
+    }
+  };
+
+  const handleUpdate = async e => {
+    e.preventDefault();
+
+    try {
+      console.log(JSON.stringify(variantData));
+      const response = await fetch(
+        `http://3.6.248.144/api/v1/varient/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(variantData),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Variant updated successfully!");
+        setTimeout(() => {
+          navigate("/Variant");
+        }, 2000);
+      } else {
+        console.error("Failed to update");
+      }
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
   };
 
   return (
@@ -83,7 +118,7 @@ function EditAddVariant() {
               </h4>
             </div>
             <div className="card-body">
-              <form>
+              <form onSubmit={handleUpdate}>
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="variant" className="form-label">
@@ -113,10 +148,7 @@ function EditAddVariant() {
                     >
                       <option value="">Select Commodity</option>
                       {commodities.map(commodity => (
-                        <option
-                          key={commodity.id}
-                          value={commodity.id.toString()}
-                        >
+                        <option key={commodity.id} value={String(commodity.id)}>
                           {commodity.commodity}
                         </option>
                       ))}
@@ -124,7 +156,7 @@ function EditAddVariant() {
                     <p className="mt-2">
                       Selected Commodity:{" "}
                       {commodities.find(
-                        c => c.id === parseInt(variantData.commodityId)
+                        c => String(c.id) === variantData.commodityId
                       )?.commodity || ""}
                     </p>
                   </div>
@@ -159,7 +191,7 @@ function EditAddVariant() {
                     />
                     {variantData.uploadImage && (
                       <p className="mt-2">
-                        Selected Image: {variantData.uploadImage}
+                        Selected Image: {variantData.uploadImage.name}
                       </p>
                     )}
                   </div>
@@ -237,7 +269,9 @@ function EditAddVariant() {
                     <button
                       type="button"
                       className="btn btn-danger rounded-pill me-2"
-                      onClick={() => {}}
+                      onClick={() => {
+                        navigate("/variant");
+                      }}
                     >
                       Cancel
                     </button>
@@ -258,6 +292,7 @@ function EditAddVariant() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
