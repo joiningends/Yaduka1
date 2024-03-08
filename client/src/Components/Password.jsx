@@ -80,7 +80,7 @@ function Password() {
         } else if (response.data.role === "manufectureadmin") {
           window.location.href = "/Requisition";
         } else if (response.data.role === "coldstorageemployee") {
-          window.location.href = "/Requisition";
+          window.location.href = "/Party";
         }
       } else {
         toast.error("Invalid credentials. Please try again.");
