@@ -24,6 +24,7 @@ function MaterialMovement() {
       try {
         const response = await fetch(`http://3.6.248.144/api/v1/ref/${userId}`);
         const data = await response.json();
+        console.log(data);
         setJsonData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -62,10 +63,10 @@ function MaterialMovement() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Storage Name</b>
+                <b>Contract</b>
               </TableCell>
               <TableCell>
-                <b>Contract</b>
+                <b>Storage Name</b>
               </TableCell>
               <TableCell>
                 <b>Date</b>
@@ -81,8 +82,8 @@ function MaterialMovement() {
           <TableBody>
             {jsonData.map(item => (
               <TableRow key={item.id}>
+                <TableCell>{item.conf.slno}</TableCell>
                 <TableCell>{item.conf.location.storagename}</TableCell>
-                <TableCell>{item.conf.id}</TableCell>
                 <TableCell>
                   {new Date(item.date).toLocaleDateString("en-GB")}
                 </TableCell>
