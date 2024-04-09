@@ -34,6 +34,20 @@ function EditProductDetails() {
   const handleTablePageChange = pageNumber => setCurrentTablePage(pageNumber);
   const handleRequiredQuantityChange = (e, contractId) => {
     const value = parseInt(e.target.value);
+    const availableQty = data
+      .flatMap(item => item.contracts)
+      .find(contract => contract.contractproductid === contractId).qty;
+
+    // Check if the entered value exceeds the available quantity
+    if (value > availableQty) {
+      // Display an error message or handle it accordingly
+      console.error("Error: Quantity cannot exceed available quantity.");
+      // Optionally, you can display a toast message to notify the user
+      toast.error("Quantity cannot exceed available quantity.");
+      return;
+    }
+
+    // Update the required quantities state
     setRequiredQuantities(prevState => ({
       ...prevState,
       [contractId]: value,
@@ -43,27 +57,39 @@ function EditProductDetails() {
   const handleSave = async () => {
     const currentDate = new Date().toISOString().split("T")[0];
     const underValues = selectedAdminId;
-    const requisitionDetails = data.map(contractArray => {
-      const productdetails = contractArray.contracts.map(contract => ({
-        requireqty: requiredQuantities[contract.contractproductid] || 0,
-        deliveryQty: 0,
-        contractId: contract.contractid,
-        storageId: selectedLocationId,
-        contractproductid: contract.contractproductid,
-      }));
-      return {
-        productdetails: productdetails,
-      };
-    });
 
+    // Filter out contracts with required quantity greater than 0 or changed by the user
+    const filteredData = data
+      .map(contractArray => {
+        const productdetails = contractArray.contracts
+          .filter(
+            contract => requiredQuantities[contract.contractproductid] > 0
+          )
+          .map(contract => ({
+            requireqty: requiredQuantities[contract.contractproductid] || 0,
+            deliveryQty: 0,
+            contractId: contract.contractid,
+            storageId: selectedLocationId,
+            contractproductid: contract.contractproductid,
+          }));
+        return {
+          productdetails: productdetails,
+        };
+      })
+      .filter(item => item.productdetails.length > 0);
+
+    // Construct request data
     const requestData = {
       date: currentDate,
       underValues: underValues,
       storageId: selectedLocationId,
-      requisitionDetails: requisitionDetails,
+      requisitionDetails: filteredData,
     };
 
+    console.log(requestData);
+
     try {
+      // Send request to save data
       await axios.post(
         `http://3.6.248.144/api/v1/ref/create/${partyId}`,
         requestData
@@ -166,7 +192,7 @@ function EditProductDetails() {
                       <input
                         type="number"
                         min="0"
-                        max={contract.qty}
+                        max={contract.qty} // Set the max attribute to the available quantity
                         value={
                           requiredQuantities[contract.contractproductid] || ""
                         }
