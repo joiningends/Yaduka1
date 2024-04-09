@@ -42,26 +42,24 @@ function AddVariant() {
     try {
       setIsLoading(true);
 
-      const {
-        variant,
-        commodityId,
-        cropDuration,
-        uploadImage,
-        isImported,
-        isFarmable,
-      } = values;
+      const { variant, commodityId, cropDuration, isImported, isFarmable } =
+        values;
 
+      // Selecting the file from input
+      const fileInput = document.getElementById("uploadImage");
+      const file = fileInput.files[0];
       // Convert isImported and isFarmable to boolean values
       const convertedIsImported = isImported === "true";
       const convertedIsFarmable = isFarmable === "true";
 
+      // Creating FormData and appending the image
       const formData = new FormData();
+      formData.append("image", file);
       formData.append("varient", variant);
       formData.append("commodityId", commodityId);
       formData.append("cropDuration", cropDuration);
       formData.append("isImported", convertedIsImported);
       formData.append("farmable", convertedIsFarmable);
-      formData.append("image", uploadImage); // Assuming uploadImage is a File object
 
       const response = await fetch("http://3.6.248.144/api/v1/varient/create", {
         method: "POST",

@@ -31,5 +31,6 @@ router.get("/invoice/:id", userController.getUsersWithType4);
 router.get("/edit/:id", userController.getUserByIda);
 
 router.get("/get/:id", userController.getUsersUnderIdmanufacture);
+router.get("/adminall/coldstorage", userController.allCloudStorageAdmin);
 
 module.exports = router;

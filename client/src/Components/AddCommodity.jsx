@@ -47,15 +47,19 @@ function AddCommodity() {
       formData.append("commodityTypeId", values.commodityType);
       formData.append("image", values.image);
 
-      const response = await fetch(
+      console.log(values);
+
+      const response = await axios.post(
         "http://3.6.248.144/api/v1/commodity/create",
+        formData,
         {
-          method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Commodity added successfully!");
         setLoading(false);
         navigate("/Commodity");
@@ -85,7 +89,9 @@ function AddCommodity() {
           </div>
           <div className="card-body">
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-              {({ setFieldValue }) => (
+              {(
+                { setFieldValue } // Pass setFieldValue here
+              ) => (
                 <Form>
                   <div className="mb-3 row">
                     <div className="col-md-6">
@@ -126,12 +132,16 @@ function AddCommodity() {
                     <label htmlFor="image" className="form-label">
                       Upload Image <span className="text-danger">*</span>
                     </label>
-                    <Field
+                    <input
                       type="file"
                       className="form-control"
                       id="image"
                       name="image"
                       accept="image/*"
+                      onChange={event => {
+                        const file = event.target.files[0];
+                        setFieldValue("image", file);
+                      }}
                       required
                       style={{ width: "48%" }}
                     />

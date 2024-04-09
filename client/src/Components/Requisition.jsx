@@ -11,46 +11,83 @@ import {
   Typography,
   Pagination,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Requisition() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(5);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [detailsData, setDetailsData] = useState([]);
+  const [detailsPage, setDetailsPage] = useState(1);
+  const [detailsRowsPerPage] = useState(5);
   const navigate = useNavigate();
-  const userId = localStorage.getItem("id");
-  console.log(userId);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/getByPartyId/${userId}`
-        );
-        setData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    const partyId = localStorage.getItem("id");
+    if (!partyId) {
+      console.error("partyId not found in localStorage");
+      return;
     }
-    fetchData();
-  }, [page, rowsPerPage]);
+
+    axios
+      .get(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`)
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleAddRequisition = () => {
-    // Navigate to the '/Requisition/addRequisition' route when the 'Add' button is clicked
-    navigate("/Requisition/addRequisition");
+  const handleDetailsPageChange = (event, newPage) => {
+    setDetailsPage(newPage);
   };
 
-  const handleView = id => {
-    // Handle the view action, you can navigate to a detailed view or perform other actions
-    console.log(`Viewing item with ID: ${id}`);
-    navigate(`/Requisition/ViewRequisition/${id}`);
+  const handleView = item => {
+    setSelectedItem(item);
+    setOpenDialog(true);
+
+    axios
+      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .then(response => {
+        setDetailsData(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching details data:", error);
+      });
   };
+
+  const handleEdit = () => {
+    if (selectedItem) {
+      navigate(`/EditRequisition/${selectedItem.id}/${selectedItem.storageId}`);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleSearch = event => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredData = data.filter(
+    item =>
+      item.slno && item.slno.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div style={{ margin: "0 1rem" }}>
@@ -67,43 +104,50 @@ function Requisition() {
             Requisition
           </Typography>
         </div>
+
         <div>
-          <Button
-            variant="contained"
-            style={{
-              background: "linear-gradient(263deg, #34b6df, #34d0be)",
-              color: "#fff",
-              borderRadius: "8px",
-              "&:hover": {
-                background: "linear-gradient(263deg, #34b6df, #34d0be)",
-              },
-            }}
-            onClick={handleAddRequisition}
+          <Link
+            to="/Requisition/AddRequisition"
+            style={{ textDecoration: "none" }}
           >
-            Add
-          </Button>
+            <Button
+              variant="contained"
+              style={{
+                background: "#34b6df",
+                color: "#fff",
+                borderRadius: "8px",
+                "&:hover": {
+                  background: "#34b6df",
+                },
+              }}
+            >
+              Add
+            </Button>
+          </Link>
         </div>
       </div>
 
+      <TextField
+        label="Search by Serial Number"
+        variant="outlined"
+        fullWidth
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{ marginBottom: "1rem" }}
+      />
+
       <TableContainer
         component={Paper}
-        sx={{ borderRadius: "12px", margin: "1rem 0" }}
+        style={{ borderRadius: "12px", margin: "1rem 0" }}
       >
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Contract Name</b>
+                <b>S No.</b>
               </TableCell>
               <TableCell>
-                <b>Storage Name</b>
-              </TableCell>
-
-              <TableCell>
-                <b>Date</b>
-              </TableCell>
-              <TableCell>
-                <b>Status</b>
+                <b>Serial Number</b>
               </TableCell>
               <TableCell>
                 <b>Action</b>
@@ -111,32 +155,30 @@ function Requisition() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(item => (
-              <TableRow key={item.id}>
-                <TableCell>{item.conf.slno}</TableCell>
-                <TableCell>{item.conf.location.storagename}</TableCell>
-                <TableCell>
-                  {new Date(item.date).toLocaleDateString("en-GB")}
-                </TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    style={{
-                      background: "#34b6df",
-                      color: "#fff",
-                      borderRadius: "8px",
-                      "&:hover": {
+            {filteredData
+              .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+              .map((item, index) => (
+                <TableRow key={item.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item.slno}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      style={{
                         background: "#34b6df",
-                      },
-                    }}
-                    onClick={() => handleView(item.id)}
-                  >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+                        color: "#fff",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          background: "#34b6df",
+                        },
+                      }}
+                      onClick={() => handleView(item)}
+                    >
+                      Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -149,12 +191,12 @@ function Requisition() {
         }}
       >
         <Pagination
-          count={Math.ceil(data.length / rowsPerPage)}
+          count={Math.ceil(filteredData.length / rowsPerPage)}
           page={page}
           onChange={handleChangePage}
           shape="rounded"
           color="primary"
-          sx={{
+          style={{
             "& .Mui-selected": {
               background: "linear-gradient(263deg, #34b6df, #34d0be)",
               color: "#fff",
@@ -162,6 +204,80 @@ function Requisition() {
           }}
         />
       </div>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        PaperProps={{
+          style: {
+            padding: "1rem",
+          },
+        }}
+      >
+        <DialogTitle>Product Information</DialogTitle>
+        <DialogContent>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <b>S No.</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Product Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Total Required Quantity</b>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {detailsData
+                  .slice(
+                    (detailsPage - 1) * detailsRowsPerPage,
+                    detailsPage * detailsRowsPerPage
+                  )
+                  .map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{`${item.commodity} || ${item.variant} || ${item.quality} || ${item.size} || ${item.unit}`}</TableCell>
+                      <TableCell>{item.qty}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "1rem",
+            }}
+          >
+            <Pagination
+              count={Math.ceil(detailsData.length / detailsRowsPerPage)}
+              page={detailsPage}
+              onChange={handleDetailsPageChange}
+              shape="rounded"
+              color="primary"
+              style={{
+                "& .Mui-selected": {
+                  background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                  color: "#fff",
+                },
+              }}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEdit} color="primary">
+            Edit
+          </Button>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

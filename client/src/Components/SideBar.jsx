@@ -53,6 +53,7 @@ const SideBar = () => {
           { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
           { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
           { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Commodity", icon: <FaWrench />, path: "/Commodity" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
           {
             name: "Contract",
@@ -82,11 +83,21 @@ const SideBar = () => {
             ],
           },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          {
+            name: "Inventory Report",
+            icon: <FaFileInvoice />,
+            path: "/InventoryReport",
+          },
         ]);
         break;
       case "manufectureadmin":
         setMenuItems([
           { name: "Employee", icon: <FaUser />, path: "/employee" },
+          {
+            name: "Inventory Report",
+            icon: <FaUser />,
+            path: "/InventoryReport",
+          },
           {
             name: "Contract",
             icon: <FaFileContract />,
@@ -203,6 +214,7 @@ const SideBar = () => {
     setShowContractDropdown(false);
     setShowRequisitionDropdown(false);
     setShowMaterialMovementDropdown(false);
+    setIsOpen(!isOpen);
   };
 
   const handleContractClick = () => {

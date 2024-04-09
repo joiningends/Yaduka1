@@ -74,8 +74,11 @@ const createCommodity = async (req, res) => {
   try {
     let image = null;
     if (req.file) {
+      const fileName= req.file.filename;
       console.log(req.file);
-      image = req.file.filename;
+      const basePath = `${req.protocol}://${req.get('host')}/public/uplds/`;
+      
+      image = `${basePath}${fileName}`
     }
     const newCommodity = await Commodity.create({
       commodity: commodity,

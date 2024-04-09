@@ -15,6 +15,7 @@ const Product = () => {
     axios
       .get("http://3.6.248.144/api/v1/commodity/all1")
       .then(response => {
+        console.log(response.data);
         setCommodities(response.data);
       })
       .catch(error => {
@@ -102,7 +103,7 @@ const Product = () => {
             style={{ margin: "0.5rem", textAlign: "center" }}
           >
             <img
-              src={`http://localhost:5001/images/${commodity.image}.jpg`}
+              src={commodity.image}
               alt={commodity?.commodity}
               style={{
                 maxWidth: "200px",

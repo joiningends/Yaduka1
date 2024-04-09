@@ -23,6 +23,10 @@ import CompletedAreaView from "../CompletedAreaView";
 import CompletedProductView from "../CompletedProductView";
 import DetailsCompeteProduct from "../DetailsCompeteProduct";
 import DetailsCompleteArea from "../DetailsCompleteArea";
+import InventoryReport from "../InventoryReport";
+import EditProductDetails from "../EditProductDetails";
+import EditRequisitionDetails from "../EditRequisitionDetails";
+import CompletedRequisitionDetails from "../CompletedRequisitionDetails";
 
 const ManufactureAdmin = () => {
   return (
@@ -81,6 +85,19 @@ const ManufactureAdmin = () => {
         />
         <Route path="/DetailsProduct/:id" element={<DetailsProduct />} />
         <Route path="/DetailsArea/:id" element={<DetailsArea />} />
+        <Route path="/InventoryReport" element={<InventoryReport />} />
+        <Route
+          path="/editProductDetails/:selectedAdminId/:selectedLocationId"
+          element={<EditProductDetails />}
+        />
+        <Route
+          path="/editRequisition/:id/:storageId"
+          element={<EditRequisitionDetails />}
+        />
+        <Route
+          path="/Requisition/completedRequisition/:id"
+          element={<CompletedRequisitionDetails />}
+        />
       </Routes>
     </div>
   );

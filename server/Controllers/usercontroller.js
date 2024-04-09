@@ -885,3 +885,23 @@ exports.getUsersUnderIdmanufacture = async (req, res) => {
     res.status(500).json({ error: "Error fetching users" });
   }
 };
+
+exports.allCloudStorageAdmin = async (req, res) => {
+  try {
+    // Retrieve all users with userTypeId 5
+    const users = await userTable.findAll({
+      where: {
+        userTypeId: 3
+      }
+    });
+
+    
+    res.status(200).json(users);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+

@@ -50,6 +50,8 @@ import CompletedProductView from "../CompletedProductView";
 import DetailsCompleteArea from "../DetailsCompleteArea";
 import DetailsCompeteProduct from "../DetailsCompeteProduct";
 import ViewCompletedMaterialMovement from "../ViewCompletedMaterialMovement";
+import InventoryReport from "../InventoryReport";
+import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
 
 const ColdStorageAdmin = () => {
   return (
@@ -157,6 +159,10 @@ const ColdStorageAdmin = () => {
           element={<DetailsCompeteProduct />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route
+          path="/InventoryReport"
+          element={<InventoryReportForColdStorage />}
+        />
       </Routes>
     </div>
   );

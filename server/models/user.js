@@ -105,6 +105,11 @@ const userTable = sequelize.define("userTable", {
       type: DataTypes.STRING,
      
       allowNull: true,
+    },
+    reqsitioncount:{
+      type: DataTypes.INTEGER,
+     
+      allowNull: true,
     }
    
 });

@@ -20,7 +20,6 @@ function CompletedRequisition() {
   const [rowsPerPage] = useState(5);
   const navigate = useNavigate();
   const userId = localStorage.getItem("id");
-  console.log(userId);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,9 +40,9 @@ function CompletedRequisition() {
     setPage(newPage);
   };
 
-  const handleView = id => {
-    console.log(`Viewing item with ID: ${id}`);
-    navigate(`/Requisition/ViewCompletedRequisition/${id}`);
+  const handleViewDetails = id => {
+    console.log(`Viewing details of item with ID: ${id}`);
+    navigate(`/Requisition/completedRequisition/${id}`);
   };
 
   return (
@@ -71,16 +70,7 @@ function CompletedRequisition() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Contract Name</b>
-              </TableCell>
-              <TableCell>
-                <b>Storage Name</b>
-              </TableCell>
-              <TableCell>
-                <b>Date</b>
-              </TableCell>
-              <TableCell>
-                <b>Status</b>
+                <b>Serial Number</b>
               </TableCell>
               <TableCell>
                 <b>Action</b>
@@ -90,12 +80,7 @@ function CompletedRequisition() {
           <TableBody>
             {data.map(item => (
               <TableRow key={item.id}>
-                <TableCell>{item?.conf?.slno}</TableCell>
-                <TableCell>{item?.conf?.location?.storagename}</TableCell>
-                <TableCell>
-                  {new Date(item?.date).toLocaleDateString("en-GB")}
-                </TableCell>
-                <TableCell>{item?.status}</TableCell>
+                <TableCell>{item.slno}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
@@ -107,9 +92,9 @@ function CompletedRequisition() {
                         background: "#34b6df",
                       },
                     }}
-                    onClick={() => handleView(item?.id)}
+                    onClick={() => handleViewDetails(item.id)}
                   >
-                    View
+                    Details
                   </Button>
                 </TableCell>
               </TableRow>
@@ -126,7 +111,7 @@ function CompletedRequisition() {
         }}
       >
         <Pagination
-          count={Math.ceil(data?.length / rowsPerPage)}
+          count={Math.ceil(data.length / rowsPerPage)}
           page={page}
           onChange={handleChangePage}
           shape="rounded"

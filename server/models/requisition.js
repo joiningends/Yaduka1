@@ -8,6 +8,10 @@ const Requisition = sequelize.define('requisition', {
     primaryKey: true,
     autoIncrement: true,
   },
+  slno:{
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   date: {
     type: DataTypes.STRING,
     allowNull: false,

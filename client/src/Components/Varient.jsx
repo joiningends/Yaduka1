@@ -34,6 +34,7 @@ const Variant = () => {
       .get("http://3.6.248.144/api/v1/varient/all")
       .then(response => {
         setVariantData(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -80,8 +81,10 @@ const Variant = () => {
   const indexOfLastRow = page * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentVariants = variantData
-    .filter(variant =>
-      variant.varient.toLowerCase().includes(search.toLowerCase())
+    .filter(
+      variant =>
+        variant.varient &&
+        variant.varient.toLowerCase().includes(search.toLowerCase())
     )
     .slice(indexOfFirstRow, indexOfLastRow);
 

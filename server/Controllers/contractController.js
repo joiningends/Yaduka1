@@ -19,6 +19,7 @@ const party = require("../models/party");
 const UserUnder = require("../models/userunder");
 const GstType = require("../models/gsttype");
 const GstRate = require("../models/gstrate");
+const Storagespace =require("../models/storagespace")
 
 const {
   sendWhatsAppMessage,
@@ -373,7 +374,6 @@ exports.updateContractforproduct = async (req, res) => {
     const contractId = req.params.id;
     const userId = req.params.userid;
     const user = await userTable.findByPk(userId);
-    console.log(contractId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -382,10 +382,8 @@ exports.updateContractforproduct = async (req, res) => {
     let under = null;
 
     if (user.userTypeId === 3) {
-      // If user type ID is 3, set under to the user ID
       under = userId;
     } else if (user.userTypeId === 5) {
-      // If user type ID is 5, set under to the user's under value
       under = user.under;
     }
 
@@ -394,15 +392,11 @@ exports.updateContractforproduct = async (req, res) => {
     if (!existingContract) {
       return res.status(404).json({ error: "Contract not found" });
     }
+
     const renewalDays = parseInt(existingContract.renewaldays, 10);
 
-    // Parse contract start date
-    const [day, month, year] = existingContract.contractstartdate
-      .split("-")
-      .map(Number);
-    const contractStartDate = new Date(year, month - 1, day); // month is zero-based
+    const contractStartDate = new Date(existingContract.contractstartdate);
 
-    // Calculate next invoice date
     const nextInvoiceDate = new Date(contractStartDate);
     nextInvoiceDate.setDate(contractStartDate.getDate() + renewalDays);
 
@@ -415,48 +409,85 @@ exports.updateContractforproduct = async (req, res) => {
 
     const { storagespaces } = req.body;
 
-    // Add new ContractSpaces
     if (storagespaces && Array.isArray(storagespaces)) {
       await Promise.all(
         storagespaces.map(async space => {
-          // Check if a space with the same details already exists for the contract
           const existingSpace = await ContractProduct.findOne({
             where: {
               contractId: existingContract.id,
-              storagespace: space.storagespace || null,
+              productid: space.productid || null,
             },
           });
 
-          // Create a new ContractSpace if it doesn't exist
           if (!existingSpace) {
             const newContractProduct = await ContractProduct.create({
               ...space,
               contractId: existingContract.id,
             });
+console.log(newContractProduct)
+            const rooms = space.storagespace;
+            const productId =space.productid;
+            console.log("allrooms", rooms);
+            if (Array.isArray(rooms)) {
+              
+              await Promise.all(
+                rooms.map(async room => {
+                  await Storagespace.create({
+
+                    productspaces: room,
+                    contractproduct: newContractProduct.id,
+                    contractId: existingContract.id,
+                    productid:productId
+                  });
+                })
+              );
+            } else if (rooms) {
+              // If rooms is not an array but exists, create a single Storagespace
+              await Storagespace.create({
+                productspaces: rooms,
+                contractproduct: newContractProduct.id,
+                contractId: existingContract.id,
+                productid:productId
+              });
+            }
+            // If rooms is null or undefined, there is nothing to do, so you can omit it.
+            
           }
         })
       );
     }
 
-    // Fetch contract products including space details using eager loading
     const contractProducts = await ContractProduct.findAll({
       where: { contractId: existingContract.id },
-      include: [{ model: SpaceDetails, as: "storagespac" }],
     });
 
-    // Extract data from contractProducts and create tableData
-    const tableData = contractProducts.map(product => ({
-      storagespace: product.storagespac.space, // Extract space details
-      qty: product.qty, // Assuming quantity is always 1
-      rate: product.rate, // Assuming rate is already available in contractProducts
-      amount: product.amount, // Assuming amount is already available in contractProducts
+    const storages = await Promise.all(contractProducts.map(async store => {
+      const storagespaces = await Storagespace.findAll({
+        where: { contractproduct: store.id },
+        include: [
+          {
+            model: ContractProduct,
+            as: 'contractp',
+          },
+          {
+            model: SpaceDetails,
+            as: 'productSpaceDetails',
+          },
+        ],
+      });
+      return storagespaces;
     }));
-    console.log(tableData);
-    const pdfFilePath = await generatePDF(
-      under,
-      existingContract.id,
-      tableData
-    );
+
+    const flattenedStorages = storages.flat();
+
+    const tableData = flattenedStorages.map(product => ({
+      //storagespace: product.contractp ? product.contractp.storagespac.space : null,
+      qty: product.qty,
+      rate: product.rate,
+      amount: product.amount,
+    }));
+
+    //const pdfFilePath = await generatePDF(under, existingContract.id, tableData);
 
     res.status(200).json(existingContract);
   } catch (error) {
@@ -1713,6 +1744,7 @@ exports.download = async (req, res) => {
 
 const cron = require("node-cron");
 const { Op } = require("sequelize");
+const varient = require("../models/varient");
 cron.schedule(
   "0 0 * * *",
   async () => {
@@ -2004,3 +2036,252 @@ exports.viewclosedcontractcaproduct = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
+exports.extractproduct = async (req, res) => {
+  const under = req.params.under;
+  const location= req.params.location
+
+  try {
+    
+    const contractIds = await Contract.findAll({
+     
+      where: {
+        under,
+        storageId:location,
+        status:'Ongoing',
+        storagetype: 'product'
+      }
+    });
+
+    // Extract contract IDs from the result
+    const ids = contractIds.map(contract => contract.id);
+
+    // Retrieve all contract products based on the extracted contract IDs
+    let contractProducts = await ContractProduct.findAll({
+      where: {
+        contractId: ids
+      },
+      include: [
+        {
+          model: Product,
+          as: "product",
+          include: [
+            { model: Variant },
+            { model: Quality },
+            { model: Size },
+            { model: Unit },
+            { model: Commodity },
+          ],
+        },
+      ],
+    });
+
+    const productMap = new Map();
+    contractProducts.forEach(contractProduct => {
+      const productName = contractProduct.productid;
+      const productDetails = {
+        contractproductid:contractProduct.id,
+        variant: contractProduct.product.varient?.varient,
+        quality: contractProduct.product.quality?.quality,
+        size: contractProduct.product.size?.size,
+        unit: contractProduct.product.unit?.unit,
+        commodity: contractProduct.product.commodity?.commodity,
+      };
+      
+      const qty = contractProduct.qty; // Assuming 'qty' is the field representing quantity
+      if (productMap.has(productName)) {
+        productMap.get(productName).qty += qty;
+      } else {
+        productMap.set(productName, { qty, ...productDetails });
+      }
+    });
+
+    // Create an array of objects with summed quantities and product details
+    const result = [];
+    productMap.forEach((product, productName) => {
+      result.push({ productName, ...product });
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.inventoryreportpop = async (req, res) => {
+  const product = req.params.id;
+  const under = req.params.under;
+  const location= req.params.location
+
+
+  try {
+  const contractIds = await Contract.findAll({
+     
+    where: {
+      under,
+      storageId:location,
+      status:'Ongoing',
+      storagetype: 'product',
+      
+    }
+  });
+
+  const ids = contractIds.map(contract => contract.id);
+    // Fetch contract spaces based on the contractId and where contract.status is 'Closed'
+    const contractSpaces = await Storagespace.findAll({
+      where: { 
+        contractId: ids,
+        productid:product
+      },
+      include: [
+        {
+          model: ContractProduct,
+          as: "contractp", // Assuming you have defined associations properly
+          include: [
+            {
+              model: Contract,
+              as: "space", // Assuming you have defined associations properly
+              where: {
+                status: "Ongoing",
+              },
+            }
+          ]
+        },
+        {
+          model: SpaceDetails,
+          as: "productSpaceDetails",
+        }
+      ]
+    });
+
+    // Restructuring the data to group contracts and their associated product details
+    const contracts = {};
+    contractSpaces.forEach(space => {
+      const contractId = space.contractp.id;
+      if (!contracts[contractId]) {
+        contracts[contractId] = {
+          contract: space.contractp,
+          productDetails: []
+        };
+      }
+      contracts[contractId].productDetails.push(space.productSpaceDetails);
+    });
+
+    // Extracting the values (contracts with associated product details) from the object and sending as JSON response
+    const response = Object.values(contracts);
+    res.json(response);
+  } catch (error) {
+    console.error("Error fetching contract spaces:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+exports.detailsbutton = async (req, res) => {
+  const under = req.params.under;
+  const location = req.params.location;
+
+  try {
+    const contractIds = await Contract.findAll({
+      where: {
+        under,
+        storageId: location,
+        status: 'Ongoing',
+        storagetype: 'product',
+      }
+    });
+
+    const ids = contractIds.map(contract => contract.id);
+
+    const contractSpaces = await Storagespace.findAll({
+      where: {
+        contractId: ids,
+      },
+      include: [
+        {
+          model: ContractProduct,
+          as: "contractp",
+          include: [
+            {
+              model: Contract,
+              as: "space",
+              where: {
+                status: "Ongoing",
+              },
+            },
+            {
+              model: Product,
+              as: "product",
+              include: [
+                { model: Variant },
+                { model: Quality },
+                { model: Size },
+                { model: Unit },
+                { model: Commodity },
+              ],
+            },
+          ]
+        },
+        {
+          model: SpaceDetails,
+          as: "productSpaceDetails",
+        }
+      ]
+    });
+
+    const contracts = {};
+    contractSpaces.forEach(space => {
+      const contractId = space.contractp.id;
+      if (!contracts[contractId]) {
+        contracts[contractId] = {
+          contract: space.contractp,
+          productDetails: []
+        };
+      }
+      contracts[contractId].productDetails.push(space.productSpaceDetails);
+    });
+
+    const data = Object.values(contracts);
+    const productDetailsMap = {};
+    data.forEach(item => {
+      const contract = item.contract;
+      if (contract && contract.product) {
+        const productId = contract.product.id;
+        if (!productDetailsMap[productId]) {
+          productDetailsMap[productId] = {
+            id: productId,
+            varient:contract.product.varient.varient,
+            commodity: contract.product.commodity.commodity,
+            size: contract.product.size.size,
+            quality: contract.product.quality.quality,
+            unit: contract.product.unit.unit,
+            contracts: []
+          };
+        }
+        productDetailsMap[productId].contracts.push({
+          contractid:contract.space.id,
+          contractproductid: contract.id,
+          slno: contract.space.slno,
+          qty: contract.qty,
+          spacedetails: item.productDetails.map(detail => ({
+            space: detail.space // Extract space details here
+          }))
+        });
+      }
+    });
+
+    const datas = Object.values(productDetailsMap);
+
+    res.json(datas);
+  } catch (error) {
+    console.error("Error fetching contract spaces:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+    

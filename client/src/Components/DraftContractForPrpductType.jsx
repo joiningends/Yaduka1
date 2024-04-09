@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 function DraftContractForProductType() {
   const [contractData, setContractData] = useState(null);
@@ -11,20 +12,15 @@ function DraftContractForProductType() {
   const [lotName, setLotName] = useState("");
   const [storageSpaces, setStorageSpaces] = useState([]);
   const [spaceOptions, setSpaceOptions] = useState([]);
-  const [selectedSpaceId, setSelectedSpaceId] = useState("");
+  const [selectedSpaceIds, setSelectedSpaceIds] = useState([]);
   const [quantity, setQuantity] = useState("");
   const [location, setLocation] = useState("");
   const [rate, setRate] = useState("");
-  const { id } = useParams();
   const [amount, setAmount] = useState("");
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  console.log(storageSpaces);
-  console.log(productOptions);
-
   const userId = localStorage.getItem("id");
-
-  console.log(contractData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +30,6 @@ function DraftContractForProductType() {
         );
         setContractData(response.data);
         setLocation(response.data.location.id);
-        console.log(response.location);
         const productResponse = await axios.get(
           "http://3.6.248.144/api/v1/product/all"
         );
@@ -71,30 +66,38 @@ function DraftContractForProductType() {
   };
 
   const handleAddStorageSpace = () => {
-    if (selectedProductId && lotName && selectedSpaceId && quantity && rate) {
+    if (
+      selectedProductId &&
+      lotName &&
+      selectedSpaceIds.length > 0 &&
+      quantity &&
+      rate
+    ) {
       const calculatedAmount = Number(quantity) * Number(rate);
-      setStorageSpaces([
-        ...storageSpaces,
-        {
-          productid: selectedProductId,
-          lotName,
-          spaceId: selectedSpaceId,
-          quantity,
-          rate,
-          amount: calculatedAmount,
-        },
-      ]);
+      const newStorageSpace = {
+        productid: selectedProductId,
+        storagespace: selectedSpaceIds,
+        lotno: lotName,
+        qty: quantity,
+        rate: rate,
+        amount: calculatedAmount,
+      };
+
+      setStorageSpaces([...storageSpaces, newStorageSpace]);
+      console.log(storageSpaces);
       setSelectedProductId("");
       setLotName("");
-      setSelectedSpaceId("");
+      setSelectedSpaceIds([]);
       setQuantity("");
       setRate("");
       setAmount("");
+    } else {
+      toast.error("Please fill all required fields.");
     }
   };
 
-  const handleSpaceChange = e => {
-    setSelectedSpaceId(e.target.value);
+  const handleSpaceChange = event => {
+    setSelectedSpaceIds(event.target.value);
   };
 
   const handleQuantityChange = e => {
@@ -112,35 +115,30 @@ function DraftContractForProductType() {
   const handleSubmit = async () => {
     const transformedData = {
       storagespaces: storageSpaces.map(space => ({
-        storagespace: space.spaceId,
         productid: space.productid,
-        lotno: space.lotName,
-        qty: parseInt(space.quantity, 10),
+        storagespace: space.storagespace,
+        lotno: space.lotno,
+        qty: parseInt(space.qty, 10),
         rate: parseInt(space.rate, 10),
         amount: space.amount,
       })),
     };
 
     try {
+      console.log(transformedData);
       const response = await axios.put(
         `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 
-      console.log("Server response:", response.data);
-
-      // Show success toast
       toast.success("Contract submitted successfully!");
 
-      // Navigate to the "/Contract" route
       setTimeout(() => {
-        // Navigate to "/Contract" route
         navigate("/Contract");
       }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
 
-      // Show error toast
       toast.error("Error submitting contract. Please try again.");
     }
   };
@@ -286,24 +284,37 @@ function DraftContractForProductType() {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="space" className="form-label">
-                      Storage Space:
-                    </label>
-                    <select
-                      className="form-control rounded-pill"
-                      id="space"
-                      value={selectedSpaceId}
-                      onChange={handleSpaceChange}
-                    >
-                      <option value="" disabled>
-                        Select Storage Space
-                      </option>
-                      {spaceOptions.map(space => (
-                        <option key={space.id} value={space.id}>
-                          {space.space}
-                        </option>
-                      ))}
-                    </select>
+                    <FormControl fullWidth>
+                      <InputLabel
+                        id="space-label"
+                        sx={{ marginBottom: "10px" }}
+                      >
+                        Storage Space
+                      </InputLabel>
+                      <Select
+                        labelId="space-label"
+                        id="space"
+                        multiple
+                        value={selectedSpaceIds}
+                        onChange={handleSpaceChange}
+                        renderValue={selected =>
+                          selected
+                            .map(
+                              id =>
+                                spaceOptions.find(space => space.id === id)
+                                  .space
+                            )
+                            .join(", ")
+                        }
+                        sx={{ marginBottom: "10px" }}
+                      >
+                        {spaceOptions.map(space => (
+                          <MenuItem key={space.id} value={space.id}>
+                            {space.space}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="quantity" className="form-label">
@@ -371,42 +382,48 @@ function DraftContractForProductType() {
                             <td>
                               {
                                 productOptions.find(
-                                  p => p.id == space.productid
+                                  p => p.id === space.productid
                                 )?.commodity?.commodity
                               }
                               -
                               {
                                 productOptions.find(
-                                  p => p.id == space.productid
+                                  p => p.id === space.productid
                                 )?.varient?.varient
                               }
                               | |
                               {
                                 productOptions.find(
-                                  p => p.id == space.productid
+                                  p => p.id === space.productid
                                 )?.quality?.quality
                               }
                               | |
                               {
                                 productOptions.find(
-                                  p => p.id == space.productid
+                                  p => p.id === space.productid
                                 )?.packSize
                               }
                               -
                               {
                                 productOptions.find(
-                                  p => p.id == space.productid
+                                  p => p.id === space.productid
                                 )?.unit?.unit
                               }
                             </td>
-                            <td>{space.lotName}</td>
+                            <td>{space.lotno}</td>
                             <td>
-                              {
-                                spaceOptions.find(s => s.id == space.spaceId)
-                                  ?.space
-                              }
+                              {space.storagespace.map((spaceId, index) => (
+                                <span key={index}>
+                                  {
+                                    spaceOptions.find(s => s.id === spaceId)
+                                      ?.space
+                                  }
+                                  {index !== space.storagespace.length - 1 &&
+                                    ", "}
+                                </span>
+                              ))}
                             </td>
-                            <td>{space.quantity}</td>
+                            <td>{space.qty}</td>
                             <td>{space.rate}</td>
                             <td>{space.amount}</td>
                           </tr>

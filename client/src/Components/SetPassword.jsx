@@ -79,7 +79,7 @@ const SetPasswordPage = () => {
 
       if (response.ok) {
         // If successful, navigate to the Password component
-        window.location.href = `/Password/${number}/${otp}`;
+        window.location.href = `/login`;
       } else {
         // Handle error response
         handleSnackbarOpen(`Error setting password: ${response.status}`);

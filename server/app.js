@@ -17,7 +17,7 @@ app.options("*", cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 const path = require("path");
-
+app.use("/public/uplds", express.static(__dirname + "/public/uplds"));
 
 
 //Routes
@@ -96,6 +96,7 @@ const party = require("./models/party");
 const Address = require('./models/address');
 const BankDetails = require('./models/bankdetails');
 const Signature = require('./models/signeture');
+const Storagespace = require("./models/storagespace");
 commodity.belongsTo(commodityType);
 
 //varient
@@ -133,7 +134,11 @@ ContractSpace.belongsTo(Contract, { foreignKey: 'contractId' });
 ContractSpace.belongsTo(SpaceDetails, { foreignKey: 'storagespace', as: 'storagespaces' });
 Contract.hasMany(ContractProduct, { as: 'space', foreignKey: 'contractId' });
 ContractProduct.belongsTo(Contract, { as: 'space', foreignKey: 'contractId' });
-ContractProduct.belongsTo(SpaceDetails, { foreignKey: 'storagespace', as: 'storagespac' });
+Storagespace.belongsTo(SpaceDetails, { foreignKey: 'productspaces', as: 'productSpaceDetails' });
+
+Storagespace.belongsTo(ContractProduct, { foreignKey: 'contractproduct', as: 'contractp' });
+Storagespace.belongsTo(Contract, { as: 'contractdet', foreignKey: 'contractId' });
+Storagespace.belongsTo(product, { foreignKey: 'productid', as: 'products' });
 ContractProduct.belongsTo(product, { foreignKey: 'productid', as: 'product' });
 Contract.hasMany(Invoice, { as: 'invoice', foreignKey: 'contractId' });
 userTable.hasMany(Invoice, { as: 'admin', foreignKey: 'userId' });
@@ -141,13 +146,16 @@ userTable.hasMany(Invoice, { as: 'admin', foreignKey: 'userId' });
 //Requisition.belongsTo(userTable, { foreignKey: 'partyId', as: 'partyuser', allowNull: true });
 //Requisition.belongsTo(party, { foreignKey: 'partyidinpartytable', as: 'partyus',allowNull: true });
 Requisition.belongsTo(userTable, { foreignKey: "partyid", as: "part" });
-Requisition.belongsTo(Contract, { foreignKey: 'contractId',as: "conf" });
-Requisition.belongsTo(Location, { foreignKey: 'storageId', as: 'locatio' });
+Reproduct.belongsTo(Contract, { foreignKey: 'contractId',as: "conf" });
+Reproduct.belongsTo(Location, { foreignKey: 'storageId', as: 'locatios' });
 Reproduct.belongsTo(ContractProduct, { foreignKey: 'contractproductid', as: 'contractproduct' });
 Requisition.hasMany(Reproduct, { as: 'reproducts', foreignKey: 'requationId' });
 Requisition.belongsTo(userTable, { foreignKey: "underValues", as: "valueofunde" });
 
+Requisition.belongsTo(Location, { foreignKey: 'storageId', as: 'locatio' });
+
 Reproduct.belongsTo(Requisition, { as: 'requtaion', foreignKey: 'requationId' });
+
 const _dirname = path.dirname("");
 const buildPath = path.join(__dirname, "../client/build");
 app.use(express.static(buildPath));

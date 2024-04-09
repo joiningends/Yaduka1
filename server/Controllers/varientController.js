@@ -51,7 +51,11 @@ const createVarient = async (req, res) => {
   try {
     let image = null;
     if (req.file) {
-      image = req.file.filename
+      const fileName= req.file.filename;
+      console.log(req.file);
+      const basePath = `${req.protocol}://${req.get('host')}/public/uplds/`;
+      
+      image = `${basePath}${fileName}`
     }
     const newVarient = await Varient.create({
       varient: varient,

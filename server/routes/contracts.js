@@ -61,5 +61,17 @@ router.get(
   "/closed/product/:id",
   contractController.viewclosedcontractcaproduct
 );
+router.get(
+  "/tabledata/:under/:location",
+  contractController.extractproduct
+);
 
+router.get(
+  "/tabledata/inventory/pop/:id/:under/:location",
+  contractController.inventoryreportpop
+);
+router.get(
+  "/details/button/:under/:location",
+  contractController.detailsbutton
+);
 module.exports = router;
