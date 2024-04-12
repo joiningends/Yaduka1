@@ -1,26 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
-import Modal from "react-modal";
-import Pagination from "react-js-pagination";
 import Select from "react-select";
+import axios from "axios";
+import Modal from "react-modal";
+import ReactPaginate from "react-paginate";
 
 function InventoryReportForColdStorage() {
-  const [coldStorageAdminOptions] = useState([
-    { value: 1, label: "Admin 1" },
-    { value: 2, label: "Admin 2" },
-    { value: 3, label: "Admin 3" },
-  ]);
+  // Component state variables
+  const [manufactureAdminOptions, setManufactureAdminOptions] = useState([]);
   const [locationOptions, setLocationOptions] = useState([]);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [tableData, setTableData] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalData, setModalData] = useState([]);
-  const [currentPage] = useState(1);
-  const [modalPage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const [modalItemsPerPage] = useState(2);
+  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [currentDate] = useState(
     new Date().toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -28,86 +18,201 @@ function InventoryReportForColdStorage() {
       year: "numeric",
     })
   );
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [isLocationSelectable, setIsLocationSelectable] = useState(false);
+  const [isLocationSelectable, setIsLocationSelectable] = useState(true);
+  const [isManufactureAdminSelectable, setIsManufactureAdminSelectable] =
+    useState(false);
+  const [productData, setProductData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loadingModalData, setLoadingModalData] = useState(false);
+  const [modalData, setModalData] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [modalPageNumber, setModalPageNumber] = useState(0);
+  const productsPerPage = 2;
+  const modalProductsPerPage = 4;
 
-  const handleAdminChange = selectedOption => {
-    setSelectedAdmin(selectedOption);
-    setSelectedLocations([]);
-    setLocationOptions([]);
-    setIsLocationSelectable(true); // Enable location selection when admin is selected
+  // Pagination event handlers
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected);
   };
 
-  const handleLocationChange = selectedOptions => {
+  const handleModalPageChange = ({ selected }) => {
+    setModalPageNumber(selected);
+  };
+
+  // Fetch locations on component mount
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  // Fetch locations function
+  const fetchLocations = () => {
+    axios
+      .get(`http://3.6.248.144/api/v1/location/${localStorage.getItem("id")}`)
+      .then(response => {
+        const locations = response.data.map(location => ({
+          value: location.id,
+          label: `${location.storagename} | ${location.address}`,
+        }));
+        setLocationOptions(locations);
+      })
+      .catch(error => {
+        console.error("Error fetching locations:", error);
+      });
+  };
+
+  // Handle admin change
+  const handleAdminChange = selectedOptions => {
     if (selectedOptions && selectedOptions.length > 0) {
-      const isSelectAllSelected = selectedOptions.some(
+      const isAdminAllSelected = selectedOptions.some(
         option => option.value === "all"
       );
-
-      if (isSelectAllSelected) {
-        // If "Select All" is selected, select all location options except "Select All"
-        setSelectedLocations(
-          dummyLocationOptions.filter(option => option.value !== "all")
+      if (isAdminAllSelected) {
+        setSelectedAdmins(
+          manufactureAdminOptions.filter(option => option.value !== "all")
         );
       } else {
-        setSelectedLocations(
-          selectedOptions.filter(option => option.value !== "all")
-        );
+        setSelectedAdmins(selectedOptions);
       }
     } else {
-      setSelectedLocations([]);
+      setSelectedAdmins([]);
     }
   };
 
+  // Handle location change
+  const handleLocationChange = selectedOption => {
+    setSelectedLocation(selectedOption);
+    setIsManufactureAdminSelectable(true);
+    fetchManufactureAdmins(selectedOption.value);
+  };
+
+  // Fetch manufacture admins
+  const fetchManufactureAdmins = locationId => {
+    setIsLoading(true);
+    axios
+      .get(
+        `http://3.6.248.144/api/v1/contracts/manufacture/id/${localStorage.getItem(
+          "id"
+        )}/${locationId}`
+      )
+      .then(response => {
+        setIsLoading(false);
+        if (Array.isArray(response.data)) {
+          const admins = response.data.map(admin => ({
+            value: admin.id,
+            label: `${admin.name} | ${admin.mobileNumber}`,
+          }));
+          setManufactureAdminOptions([
+            { value: "all", label: "Select All" },
+            ...admins,
+          ]);
+        }
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.error("Error fetching manufacture admins:", error);
+      });
+  };
+
+  // Handle form submit
   const handleSubmit = (values, { resetForm }) => {
-    if (!selectedLocations.length) {
-      alert("Please select storage location.");
+    if (!selectedLocation) {
+      alert("Please select a storage location.");
       return;
     }
 
-    const dummyTableData = [
-      { commodity: "Commodity 1", variant: "Variant 1", qty: 10 },
-      { commodity: "Commodity 2", variant: "Variant 2", qty: 20 },
-      { commodity: "Commodity 3", variant: "Variant 3", qty: 30 },
-    ];
-    setTableData(dummyTableData);
-    resetForm();
-    setFormSubmitted(true);
+    if (selectedAdmins.length === 0) {
+      alert("Please select at least one manufacture admin.");
+      return;
+    }
+
+    setIsLoading(true);
+    const requestData = {
+      partyid: selectedAdmins.map(admin => admin.value),
+    };
+
+    axios
+      .post(
+        `http://3.6.248.144/api/v1/contracts/material/${localStorage.getItem(
+          "id"
+        )}/${selectedLocation.value}`,
+        requestData
+      )
+      .then(response => {
+        setIsLoading(false);
+        setProductData(response.data);
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.error("Error submitting form:", error);
+      });
   };
 
-  const openModal = product => {
+  // Handle reset button click
+  const handleReset = () => {
+    setProductData(null);
+    setSelectedAdmins([]);
+    setSelectedLocation(null);
+    setIsLocationSelectable(true);
+    setIsManufactureAdminSelectable(false);
+  };
+
+  // Open modal and fetch modal data
+  const openModal = async (product, partyId) => {
     setSelectedProduct(product);
-    setModalIsOpen(true);
+    setLoadingModalData(true);
+    console.log(partyId);
+    console.log(product);
+    const requestData = {
+      partyid: selectedAdmins.map(admin => admin.value),
+    };
+    try {
+      const response = await axios.get(
+        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+          product.Productid
+        }/${localStorage.getItem("id")}/${selectedLocation.value}/${partyId}`
+      );
+      console.log(
+        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+          product.productName
+        }/${localStorage.getItem("id")}/${selectedLocation.value}/${partyId}`
+      );
+      setModalData(response.data);
+      console.log(response.data);
+      setModalIsOpen(true);
+    } catch (error) {
+      console.error("Error fetching modal data:", error);
+      alert("Error fetching modal data. Please try again later.");
+    } finally {
+      setLoadingModalData(false);
+    }
   };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const customProductName = product => {
-    const { commodity, variant } = product;
-    return `${commodity || ""} || ${variant || ""}`;
-  };
-
-  const handlePageChange = pageNumber => {};
-  const handleModalPageChange = pageNumber => {};
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const indexOfLastModalItem = modalPage * modalItemsPerPage;
-  const indexOfFirstModalItem = indexOfLastModalItem - modalItemsPerPage;
-  const currentModalItems = modalData
-    ? modalData.slice(indexOfFirstModalItem, indexOfLastModalItem)
+  // Paginate product data
+  const productDataPaginated = productData
+    ? productData
+        .flat()
+        .slice(pageNumber * productsPerPage, (pageNumber + 1) * productsPerPage)
     : [];
 
-  const dummyLocationOptions = [
-    { value: "all", label: "Select All" },
-    { value: 1, label: "Storage 1 - Address 1" },
-    { value: 2, label: "Storage 2 - Address 2" },
-    { value: 3, label: "Storage 3 - Address 3" },
-  ];
+  // Paginate modal data
+  const modalDataPaginated = modalData
+    ? modalData
+        .flat()
+        .slice(
+          modalPageNumber * modalProductsPerPage,
+          (modalPageNumber + 1) * modalProductsPerPage
+        )
+    : [];
+
+  // Calculate page count for product data
+  const pageCount =
+    productData && Math.ceil(productData.flat().length / productsPerPage);
+
+  // Calculate page count for modal data
+  const modalPageCount =
+    modalData && Math.ceil(modalData.flat().length / modalProductsPerPage);
 
   return (
     <div className="container-fluid mt-5">
@@ -124,7 +229,7 @@ function InventoryReportForColdStorage() {
               <Formik
                 initialValues={{
                   date: currentDate,
-                  coldStorageAdmin: "",
+                  manufactureAdmin: [],
                   storageLocation: "",
                   otherField1: "",
                   otherField2: "",
@@ -134,36 +239,14 @@ function InventoryReportForColdStorage() {
                 {({ values, resetForm }) => (
                   <Form>
                     <div className="mb-3">
-                      <label htmlFor="coldStorageAdmin" className="form-label">
-                        Cold Storage Admin{" "}
-                        <span className="text-danger">*</span>
-                      </label>
-                      <Select
-                        options={coldStorageAdminOptions}
-                        onChange={handleAdminChange}
-                        value={selectedAdmin}
-                        placeholder="Select Cold Storage Admin"
-                      />
-                      <ErrorMessage
-                        name="coldStorageAdmin"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-                    <div className="mb-3">
                       <label htmlFor="storageLocation" className="form-label">
                         Storage Location <span className="text-danger">*</span>
                       </label>
                       <Select
-                        options={dummyLocationOptions}
+                        options={locationOptions}
                         onChange={handleLocationChange}
-                        value={selectedLocations}
-                        isMulti
-                        placeholder={
-                          isLocationSelectable
-                            ? "Select Storage Locations"
-                            : "Select Cold Storage Admin first"
-                        }
+                        value={selectedLocation}
+                        placeholder={"Select Storage Location"}
                         isDisabled={!isLocationSelectable}
                       />
                       <ErrorMessage
@@ -173,160 +256,194 @@ function InventoryReportForColdStorage() {
                       />
                     </div>
                     <div className="mb-3">
-                      <button type="submit" className="btn btn-primary me-2 mr-2">
-                        Submit
+                      <label htmlFor="manufactureAdmin" className="form-label">
+                        Manufacture Admin <span className="text-danger">*</span>
+                      </label>
+                      <Select
+                        options={manufactureAdminOptions}
+                        onChange={handleAdminChange}
+                        value={selectedAdmins}
+                        placeholder="Select Manufacture Admin(s)"
+                        isMulti
+                        isDisabled={!isManufactureAdminSelectable}
+                      />
+                      <ErrorMessage
+                        name="manufactureAdmin"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <button
+                        type="submit"
+                        className="btn btn-primary me-2 mr-2"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        ) : (
+                          "Submit"
+                        )}
                       </button>
                       <button
                         type="button"
                         className="btn btn-secondary"
-                        onClick={() => {
-                          resetForm();
-                          setSelectedAdmin(null);
-                          setSelectedLocations([]);
-                          setFormSubmitted(false);
-                          setIsLocationSelectable(false); // Disable location selection on reset
-                          setTableData([]);
-                        }}
+                        onClick={handleReset}
+                        disabled={isLoading}
                       >
                         Reset
                       </button>
                     </div>
-                    {formSubmitted &&
-                      selectedAdmin &&
-                      selectedLocations.length > 0 &&
-                      currentItems.length > 0 && (
-                        <div>
-                          <div className="table-responsive">
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th>Product Name</th>
-                                  <th>Total Quantity</th>
-                                  <th>Details</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {currentItems.map((item, index) => (
-                                  <tr key={index}>
-                                    <td>{customProductName(item)}</td>
-                                    <td>{item.qty}</td>
-                                    <td>
-                                      <button
-                                        className="btn btn-primary"
-                                        onClick={() => openModal(item)}
-                                      >
-                                        See Details
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                          <Pagination
-                            activePage={currentPage}
-                            itemsCountPerPage={itemsPerPage}
-                            totalItemsCount={tableData.length}
-                            pageRangeDisplayed={5}
-                            onChange={handlePageChange}
-                            itemClass="page-item"
-                            linkClass="page-link"
-                          />
-                        </div>
-                      )}
                   </Form>
                 )}
               </Formik>
+              {productData && (
+                <div className="mt-3">
+                  <h5>Inventory Report</h5>
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Manufacture Admin</th>
+                        <th>Product Name</th>
+                        <th>Total Quantity</th>
+                        <th>Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {productDataPaginated.map((adminData, index) => (
+                        <React.Fragment key={index}>
+                          {adminData.products.map((product, idx) => (
+                            <tr key={`${index}-${idx}`}>
+                              {idx === 0 ? (
+                                <td rowSpan={adminData.products.length}>
+                                  {`${adminData.partyUser.name} | ${adminData.partyUser.mobileNumber}`}
+                                </td>
+                              ) : null}
+                              <td>
+                                {`${product.commodity} || ${product.variant} || ${product.quality} || ${product.size} || ${product.unit}`}
+                              </td>
+                              <td>{product.qty}</td>
+                              <td>
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={() =>
+                                    openModal(product, adminData?.partyUser?.id)
+                                  }
+                                >
+                                  Details
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ))}
+                    </tbody>
+                  </table>
+                  <ReactPaginate
+                    pageCount={pageCount}
+                    onPageChange={handlePageChange}
+                    containerClassName={"pagination justify-content-center"}
+                    activeClassName={"active"}
+                    pageLinkClassName={"page-link"}
+                    previousLinkClassName={"page-link"}
+                    nextLinkClassName={"page-link"}
+                    breakClassName={"page-item"}
+                    pageClassName={"page-item"}
+                    previousClassName={"page-item"}
+                    nextClassName={"page-item"}
+                    disabledClassName={"disabled"}
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Product Details"
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
           },
           content: {
-            width: "80%",
-            maxHeight: "80%",
-            margin: "auto",
-            borderRadius: "10px",
-            padding: "20px",
-            backgroundColor: "#fff",
-            border: "1px solid #ccc",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            overflow: "auto",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: "70%", // Adjust width as needed
+            maxHeight: "70vh", // Limit height to 70% of viewport height
+            overflowY: "auto", // Enable vertical scrolling if content exceeds maxHeight
           },
         }}
       >
-        {modalData && (
+        <button
+          className="btn btn-danger"
+          style={{ position: "absolute", top: "10px", right: "10px" }}
+          onClick={() => setModalIsOpen(false)}
+        >
+          Cancel
+        </button>
+        {loadingModalData ? (
+          <div>Loading...</div>
+        ) : (
           <>
-            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-              {selectedProduct && customProductName(selectedProduct)}
+            <h2>
+              {selectedProduct && (
+                <>
+                  {selectedProduct.commodity} || {selectedProduct.variant} ||{" "}
+                  {selectedProduct.quality} || {selectedProduct.size} ||{" "}
+                  {selectedProduct.unit}
+                </>
+              )}
             </h2>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                border: "1px solid #ccc",
-                marginBottom: "20px",
-              }}
-            >
+            <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th style={{ border: "1px solid #ccc", padding: "10px" }}>
-                    Contract
-                  </th>
-                  <th style={{ border: "1px solid #ccc", padding: "10px" }}>
-                    Storage Space
-                  </th>
-                  <th style={{ border: "1px solid #ccc", padding: "10px" }}>
-                    Available Quantity
-                  </th>
+                  <th>Contract</th>
+                  <th>Storage Space</th>
+                  <th>Available Quantity</th>
                 </tr>
               </thead>
               <tbody>
-                {currentModalItems.map((item, index) => (
+                {modalDataPaginated.map((item, index) => (
                   <tr key={index}>
-                    <td style={{ border: "1px solid #ccc", padding: "10px" }}>
-                      {item.contract.space.slno}
-                    </td>
-                    <td style={{ border: "1px solid #ccc", padding: "10px" }}>
-                      {item.productDetails.map((detail, idx) => (
-                        <span key={idx}>
-                          {detail.space}
-                          {idx !== item.productDetails.length - 1 && ", "}
-                        </span>
+                    <td>{item.contract.space.slno}</td>
+                    <td>
+                      {item.productDetails.map((detail, index) => (
+                        <div key={index}>{detail.space}</div>
                       ))}
                     </td>
-                    <td style={{ border: "1px solid #ccc", padding: "10px" }}>
-                      {item.contract.qty}
-                    </td>
+                    <td>{item.contract.qty}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <Pagination
-                activePage={modalPage}
-                itemsCountPerPage={modalItemsPerPage}
-                totalItemsCount={modalData.length}
-                pageRangeDisplayed={5}
-                onChange={handleModalPageChange}
-                itemClass="page-item"
-                linkClass="page-link"
-                style={{ marginBottom: "20px" }}
-              />
-            </div>
-            <button
-              style={{ position: "absolute", bottom: "20px", right: "20px" }}
-              className="btn btn-danger"
-              onClick={closeModal}
-            >
-              Cancel
-            </button>
+            <ReactPaginate
+              pageCount={modalPageCount}
+              onPageChange={handleModalPageChange}
+              containerClassName={"pagination justify-content-center"}
+              activeClassName={"active"}
+              pageLinkClassName={"page-link"}
+              previousLinkClassName={"page-link"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              pageClassName={"page-item"}
+              previousClassName={"page-item"}
+              nextClassName={"page-item"}
+              disabledClassName={"disabled"}
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+            />
           </>
         )}
       </Modal>

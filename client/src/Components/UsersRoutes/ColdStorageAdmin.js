@@ -52,6 +52,7 @@ import DetailsCompeteProduct from "../DetailsCompeteProduct";
 import ViewCompletedMaterialMovement from "../ViewCompletedMaterialMovement";
 import InventoryReport from "../InventoryReport";
 import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
+import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
 
 const ColdStorageAdmin = () => {
   return (
@@ -162,6 +163,10 @@ const ColdStorageAdmin = () => {
         <Route
           path="/InventoryReport"
           element={<InventoryReportForColdStorage />}
+        />
+        <Route
+          path="/EditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovmentColdStorage />}
         />
       </Routes>
     </div>

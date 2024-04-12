@@ -477,18 +477,23 @@ console.log(newContractProduct)
       });
       return storagespaces;
     }));
-
+    
+    
     const flattenedStorages = storages.flat();
-
+    
+    
     const tableData = flattenedStorages.map(product => ({
-      //storagespace: product.contractp ? product.contractp.storagespac.space : null,
-      qty: product.qty,
-      rate: product.rate,
-      amount: product.amount,
+      storagespace: Array.isArray(product.productSpaceDetails) ? 
+      product.productSpaceDetails.map(detail => detail.space).join(', ') : 
+      product.productSpaceDetails.space, 
+      qty: product.contractp.qty, 
+      rate: product.contractp.rate,
+      amount: product.contractp.amount,
     }));
-
-    //const pdfFilePath = await generatePDF(under, existingContract.id, tableData);
-
+    
+    
+    const pdfFilePath = await generatePDF(under, existingContract.id, tableData);
+    
     res.status(200).json(existingContract);
   } catch (error) {
     console.error(error);
@@ -1837,6 +1842,7 @@ cron.schedule(
           const contract = await Contract.findOne({
             where: {
               id: contractId,
+              status:"Ongoing"
             },
           });
 
@@ -2040,18 +2046,53 @@ exports.viewclosedcontractcaproduct = async (req, res) => {
 
 
 exports.extractproduct = async (req, res) => {
-  const under = req.params.under;
-  const location= req.params.location
-
   try {
-    
+  
+    const userId = req.params.under;
+  const location = req.params.location;
+const partyid= req.params.partyid;
+
+  const user = await userTable.findByPk(userId);
+  
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  let under = null;
+
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
+
+    if (!party) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    let partyunder = null;
+
+    if (user.userTypeId === 4) {
+      // If user type ID is 3, set under to the user ID
+      partyunder = partyid;
+    } else if (user.userTypeId === 8) {
+      // If user type ID is 5, set under to the user's under value
+      partyunder = user.under;
+    }
+
     const contractIds = await Contract.findAll({
      
       where: {
         under,
         storageId:location,
         status:'Ongoing',
-        storagetype: 'product'
+        storagetype: 'product',
+        partyId: partyunder
+        
+
       }
     });
 
@@ -2112,12 +2153,45 @@ exports.extractproduct = async (req, res) => {
 };
 
 exports.inventoryreportpop = async (req, res) => {
-  const product = req.params.id;
-  const under = req.params.under;
-  const location= req.params.location
-
-
   try {
+    const product = req.params.id;
+  const userId = req.params.under;
+  const location = req.params.location;
+const partyid= req.params.partyid;
+
+  const user = await userTable.findByPk(userId);
+  
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  let under = null;
+
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
+
+    if (!party) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    let partyunder = null;
+
+    if (user.userTypeId === 4) {
+      // If user type ID is 3, set under to the user ID
+      partyunder = partyid;
+    } else if (user.userTypeId === 8) {
+      // If user type ID is 5, set under to the user's under value
+      partyunder = user.under;
+    }
+
+
+  
   const contractIds = await Contract.findAll({
      
     where: {
@@ -2125,7 +2199,7 @@ exports.inventoryreportpop = async (req, res) => {
       storageId:location,
       status:'Ongoing',
       storagetype: 'product',
-      
+      partyId: partyunder
     }
   });
 
@@ -2181,16 +2255,49 @@ exports.inventoryreportpop = async (req, res) => {
 
 
 exports.detailsbutton = async (req, res) => {
-  const under = req.params.under;
-  const location = req.params.location;
-
   try {
+  const userId = req.params.under;
+  const location = req.params.location;
+const partyid= req.params.partyid;
+
+  const user = await userTable.findByPk(userId);
+  
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  let under = null;
+
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
+
+    if (!party) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    let partyunder = null;
+
+    if (user.userTypeId === 4) {
+      // If user type ID is 3, set under to the user ID
+      partyunder = partyid;
+    } else if (user.userTypeId === 8) {
+      // If user type ID is 5, set under to the user's under value
+      partyunder = user.under;
+    }
+
     const contractIds = await Contract.findAll({
       where: {
         under,
         storageId: location,
         status: 'Ongoing',
         storagetype: 'product',
+        partyId: partyunder
       }
     });
 
@@ -2283,5 +2390,175 @@ exports.detailsbutton = async (req, res) => {
 };
 
 
+exports.extractproductsformaterialmove = async (req, res) => {
+  
+  const userId = req.params.under;
+  const location = req.params.location; // Removed extra comma
+  const partyids = req.body.partyid; // Assuming partyid is an array of IDs
+  
+  const user = await userTable.findByPk(userId);
+  
 
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  let under = null;
+
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  try {
+    const allResults = [];
+
+    for (const partyid of partyids) {
+      const contractIds = await Contract.findAll({
+        where: {
+          under,
+          storageId: location,
+          status: 'Ongoing',
+          storagetype: 'product',
+          partyId: partyid
+        },
+        include: [
+          {
+            model: userTable,
+            as: "partyuser",
+            attributes: ['id', 'name', 'mobileNumber']
+          }
+        ]
+      });
+
+      const ids = contractIds.map(contract => contract.id);
+
+      const contractProducts = await ContractProduct.findAll({
+        where: {
+          contractId: ids
+        },
+        include: [
+          {
+            model: Product,
+            as: "product",
+            include: [
+              { model: Variant },
+              { model: Quality },
+              { model: Size },
+              { model: Unit },
+              { model: Commodity },
+            ],
+          },
+        ],
+      });
+
+      const partyUser = contractIds[0]?.partyuser; // Get party user info from the first contract (assuming it's the same for all contracts)
+
+      const result = processData(contractProducts, partyUser);
+      allResults.push(result);
+    }
+
+    res.status(200).json(allResults);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// Helper function to process contract products and extract relevant information
+
+ 
+    function processData(contractProducts,partyUser) {
+      const productMap = new Map();
+      contractProducts.forEach(contractProduct => {
+        const productName = contractProduct.productid;
+        const productDetails = {
+           Productid:contractProduct.productid,
+          contractproductid: contractProduct.id,
+          variant: contractProduct.product.varient?.varient,
+          quality: contractProduct.product.quality?.quality,
+          size: contractProduct.product.size?.size,
+          unit: contractProduct.product.unit?.unit,
+          commodity: contractProduct.product.commodity?.commodity,
+        };
     
+        const qty = contractProduct.qty; // Assuming 'qty' is the field representing quantity
+        if (productMap.has(productName)) {
+          productMap.get(productName).qty += qty;
+        } else {
+          productMap.set(productName, { qty, ...productDetails });
+        }
+    
+  });
+
+  const products = Array.from(productMap.values());
+
+  return { partyUser, products };
+}
+
+  
+
+
+exports.manufactureid = async (req, res) => {
+  try {
+  const userId = req.params.under;
+  const user = await userTable.findByPk(userId);
+  
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  let under = null;
+
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const location = req.params.location;
+
+  
+    const contractIds = await Contract.findAll({
+      where: {
+        under,
+        storageId: location,
+        status: 'Ongoing',
+        storagetype: 'product',
+      },
+      include: [
+        {
+          model: userTable,
+          as: "partyuser",
+          attributes: ['id', 'name','mobileNumber']
+        }
+      ]
+    });
+
+    const uniqueParties = [];
+    const seenIds = new Set();
+
+    contractIds.forEach(contract => {
+      const partyId = contract.partyId;
+      if (!seenIds.has(partyId)) {
+        seenIds.add(partyId);
+        uniqueParties.push({
+          id: partyId,
+          name: contract.partyuser.name,
+           mobileNumber:contract.partyuser.mobileNumber// Assuming the name attribute is retrieved from the included userTable model
+        });
+      }
+    });
+
+    res.status(200).json(uniqueParties);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+  

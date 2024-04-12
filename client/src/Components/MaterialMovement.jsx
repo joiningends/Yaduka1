@@ -1,114 +1,311 @@
 import React, { useState, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Button,
-} from "@mui/material";
+import axios from "axios";
+import Select from "react-select";
+import ReactPaginate from "react-paginate";
+import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function MaterialMovement() {
-  const [jsonData, setJsonData] = useState([]);
   const navigate = useNavigate();
-  const userId = localStorage.getItem("id");
-
-  console.log(userId);
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [manufactureAdminOptions, setManufactureAdminOptions] = useState([]);
+  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emptyAdminsMessage, setEmptyAdminsMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [requestData, setRequestData] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState([]);
+  const [modalPageNumber, setModalPageNumber] = useState(0);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const modalItemsPerPage = 3;
+  const itemsPerPage = 5;
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`http://3.6.248.144/api/v1/ref/${userId}`);
-        const data = await response.json();
-        console.log(data);
-        setJsonData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-
-    fetchData();
+    fetchLocations();
   }, []);
 
-  const handleView = id => {
-    navigate(`/MaterialMovement/EditMaterialMovement/${id}`);
+  const fetchLocations = () => {
+    setIsLoading(true);
+    const id = localStorage.getItem("id");
+    axios
+      .get(`http://3.6.248.144/api/v1/ref/${id}`)
+      .then(response => {
+        const options = response.data.map(location => ({
+          value: location.id,
+          label: location.storagename,
+        }));
+        setLocations(options);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching locations:", error);
+        setIsLoading(false);
+      });
   };
 
+  const handleLocationChange = selectedOption => {
+    setSelectedLocation(selectedOption);
+    setIsLoading(true);
+    axios
+      .get(
+        `http://3.6.248.144/api/v1/ref/manufactureid/${localStorage.getItem(
+          "id"
+        )}/${selectedOption.value}`
+      )
+      .then(response => {
+        const admins = response.data;
+        if (admins.length === 0) {
+          setEmptyAdminsMessage(
+            "No manufacture admins available for this location."
+          );
+        } else {
+          setEmptyAdminsMessage("");
+        }
+        const adminOptions = admins.map(admin => ({
+          value: admin.id,
+          label: `${admin.name} | ${admin.mobileNumber}`,
+        }));
+        setManufactureAdminOptions([
+          { value: "all", label: "Select All" },
+          ...adminOptions,
+        ]);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching manufacture admins:", error);
+        setIsLoading(false);
+      });
+  };
+
+  const handleAdminChange = selectedOptions => {
+    if (selectedOptions && selectedOptions.length > 0) {
+      const isAdminAllSelected = selectedOptions.some(
+        option => option.value === "all"
+      );
+      if (isAdminAllSelected) {
+        setSelectedAdmins(
+          manufactureAdminOptions.filter(option => option.value !== "all")
+        );
+      } else {
+        setSelectedAdmins(selectedOptions);
+      }
+    } else {
+      setSelectedAdmins([]);
+    }
+  };
+
+  const handleSubmit = () => {
+    setSubmitting(true);
+    axios
+      .post(
+        `http://3.6.248.144/api/v1/ref/requstion/${localStorage.getItem(
+          "id"
+        )}/${selectedLocation.value}`,
+        {
+          partyid: selectedAdmins.map(admin => admin.value),
+        }
+      )
+      .then(response => {
+        console.log("Request successful:", response.data);
+        setRequestData(response.data[0]);
+        setSubmitting(false);
+      })
+      .catch(error => {
+        console.error("Error submitting request:", error);
+        setSubmitting(false);
+      });
+  };
+
+  const handleReset = () => {
+    setSelectedLocation(null);
+    setManufactureAdminOptions([]);
+    setSelectedAdmins([]);
+    setEmptyAdminsMessage("");
+    setRequestData([]);
+  };
+
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
+  const handleDetailsClick = item => {
+    axios
+      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .then(response => {
+        setModalData(response.data);
+        setSelectedItemId(item.id);
+        setShowModal(true);
+      })
+      .catch(error => {
+        console.error("Error fetching details:", error);
+      });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalData([]);
+  };
+
+  const handleEdit = () => {
+    navigate(
+      `/EditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
+    );
+  };
+
+  const renderRequestData = requestData
+    .slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage)
+    .map((item, index) => (
+      <tr key={index}>
+        <td>{pageNumber * itemsPerPage + index + 1}</td>
+        <td>{item.slno}</td>
+        <td>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleDetailsClick(item)}
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+    ));
+
+  const pageCount = Math.ceil(requestData.length / itemsPerPage);
+
   return (
-    <div style={{ margin: "0 1rem" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          margin: "1rem 0",
-        }}
-      >
-        <div>
-          <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-            Material Movement
-          </Typography>
+    <div className="container-fluid mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-10">
+          <div className="card shadow" style={{ borderRadius: "2rem" }}>
+            <div
+              className="card-header"
+              style={{ borderRadius: "2rem 2rem 0 0" }}
+            >
+              <h4 className="card-title mb-0">Material Movement</h4>
+            </div>
+            <div className="card-body">
+              {isLoading && <p className="text-center">Loading...</p>}
+              {!isLoading && (
+                <>
+                  <div className="mb-3">
+                    <label htmlFor="location" className="form-label">
+                      Location
+                    </label>
+                    <Select
+                      options={locations}
+                      onChange={handleLocationChange}
+                      value={selectedLocation}
+                      placeholder="Select Location"
+                    />
+                  </div>
+                  {emptyAdminsMessage && (
+                    <p className="text-danger">{emptyAdminsMessage}</p>
+                  )}
+                  <div className="mb-3">
+                    <label htmlFor="manufactureAdmin" className="form-label">
+                      Manufacture Admin
+                    </label>
+                    <Select
+                      options={manufactureAdminOptions}
+                      onChange={handleAdminChange}
+                      value={selectedAdmins}
+                      placeholder="Select Manufacture Admin(s)"
+                      isMulti
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <button
+                      type="button"
+                      className="btn btn-primary me-2 mr-2"
+                      onClick={handleSubmit}
+                      disabled={
+                        !selectedLocation ||
+                        selectedAdmins.length === 0 ||
+                        submitting
+                      }
+                    >
+                      {submitting ? "Submitting..." : "Submit"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleReset}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </>
+              )}
+              {requestData.length > 0 && (
+                <>
+                  <h5>Requisition Details</h5>
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sno</th>
+                        <th>Requisition Number</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>{renderRequestData}</tbody>
+                  </table>
+                  <ReactPaginate
+                    pageCount={pageCount}
+                    onPageChange={handlePageChange}
+                    containerClassName={"pagination justify-content-center"}
+                    activeClassName={"active"}
+                    pageLinkClassName={"page-link"}
+                    previousLinkClassName={"page-link"}
+                    nextLinkClassName={"page-link"}
+                    breakClassName={"page-item"}
+                    pageClassName={"page-item"}
+                    previousClassName={"page-item"}
+                    nextClassName={"page-item"}
+                    disabledClassName={"disabled"}
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                  />
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-
-      <TableContainer
-        component={Paper}
-        sx={{ borderRadius: "12px", margin: "1rem 0" }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <b>Contract</b>
-              </TableCell>
-              <TableCell>
-                <b>Storage Name</b>
-              </TableCell>
-              <TableCell>
-                <b>Date</b>
-              </TableCell>
-              <TableCell>
-                <b>Status</b>
-              </TableCell>
-              <TableCell>
-                <b>Action</b>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jsonData.map(item => (
-              <TableRow key={item.id}>
-                <TableCell>{item.conf.slno}</TableCell>
-                <TableCell>{item.conf.location.storagename}</TableCell>
-                <TableCell>
-                  {new Date(item.date).toLocaleDateString("en-GB")}
-                </TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    style={{
-                      background: "#34b6df",
-                      color: "#fff",
-                      borderRadius: "8px",
-                      "&:hover": {
-                        background: "#34b6df",
-                      },
-                    }}
-                    onClick={() => handleView(item.id)}
-                  >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>S No.</th>
+                <th>Product Name</th>
+                <th>Total Requested Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modalData.map((product, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{`${product.commodity} || ${product.variant} || ${product.quality} || ${product.size} || ${product.unit}`}</td>
+                  <td>{product.qty}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-primary" onClick={handleEdit}>
+            Edit
+          </button>
+          <button className="btn btn-secondary" onClick={handleCloseModal}>
+            Close
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

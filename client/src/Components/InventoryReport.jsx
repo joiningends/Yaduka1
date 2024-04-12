@@ -69,7 +69,9 @@ function InventoryReport() {
     setLoadingTableData(true);
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}`
+        `http://3.6.248.144/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+          "id"
+        )}`
       );
       setTableData(response.data);
       setShowTable(true);
@@ -95,7 +97,11 @@ function InventoryReport() {
     setLoadingModalData(true);
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${product.productName}/${selectedAdminId}/${selectedLocationId}`
+        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+          product.productName
+        }/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+          "id"
+        )}`
       );
       setModalData(response.data);
       setModalPage(1); // Reset modal page to 1 when opening

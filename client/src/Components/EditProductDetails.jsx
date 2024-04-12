@@ -19,7 +19,9 @@ function EditProductDetails() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}`
+          `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+            "id"
+          )}`
         );
         setData(response.data);
       } catch (error) {

@@ -42,6 +42,7 @@ function Requisition() {
       .get(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`)
       .then(response => {
         setData(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -138,7 +139,11 @@ function Requisition() {
 
       <TableContainer
         component={Paper}
-        style={{ borderRadius: "12px", margin: "1rem 0" }}
+        style={{
+          borderRadius: "12px",
+          margin: "1rem 0",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
       >
         <Table>
           <TableHead>
@@ -147,7 +152,7 @@ function Requisition() {
                 <b>S No.</b>
               </TableCell>
               <TableCell>
-                <b>Serial Number</b>
+                <b>Requisition Number</b>
               </TableCell>
               <TableCell>
                 <b>Action</b>
@@ -211,23 +216,26 @@ function Requisition() {
         PaperProps={{
           style: {
             padding: "1rem",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           },
         }}
       >
-        <DialogTitle>Product Information</DialogTitle>
+        <DialogTitle style={{ fontWeight: "bold" }}>
+          Product Information
+        </DialogTitle>
         <DialogContent>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>
-                    <b>S No.</b>
+                  <TableCell style={{ width: "20%" }}>
+                    <b style={{ verticalAlign: "middle" }}>S No.</b>
                   </TableCell>
                   <TableCell>
                     <b>Product Name</b>
                   </TableCell>
                   <TableCell>
-                    <b>Total Required Quantity</b>
+                    <b>Total Requested Quantity</b>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -239,7 +247,15 @@ function Requisition() {
                   )
                   .map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{index + 1}</TableCell>
+                      <TableCell
+                        style={{
+                          verticalAlign: "middle",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                        }}
+                      >
+                        {index + 1}
+                      </TableCell>
                       <TableCell>{`${item.commodity} || ${item.variant} || ${item.quality} || ${item.size} || ${item.unit}`}</TableCell>
                       <TableCell>{item.qty}</TableCell>
                     </TableRow>
@@ -247,6 +263,7 @@ function Requisition() {
               </TableBody>
             </Table>
           </TableContainer>
+
           <div
             style={{
               display: "flex",
@@ -270,10 +287,34 @@ function Requisition() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEdit} color="primary">
+          <Button
+            onClick={handleEdit}
+            color="primary"
+            variant="contained"
+            style={{
+              borderRadius: "8px",
+              background: "#34b6df",
+              color: "#fff",
+              "&:hover": {
+                background: "#34b6df",
+              },
+            }}
+          >
             Edit
           </Button>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button
+            onClick={handleCloseDialog}
+            color="primary"
+            variant="contained"
+            style={{
+              borderRadius: "8px",
+              background: "#ff3d00",
+              color: "#fff",
+              "&:hover": {
+                background: "#ff3d00",
+              },
+            }}
+          >
             Cancel
           </Button>
         </DialogActions>

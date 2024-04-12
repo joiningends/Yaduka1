@@ -150,7 +150,7 @@ function OngoingByProductForManufecture() {
                     type="text"
                     className="form-control rounded-pill"
                     value={formatDateString(
-                      contractData.latestInvoice.createdAt
+                      contractData?.latestInvoice?.createdAt
                     )}
                     readOnly
                   />
@@ -182,7 +182,7 @@ function OngoingByProductForManufecture() {
                     readOnly
                   />
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label>Stock Balance</label>
                   <button
                     type="button"
@@ -195,7 +195,7 @@ function OngoingByProductForManufecture() {
                   >
                     View
                   </button>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

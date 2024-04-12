@@ -62,16 +62,29 @@ router.get(
   contractController.viewclosedcontractcaproduct
 );
 router.get(
-  "/tabledata/:under/:location",
+  "/tabledata/:under/:location/:partyid",
   contractController.extractproduct
 );
 
 router.get(
-  "/tabledata/inventory/pop/:id/:under/:location",
+  "/tabledata/inventory/pop/:id/:under/:location/:partyid",
   contractController.inventoryreportpop
 );
 router.get(
-  "/details/button/:under/:location",
+  "/details/button/:under/:location/:partyid",
   contractController.detailsbutton
+);
+
+router.post(
+  "/material/:under/:location",
+  contractController.extractproductsformaterialmove
+);
+router.get(
+  "/manufacture/id/:under/:location",
+  contractController.manufactureid
+);
+router.post(
+  "/coldstorage/:id/:under/:location",
+  contractController.manufactureid
 );
 module.exports = router;

@@ -20,4 +20,13 @@ router.get("/complete/:id", requisitionController.getRequisitionIdcompleted);
 router.put("/", requisitionController.updateDeliveryQty);
 router.put("/request/qty", requisitionController.updateRequireQty);
 router.get("/tabledata/:requstion", requisitionController.detailsbuttonedit);
+router.get(
+  "/manufactureid/:id/:location",
+  requisitionController.getmanufactureId
+);
+
+router.post(
+  "/requstion/:id/:location",
+  requisitionController.getRequisitionfortabledatapending
+);
 module.exports = router;
