@@ -22,7 +22,6 @@ function EditMaterialMovmentColdStorage() {
           `http://3.6.248.144/api/v1/ref/tabledata/${id}`
         );
         setData(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -34,7 +33,7 @@ function EditMaterialMovmentColdStorage() {
   const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   const handleTablePageChange = pageNumber => setCurrentTablePage(pageNumber);
   const handleDeliveredQuantityChange = (e, contractId, requireQty) => {
-    const value = parseInt(e.target.value);
+    const value = parseInt(e.target.value) || 0; // Default to 0 if value is falsy
     if (value <= requireQty) {
       setDeliveredQuantities(prevState => ({
         ...prevState,
@@ -58,18 +57,26 @@ function EditMaterialMovmentColdStorage() {
             contract => contract.contractproductid === parseInt(productId)
           );
           const deliveryQty = deliveredQuantities[productId];
-          if (deliveryQty !== 0) {
-            return {
-              id: contract.requstionid,
-              deliveryQty: deliveryQty,
-            };
-          }
-          return null;
+          return {
+            id: contract.requstionid,
+            deliveryQty: deliveryQty,
+          };
         })
         .filter(item => item !== null);
 
+      // Replace empty delivered quantities with 0
+      for (const contract of data.flatMap(item => item.contracts)) {
+        if (!(contract.contractproductid in deliveredQuantities)) {
+          deliveryData.push({
+            id: contract.requstionid,
+            deliveryQty: 0,
+          });
+        }
+      }
+
       console.log(deliveryData);
 
+      // Uncomment the following lines to send the PUT request
       const response = await axios.put(
         "http://3.6.248.144/api/v1/ref",
         deliveryData

@@ -13,6 +13,7 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
+  Pagination,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,8 @@ function Ongoing() {
   const [filteredContracts, setFilteredContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 5;
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("id");
@@ -42,17 +45,22 @@ function Ongoing() {
   }, []);
 
   useEffect(() => {
-    // Filter contracts based on search term
-    const filtered = contracts.filter(
-      contract =>
-        contract.storagetype.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contract.partyuser.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        contract.location.storagename
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-    );
+    const filtered = contracts.filter(contract => {
+      const { storagetype, partyuser, contractName, location } = contract;
+      const partyName = partyuser?.name || "";
+      const locationName = location?.storagename || "";
+
+      return (
+        (storagetype &&
+          storagetype.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (partyName &&
+          partyName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (contractName &&
+          contractName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (locationName &&
+          locationName.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    });
 
     setFilteredContracts(filtered);
   }, [searchTerm, contracts]);
@@ -63,8 +71,18 @@ function Ongoing() {
     } else if (storagetype.toLowerCase() === "area") {
       navigate(`/Ongoing/OngoingByArea/${contractId}`);
     }
-    // Add more conditions for other storagetypes if needed
   };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const indexOfLastRow = page * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentContracts = filteredContracts.slice(
+    indexOfFirstRow,
+    indexOfLastRow
+  );
 
   return (
     <div style={{ margin: "0 1rem" }}>
@@ -73,7 +91,7 @@ function Ongoing() {
       </Typography>
 
       <TextField
-        label="Search by Storage Type, Party Name, or Storage Name"
+        label="Search by Storage Type, Party Name, or Location"
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -94,58 +112,81 @@ function Ongoing() {
         >
           <CircularProgress />
         </div>
-      ) : filteredContracts.length > 0 ? (
-        <TableContainer
-          component={Paper}
-          sx={{ borderRadius: "12px", margin: "1rem 0" }}
-        >
-          <Table sx={{ borderRadius: "12px" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <b>Storage Type</b>
-                </TableCell>
-                <TableCell>
-                  <b>Party Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Storage Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Action</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredContracts?.map(contract => (
-                <TableRow key={contract?.id}>
-                  <TableCell>{contract?.storagetype}</TableCell>
-                  <TableCell>{contract?.partyuser?.name}</TableCell>
-                  <TableCell>{contract?.location?.storagename}</TableCell>
+      ) : currentContracts.length > 0 ? (
+        <>
+          <TableContainer
+            component={Paper}
+            sx={{ borderRadius: "12px", margin: "1rem 0" }}
+          >
+            <Table sx={{ borderRadius: "12px" }}>
+              <TableHead>
+                <TableRow>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      style={{
-                        background: "linear-gradient(263deg, #34b6df, #34d0be)",
-                        color: "#fff",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          background:
-                            "linear-gradient(263deg, #34b6df, #34d0be)",
-                        },
-                      }}
-                      onClick={() =>
-                        handleViewContract(contract.id, contract.storagetype)
-                      }
-                    >
-                      View
-                    </Button>
+                    <b>S. No</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Party Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Contract Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Location</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Storage Type</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Action</b>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {currentContracts.map((contract, index) => (
+                  <TableRow key={contract?.id}>
+                    <TableCell>{indexOfFirstRow + index + 1}</TableCell>
+                    <TableCell>{contract?.partyuser?.name}</TableCell>
+                    <TableCell>{contract?.slno}</TableCell>
+                    <TableCell>{contract?.location?.storagename}</TableCell>
+                    <TableCell>{contract?.storagetype}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        style={{
+                          background:
+                            "linear-gradient(263deg, #34b6df, #34d0be)",
+                          color: "#fff",
+                          borderRadius: "8px",
+                        }}
+                        onClick={() =>
+                          handleViewContract(contract.id, contract.storagetype)
+                        }
+                      >
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Pagination
+              count={Math.ceil(filteredContracts.length / rowsPerPage)}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+              sx={{
+                marginTop: "1rem",
+                "& .Mui-selected": {
+                  background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                  color: "#fff",
+                },
+              }}
+            />
+          </div>
+        </>
       ) : (
         <p>No ongoing contracts found.</p>
       )}

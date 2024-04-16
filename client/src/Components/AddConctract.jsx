@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { css } from "@emotion/react";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
+import Select from "react-select";
 
 function AddContract() {
   const initialValues = {
@@ -25,7 +26,6 @@ function AddContract() {
   const [partyOptions, setPartyOptions] = useState([]);
   const [gstRates, setGstRates] = useState([]);
   const [gstTypes, setGstTypes] = useState([]);
-
   const userId = localStorage.getItem("id");
 
   const override = css`
@@ -95,26 +95,11 @@ function AddContract() {
         gsttype: values.gstApplicable === "Yes" ? values.gstType : 0,
       };
 
-      // Log the selected party ID for debugging
       const selectedPartyId = values.party;
-      console.log("Selected Party ID:", selectedPartyId);
 
-      // Log the partyOptions array for debugging
-      console.log("Party Options:", partyOptions);
-
-      // Log the entire partyOptions array to check its structure
-      console.log(
-        "Entire Party Options Array:",
-        JSON.stringify(partyOptions, null, 2)
-      );
-
-      // Find the selected party using party ID
       const selectedParty = partyOptions.find(
         party => party.id == selectedPartyId
       );
-
-      // Log the selectedParty for debugging
-      // console.log("Selected Party:", selectedParty);
 
       if (selectedParty && selectedParty.userTypeId) {
         dataToSend.partyId = selectedPartyId;
@@ -124,14 +109,11 @@ function AddContract() {
         dataToSend.partyidinpartytable = selectedPartyId;
       }
 
-      console.log(dataToSend);
-
       const response = await axios.post(
         `http://3.6.248.144/api/v1/contracts/${userId}`,
         dataToSend
       );
 
-      console.log(response);
       if (response.status === 201) {
         toast.success("Contract added successfully!");
         setLoading(false);
@@ -191,23 +173,17 @@ function AddContract() {
                       <label htmlFor="party" className="form-label">
                         Party <span className="text-danger">*</span>
                       </label>
-                      <Field
-                        as="select"
-                        className="form-control rounded-pill"
-                        id="party"
-                        name="party"
-                        required
-                        onChange={e => setFieldValue("party", e.target.value)}
-                      >
-                        <option value="" disabled>
-                          Select Party
-                        </option>
-                        {partyOptions.map(party => (
-                          <option key={party.id} value={party.id}>
-                            {`${party.mobileNumber} - ${party.name} - ${party.companyname}`}
-                          </option>
-                        ))}
-                      </Field>
+                      <Select
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                        options={partyOptions.map(party => ({
+                          value: party.id,
+                          label: `${party.mobileNumber} - ${party.name}`,
+                        }))}
+                        onChange={option =>
+                          setFieldValue("party", option.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="mb-3">

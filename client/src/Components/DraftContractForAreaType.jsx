@@ -4,20 +4,20 @@ import { ClipLoader } from "react-spinners";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 function DraftContractForAreaType() {
   const [draftContract, setDraftContract] = useState(null);
   const [loading, setLoading] = useState(true);
   const [storageId, setStorageId] = useState(null);
   const [storageSpaces, setStorageSpaces] = useState([]);
-  const [selectedSpaceId, setSelectedSpaceId] = useState("");
-  const [selectedStorageSpaces, setSelectedStorageSpaces] = useState([]);
+  const [selectedSpaceIds, setSelectedSpaceIds] = useState([]);
   const [inQty, setInQty] = useState(1);
   const [rate, setRate] = useState(0);
-  console.log(draftContract?.gstRate?.percentage);
+  const [selectedStorageSpaces, setSelectedStorageSpaces] = useState([]);
+
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -27,7 +27,6 @@ function DraftContractForAreaType() {
           `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
         );
         setDraftContract(response.data);
-        console.log(response);
         setStorageId(response.data.storageId);
         setLoading(false);
       } catch (error) {
@@ -42,7 +41,6 @@ function DraftContractForAreaType() {
   useEffect(() => {
     const fetchStorageSpaces = async () => {
       try {
-        console.log(`http://3.6.248.144/api/v1/location/space/${storageId}`);
         const response = await axios.get(
           `http://3.6.248.144/api/v1/location/space/${storageId}`
         );
@@ -58,17 +56,17 @@ function DraftContractForAreaType() {
   }, [storageId]);
 
   const handleAddSpace = () => {
-    if (selectedSpaceId) {
+    if (selectedSpaceIds.length > 0) {
       setSelectedStorageSpaces([
         ...selectedStorageSpaces,
         {
-          storagespace: selectedSpaceId,
+          storagespace: selectedSpaceIds.map(space => space.value),
           qty: inQty,
           rate: rate,
           amount: inQty * rate,
         },
       ]);
-      setSelectedSpaceId("");
+      setSelectedSpaceIds([]);
       setInQty(1);
       setRate(0);
     }
@@ -81,7 +79,7 @@ function DraftContractForAreaType() {
   };
 
   const handleClearData = () => {
-    setSelectedSpaceId("");
+    setSelectedSpaceIds([]);
     setInQty(1);
     setRate(0);
   };
@@ -91,18 +89,17 @@ function DraftContractForAreaType() {
       const dataToSend = {
         storagespaces: selectedStorageSpaces,
       };
+      console.log(dataToSend);
 
-      const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
-        dataToSend
-      );
+      // const response = await axios.put(
+      //   `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
+      //   dataToSend
+      // );
 
-      toast.success("Data submitted successfully!");
-      // Add any additional logic or redirection as needed
-      setTimeout(() => {
-        // Navigate to "/Contract" route
-        navigate("/Contract");
-      }, 2000);
+      // toast.success("Data submitted successfully!");
+      // setTimeout(() => {
+      //   navigate("/Contract");
+      // }, 2000);
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data. Please try again.");
@@ -121,31 +118,29 @@ function DraftContractForAreaType() {
               <ClipLoader loading={loading} size={150} />
             ) : (
               <>
-                <div className="mb-3 row">
-                  <div className="col-md-6">
-                    <label htmlFor="storageName" className="form-label">
-                      Storage Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill"
-                      id="storageName"
-                      value={draftContract?.location?.storagename}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="party" className="form-label">
-                      Party:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill"
-                      id="party"
-                      value={draftContract?.partyuser?.name}
-                      readOnly
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label htmlFor="storageName" className="form-label">
+                    Storage Name:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    id="storageName"
+                    value={draftContract?.location?.storagename}
+                    readOnly
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="party" className="form-label">
+                    Party:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    id="party"
+                    value={draftContract?.partyuser?.name}
+                    readOnly
+                  />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="storageType" className="form-label">
@@ -224,38 +219,22 @@ function DraftContractForAreaType() {
                   </div>
                 )}
 
-                {/* New Section Heading */}
-                {storageId && (
-                  <div className="mb-4">
-                    <h5 className="mb-0">Add Contract Here by Area</h5>
-                  </div>
-                )}
-
-                {/* New Section */}
-                {storageId && (
-                  <div className="mb-3">
-                    <label htmlFor="selectedSpace" className="form-label">
-                      Storage Space <span className="text-danger">*</span>
-                    </label>
-                    <select
-                      className="form-control rounded-pill"
-                      id="selectedSpace"
-                      name="selectedSpace"
-                      onChange={e => setSelectedSpaceId(e.target.value)}
-                      value={selectedSpaceId}
-                      required
-                    >
-                      <option value="" disabled>
-                        Select Storage Space
-                      </option>
-                      {storageSpaces.map(space => (
-                        <option key={space.id} value={space.id}>
-                          {space.space}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+                <div className="mb-3">
+                  <label htmlFor="selectedSpace" className="form-label">
+                    Storage Space <span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    isMulti
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    options={storageSpaces.map(space => ({
+                      value: space.id,
+                      label: space.space,
+                    }))}
+                    onChange={setSelectedSpaceIds}
+                    value={selectedSpaceIds}
+                  />
+                </div>
                 <div className="mb-3">
                   <label htmlFor="inQty" className="form-label">
                     In Qty <span className="text-danger">*</span>
@@ -286,19 +265,6 @@ function DraftContractForAreaType() {
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="amount" className="form-label">
-                    Amount <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control rounded-pill"
-                    id="amount"
-                    name="amount"
-                    value={inQty * rate}
-                    readOnly
-                  />
-                </div>
                 <div className="text-center">
                   <button
                     type="button"
@@ -318,8 +284,6 @@ function DraftContractForAreaType() {
                     Clear Data
                   </button>
                 </div>
-
-                {/* Entered Details Table */}
                 {selectedStorageSpaces.length > 0 && (
                   <div className="mt-4">
                     <h5>Entered Details</h5>
@@ -337,9 +301,14 @@ function DraftContractForAreaType() {
                         {selectedStorageSpaces.map((space, index) => (
                           <tr key={index}>
                             <td>
-                              {storageSpaces.find(
-                                s => s.id === parseInt(space.storagespace, 10)
-                              )?.space || space.storagespace}
+                              {space.storagespace.map((id, idx) => (
+                                <span key={idx}>
+                                  {storageSpaces.find(s => s.id === id)
+                                    ?.space || id}
+                                  {idx !== space.storagespace.length - 1 &&
+                                    ", "}
+                                </span>
+                              ))}
                             </td>
                             <td>{space.qty}</td>
                             <td>{space.rate}</td>
@@ -359,8 +328,6 @@ function DraftContractForAreaType() {
                     </table>
                   </div>
                 )}
-
-                {/* Submit Contract Section */}
                 {selectedStorageSpaces.length > 0 && (
                   <div className="mt-4">
                     <h5>Submit Contract by Area</h5>

@@ -97,6 +97,7 @@ const Address = require('./models/address');
 const BankDetails = require('./models/bankdetails');
 const Signature = require('./models/signeture');
 const Storagespace = require("./models/storagespace");
+const StoragespaceArea = require("./models/storagespacearea");
 commodity.belongsTo(commodityType);
 
 //varient
@@ -131,13 +132,15 @@ Contract.belongsTo(userTable, { foreignKey: 'partyId', as: 'partyuser', allowNul
 Contract.belongsTo(party, { foreignKey: 'partyidinpartytable', as: 'partyus',allowNull: true });
 Contract.hasMany(ContractSpace, { as: 'spaces', foreignKey: 'contractId' });
 ContractSpace.belongsTo(Contract, { foreignKey: 'contractId' });
-ContractSpace.belongsTo(SpaceDetails, { foreignKey: 'storagespace', as: 'storagespaces' });
+//ContractSpace.belongsTo(SpaceDetails, { foreignKey: 'storagespace', as: 'storagespaces' });
 Contract.hasMany(ContractProduct, { as: 'space', foreignKey: 'contractId' });
 ContractProduct.belongsTo(Contract, { as: 'space', foreignKey: 'contractId' });
 Storagespace.belongsTo(SpaceDetails, { foreignKey: 'productspaces', as: 'productSpaceDetails' });
+StoragespaceArea.belongsTo(SpaceDetails, { foreignKey: 'Areaspaces', as: 'AreaSpaceDetails' });
 
 Storagespace.belongsTo(ContractProduct, { foreignKey: 'contractproduct', as: 'contractp' });
 Storagespace.belongsTo(Contract, { as: 'contractdet', foreignKey: 'contractId' });
+StoragespaceArea.belongsTo(ContractSpace, { foreignKey: 'contractspace', as: 'contractspac' });
 Storagespace.belongsTo(product, { foreignKey: 'productid', as: 'products' });
 ContractProduct.belongsTo(product, { foreignKey: 'productid', as: 'product' });
 Contract.hasMany(Invoice, { as: 'invoice', foreignKey: 'contractId' });

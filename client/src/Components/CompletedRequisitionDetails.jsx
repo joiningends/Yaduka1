@@ -91,6 +91,10 @@ function CompletedRequisitionDetails() {
                 <th style={{ padding: "10px", textAlign: "left" }}>
                   Available Quantity
                 </th>
+
+                <th style={{ padding: "10px", textAlign: "left" }}>
+                  Required Quantity
+                </th>
                 <th style={{ padding: "10px", textAlign: "left" }}>
                   Delivered Quantity
                 </th>
@@ -118,9 +122,14 @@ function CompletedRequisitionDetails() {
                     <td style={{ padding: "10px", textAlign: "left" }}>
                       {contract.qty}
                     </td>
+
                     <td style={{ padding: "10px", textAlign: "left" }}>
                       {requiredQuantities[contract.contractproductid] ||
                         contract.requireQty}
+                    </td>
+                    <td style={{ padding: "10px", textAlign: "left" }}>
+                      {requiredQuantities[contract.contractproductid] ||
+                        contract.deliveryQty}
                     </td>
                   </tr>
                 ))}

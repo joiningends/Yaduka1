@@ -53,6 +53,8 @@ import ViewCompletedMaterialMovement from "../ViewCompletedMaterialMovement";
 import InventoryReport from "../InventoryReport";
 import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
 import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
+import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
+import EditMaterialMovementColdStorageCompleted from "../EditMaterialMovementColdStorageCompleted";
 
 const ColdStorageAdmin = () => {
   return (
@@ -128,7 +130,7 @@ const ColdStorageAdmin = () => {
         />
         <Route
           path="/CompletedMaterialMovement"
-          element={<CompletedEditMaterialMovement />}
+          element={<CompletedMaterialMovementColdStorage />}
         />
         <Route
           path="/MaterialMovement/ViewMaterialMovement/:id"
@@ -167,6 +169,10 @@ const ColdStorageAdmin = () => {
         <Route
           path="/EditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovmentColdStorage />}
+        />
+        <Route
+          path="/CompletedEditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovementColdStorageCompleted />}
         />
       </Routes>
     </div>

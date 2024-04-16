@@ -18,11 +18,17 @@ function EditProductDetails() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(
+          `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+            "id"
+          )}`
+        );
         const response = await axios.get(
           `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
             "id"
           )}`
         );
+
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -63,17 +69,13 @@ function EditProductDetails() {
     // Filter out contracts with required quantity greater than 0 or changed by the user
     const filteredData = data
       .map(contractArray => {
-        const productdetails = contractArray.contracts
-          .filter(
-            contract => requiredQuantities[contract.contractproductid] > 0
-          )
-          .map(contract => ({
-            requireqty: requiredQuantities[contract.contractproductid] || 0,
-            deliveryQty: 0,
-            contractId: contract.contractid,
-            storageId: selectedLocationId,
-            contractproductid: contract.contractproductid,
-          }));
+        const productdetails = contractArray.contracts.map(contract => ({
+          requireqty: requiredQuantities[contract.contractproductid] || 0,
+          deliveryQty: 0,
+          contractId: contract.contractid,
+          storageId: selectedLocationId,
+          contractproductid: contract.contractproductid,
+        }));
         return {
           productdetails: productdetails,
         };

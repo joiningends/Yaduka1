@@ -5,7 +5,6 @@ import axios from "axios";
 function DetailsProduct() {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
-  const [concatenatedValue, setConcatenatedValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,32 +21,9 @@ function DetailsProduct() {
     fetchData();
   }, [id]);
 
-  useEffect(() => {
-    if (productDetails && productDetails[0]) {
-      console.log(productDetails[0]);
-      const { product } = productDetails[0];
-      console.log(product);
-      if (product !== null) {
-        const { commodity, varient, unit } = product;
-        console.log();
-        setConcatenatedValue(
-          `${commodity?.commodity} | ${varient?.varient} || ${unit?.unit}`
-        );
-      }
-    }
-  }, [productDetails]);
-
-  if (!productDetails || !productDetails[0]) {
+  if (!productDetails || productDetails.length === 0) {
     return <div>Loading...</div>;
   }
-
-  const columns = ["Name", "Quantity", "Rate", "Amount"];
-  const data = productDetails?.map(detail => ({
-    Name: concatenatedValue,
-    Quantity: detail.qty,
-    Rate: detail.rate,
-    Amount: detail.amount,
-  }));
 
   return (
     <div className="container mt-5">
@@ -60,17 +36,19 @@ function DetailsProduct() {
             <table className="table">
               <thead>
                 <tr>
-                  {columns?.map((column, index) => (
-                    <th key={index}>{column}</th>
-                  ))}
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Rate</th>
+                  <th>Amount</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {columns?.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column]}</td>
-                    ))}
+                {productDetails.map((detail, index) => (
+                  <tr key={index}>
+                    <td>{`${detail.product.commodity?.commodity} | ${detail.product.varient?.varient} || ${detail.product.unit?.unit}`}</td>
+                    <td>{detail.qty}</td>
+                    <td>{detail.rate}</td>
+                    <td>{detail.amount}</td>
                   </tr>
                 ))}
               </tbody>

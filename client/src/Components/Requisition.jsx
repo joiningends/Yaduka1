@@ -60,6 +60,7 @@ function Requisition() {
   const handleView = item => {
     setSelectedItem(item);
     setOpenDialog(true);
+    console.log(`http://3.6.248.144/api/v1/ref/getById/${item.id}`);
 
     axios
       .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)

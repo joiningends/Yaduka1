@@ -51,6 +51,10 @@ import DraftContractForAreaType from "../DraftContractForAreaType";
 import Completed from "../Completed";
 import CompletedAreaView from "../CompletedAreaView";
 import CompletedProductView from "../CompletedProductView";
+import EditMaterialMovementColdStorageCompleted from "../EditMaterialMovementColdStorageCompleted";
+import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
+import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
+import CompletedEditCompletedMaterialMovement from "../CompletedEditCompletedMaterialMovement";
 
 const ColdStorageEmployee = () => {
   return (
@@ -124,10 +128,7 @@ const ColdStorageEmployee = () => {
           path="/MaterialMovement/EditMaterialMovement/:id"
           element={<EditMaterialMovement />}
         />
-        <Route
-          path="/CompletedMaterialMovement"
-          element={<CompletedEditMaterialMovement />}
-        />
+
         <Route
           path="/MaterialMovement/ViewMaterialMovement/:id"
           element={<ViewCompletedMaterialMovement />}
@@ -156,6 +157,22 @@ const ColdStorageEmployee = () => {
         <Route
           path="CompletedContract/DetailsProduct/:id"
           element={<DetailsCompeteProduct />}
+        />
+        <Route
+          path="/EditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovmentColdStorage />}
+        />
+        <Route
+          path="/CompletedMaterialMovement"
+          element={<CompletedMaterialMovementColdStorage />}
+        />
+        <Route
+          path="/MaterialMovement/ViewMaterialMovement/:id"
+          element={<ViewCompletedMaterialMovement />}
+        />
+        <Route
+          path="/CompletedEditMaterialMovement/:id/:storageId"
+          element={<CompletedEditCompletedMaterialMovement />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
       </Routes>

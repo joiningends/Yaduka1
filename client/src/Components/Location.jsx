@@ -143,9 +143,9 @@ const Location = () => {
               <TableCell>
                 <b>Rentable</b>
               </TableCell>
-              <TableCell>
-                <b>Action</b>
-              </TableCell>
+              {/* <TableCell> */}
+              {/* <b>Action</b>
+              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -155,7 +155,7 @@ const Location = () => {
                 <TableCell>{location.storagename}</TableCell>
                 <TableCell>{location.address}</TableCell>
                 <TableCell>{location.rantable ? "Yes" : "No"}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Button
                     variant="contained"
                     style={{
@@ -171,7 +171,7 @@ const Location = () => {
                   >
                     Delete
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

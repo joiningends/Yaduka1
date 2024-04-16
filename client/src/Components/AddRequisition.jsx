@@ -84,6 +84,7 @@ function AddRequisition() {
         )}`
       );
       setTableData(response.data);
+      console.log(response.data);
       setShowTable(true);
     } catch (error) {
       console.error("Error fetching table data:", error);
@@ -290,7 +291,7 @@ function AddRequisition() {
                             className="btn btn-primary"
                             onClick={handleEditDetails}
                           >
-                            Edit Details
+                            Req. Qty
                           </button>
                         </div>
                         <Pagination

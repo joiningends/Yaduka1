@@ -8,6 +8,7 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 function DraftContractForProductType() {
   const [contractData, setContractData] = useState(null);
   const [productOptions, setProductOptions] = useState([]);
+  console.log(productOptions);
   const [selectedProductId, setSelectedProductId] = useState("");
   const [lotName, setLotName] = useState("");
   const [storageSpaces, setStorageSpaces] = useState([]);
@@ -266,7 +267,7 @@ function DraftContractForProductType() {
                       </option>
                       {productOptions.map(product => (
                         <option key={product.id} value={product.id}>
-                          {`${product.commodity?.commodity}-${product.varient?.varient}| |${product.quality?.quality}| |${product.packSize}-${product.unit?.unit}`}
+                          {`${product.commodity?.commodity}-${product.varient?.varient}| |${product.quality?.quality}| |${product?.size?.size}-${product.unit?.unit}`}
                         </option>
                       ))}
                     </select>
