@@ -85,15 +85,21 @@ function AddContract() {
     setLoading(true);
 
     try {
-      const dataToSend = {
+      let dataToSend = {
         storageId: values.storage,
         storagetype: values.storageType,
         renewaldays: values.renewalDays,
         contractstartdate: values.contractStartDate,
         Gstapplicable: values.gstApplicable === "Yes",
-        gstrate: values.gstApplicable === "Yes" ? values.gstRate : 0,
-        gsttype: values.gstApplicable === "Yes" ? values.gstType : 0,
       };
+
+      if (values.gstApplicable === "Yes") {
+        dataToSend = {
+          ...dataToSend,
+          gstrate: values.gstRate,
+          gsttype: values.gstType,
+        };
+      }
 
       const selectedPartyId = values.party;
 
@@ -108,6 +114,8 @@ function AddContract() {
         dataToSend.partyId = null;
         dataToSend.partyidinpartytable = selectedPartyId;
       }
+
+      console.log(dataToSend);
 
       const response = await axios.post(
         `http://3.6.248.144/api/v1/contracts/${userId}`,

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Typography } from "@mui/material";
 
 function DraftContractForProductType() {
   const [contractData, setContractData] = useState(null);
@@ -19,6 +20,7 @@ function DraftContractForProductType() {
   const [rate, setRate] = useState("");
   const [amount, setAmount] = useState("");
   const { id } = useParams();
+  console.log(storageSpaces);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("id");
@@ -286,12 +288,9 @@ function DraftContractForProductType() {
                   </div>
                   <div className="mb-3">
                     <FormControl fullWidth>
-                      <InputLabel
-                        id="space-label"
-                        sx={{ marginBottom: "10px" }}
-                      >
+                      <Typography variant="body1" fontWeight="100">
                         Storage Space
-                      </InputLabel>
+                      </Typography>
                       <Select
                         labelId="space-label"
                         id="space"
@@ -307,7 +306,9 @@ function DraftContractForProductType() {
                             )
                             .join(", ")
                         }
-                        sx={{ marginBottom: "10px" }}
+                        sx={{
+                          marginTop: "10px", // Add margin top to prevent overlap with the border
+                        }}
                       >
                         {spaceOptions.map(space => (
                           <MenuItem key={space.id} value={space.id}>
@@ -383,31 +384,31 @@ function DraftContractForProductType() {
                             <td>
                               {
                                 productOptions.find(
-                                  p => p.id === space.productid
+                                  p => p.id == space.productid
                                 )?.commodity?.commodity
                               }
                               -
                               {
                                 productOptions.find(
-                                  p => p.id === space.productid
+                                  p => p.id == space.productid
                                 )?.varient?.varient
                               }
                               | |
                               {
                                 productOptions.find(
-                                  p => p.id === space.productid
+                                  p => p.id == space.productid
                                 )?.quality?.quality
                               }
                               | |
                               {
                                 productOptions.find(
-                                  p => p.id === space.productid
+                                  p => p.id == space.productid
                                 )?.packSize
                               }
                               -
                               {
                                 productOptions.find(
-                                  p => p.id === space.productid
+                                  p => p.id == space.productid
                                 )?.unit?.unit
                               }
                             </td>

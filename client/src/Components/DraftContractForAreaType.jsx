@@ -91,15 +91,15 @@ function DraftContractForAreaType() {
       };
       console.log(dataToSend);
 
-      // const response = await axios.put(
-      //   `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
-      //   dataToSend
-      // );
+      const response = await axios.put(
+        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
+        dataToSend
+      );
 
-      // toast.success("Data submitted successfully!");
-      // setTimeout(() => {
-      //   navigate("/Contract");
-      // }, 2000);
+      toast.success("Data submitted successfully!");
+      setTimeout(() => {
+        navigate("/Contract");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data. Please try again.");
