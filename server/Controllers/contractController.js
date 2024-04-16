@@ -1604,7 +1604,7 @@ const generatePDF = async (userId, existingContract, tableData) => {
     });
 
     // Construct the media URL for WhatsApp
-    const media_url = `https://appointments.inspirononline.com/${filePath}`;
+    const media_url = `http://3.6.248.144/${filePath}`;
 
     // Send WhatsApp message with the PDF attachment
     sendWhatsAppMessageMedia(
