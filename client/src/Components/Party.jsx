@@ -36,7 +36,12 @@ function Party() {
     axios
       .get(`http://3.6.248.144/api/v1/users/getparty/${userId}`)
       .then(response => {
-        setPartyData(response.data);
+        // Sort the data based on createdAt time, newest to oldest
+        const sortedData = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPartyData(sortedData);
+        console.log(sortedData);
       })
       .catch(error => {
         console.error("Error in API request:", error);

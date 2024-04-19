@@ -30,7 +30,11 @@ function PackagingType() {
     axios
       .get("http://3.6.248.144/api/v1/unit/all")
       .then(response => {
-        setPackagingTypes(response.data);
+        // Sort the data based on createdAt time
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setPackagingTypes(sortedData);
       })
       .catch(error => {
         console.error("Error fetching data:", error);

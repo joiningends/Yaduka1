@@ -33,8 +33,12 @@ const Variant = () => {
     axios
       .get("http://3.6.248.144/api/v1/varient/all")
       .then(response => {
-        setVariantData(response.data);
-        console.log(response.data);
+        // Sort the data based on createdAt time, newest to oldest
+        const sortedData = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setVariantData(sortedData);
+        console.log(sortedData);
       })
       .catch(error => {
         console.error("Error fetching data:", error);

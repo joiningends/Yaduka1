@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
+
 function CompletedContractManufecture() {
   const [contracts, setContracts] = useState([]);
   const [filteredContracts, setFilteredContracts] = useState([]);
@@ -76,11 +77,11 @@ function CompletedContractManufecture() {
   return (
     <div style={{ margin: "0 1rem" }}>
       <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-        Completed Contracts
+        Ongoing Contracts
       </Typography>
 
       <TextField
-        label="Search by Storage Type, Party Name, or Storage Name"
+        label="Search by Storage Type, Party Name, or Location"
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -101,7 +102,7 @@ function CompletedContractManufecture() {
         >
           <CircularProgress />
         </div>
-      ) : filteredContracts.length > 0 ? (
+      ) : currentContracts.length > 0 ? (
         <>
           <TableContainer
             component={Paper}
@@ -111,13 +112,19 @@ function CompletedContractManufecture() {
               <TableHead>
                 <TableRow>
                   <TableCell>
-                    <b>Storage Type</b>
+                    <b>S. No</b>
                   </TableCell>
                   <TableCell>
                     <b>Party Name</b>
                   </TableCell>
                   <TableCell>
-                    <b>Storage Name</b>
+                    <b>Contract Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Location</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Storage Type</b>
                   </TableCell>
                   <TableCell>
                     <b>Action</b>
@@ -125,11 +132,13 @@ function CompletedContractManufecture() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentContracts.map(contract => (
+                {currentContracts.map((contract, index) => (
                   <TableRow key={contract?.id}>
-                    <TableCell>{contract?.storagetype}</TableCell>
+                    <TableCell>{indexOfFirstContract + index + 1}</TableCell>
                     <TableCell>{contract?.partyuser?.name}</TableCell>
+                    <TableCell>{contract?.slno}</TableCell>
                     <TableCell>{contract?.location?.storagename}</TableCell>
+                    <TableCell>{contract?.storagetype}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
@@ -138,10 +147,6 @@ function CompletedContractManufecture() {
                             "linear-gradient(263deg, #34b6df, #34d0be)",
                           color: "#fff",
                           borderRadius: "8px",
-                          "&:hover": {
-                            background:
-                              "linear-gradient(263deg, #34b6df, #34d0be)",
-                          },
                         }}
                         onClick={() =>
                           handleViewContract(contract.id, contract.storagetype)
@@ -155,32 +160,25 @@ function CompletedContractManufecture() {
               </TableBody>
             </Table>
           </TableContainer>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "1rem",
-            }}
-          >
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <Pagination
               count={Math.ceil(filteredContracts.length / contractsPerPage)}
               page={currentPage}
               onChange={(event, value) => paginate(value)}
+              color="primary"
+              shape="rounded"
               sx={{
-                "& .MuiPaginationItem-root": {
+                marginTop: "1rem",
+                "& .Mui-selected": {
                   background: "linear-gradient(263deg, #34b6df, #34d0be)",
                   color: "#fff",
-                  "&:hover": {
-                    background: "linear-gradient(263deg, #34b6df, #34d0be)",
-                  },
                 },
               }}
             />
           </div>
         </>
       ) : (
-        <p>No completed contracts found.</p>
+        <p>No ongoing contracts found.</p>
       )}
     </div>
   );

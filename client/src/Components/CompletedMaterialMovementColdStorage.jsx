@@ -154,7 +154,7 @@ function CompletedMaterialMovementColdStorage() {
 
   const handleEdit = () => {
     navigate(
-      `/CompletedEditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
+      `/CompletedMaterialMovement/CompletedEditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
     );
   };
 

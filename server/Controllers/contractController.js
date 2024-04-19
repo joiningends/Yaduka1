@@ -746,27 +746,35 @@ exports.getContractSpacesByContractId = async (req, res) => {
     const contractId = req.params.contractId;
 
     // Fetch contract spaces based on the contractId and where contract.status is not 'Closed'
-    const contractSpaces = await ContractSpace.findAll({
-      where: { contractId },
-      include: [
-        {
-          model: Contract,
-          where: {
-            id: contractId,
-            status: {
-              [Op.not]: "Closed",
-            },
-          },
-        },
-        {
-          model: SpaceDetails,
-          as: "storagespaces",
-          attributes: ["space"], // Include only the desired attribute
-        },
-      ],
+   
+    const contractProducts = await ContractSpace.findAll({
+      where: { contractId: contractId },
     });
 
-    res.status(200).json(contractSpaces);
+    const storages = await Promise.all(contractProducts.map(async store => {
+      const storagespaces = await StoragespaceArea.findAll({
+        where: { contractspace: store.id },
+        include: [
+          {
+            model: SpaceDetails,
+            as: 'AreaSpaceDetails',
+          },
+          {
+            model: ContractSpace,
+            as: 'contractspac',
+          },
+        ],
+      });
+
+      return {
+        contractspac: storagespaces[0].contractspac,
+        AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
+      };
+    }));
+
+   
+
+    res.status(200).json(storages);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -1360,7 +1368,7 @@ function generateFooters(doc, tableData, invoiceDetails) {
     // Reset the footerTop for the new page
     footerTop = 50; // You can adjust this value based on your new page layout
   }
-
+  if (invoiceDetails.gstrate ) {
   if (invoiceDetails.gsttype === "CGST&SGST") {
     const CGST = invoiceDetails.gstrate / 2;
     const SGST = invoiceDetails.gstrate / 2;
@@ -1388,7 +1396,16 @@ function generateFooters(doc, tableData, invoiceDetails) {
     doc.text("Total Invoice Value", 50, footerTop + 75);
     doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 75);
   }
+  }else{
+    doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
+    doc.text("Total Taxable Value", 50, footerTop + 25);
 
+    doc.text("GST on Above:", 50, footerTop + 45);
+    doc.text("No", 420, footerTop + 45);
+    
+    doc.text("Total Invoice Value", 50, footerTop + 75);
+    doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 75);
+  }
   const boxLeft = 40;
   const boxTop = footerTop + 110;
   const boxWidth = 250;
@@ -1603,8 +1620,8 @@ const generatePDF = async (userId, existingContract, tableData) => {
       });
     });
 
-    // Construct the media URL for WhatsApp
-   
+    
+
     return filePath;
   } catch (error) {
     console.error("Error generating PDF:", error);

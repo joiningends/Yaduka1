@@ -31,7 +31,13 @@ function Size() {
     axios
       .get("http://3.6.248.144/api/v1/size/all")
       .then(response => {
-        setData(response.data);
+        // Sort the data based on the createdAt time
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setData(sortedData);
+        console.log(sortedData);
         setLoading(false);
       })
       .catch(error => {

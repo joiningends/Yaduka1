@@ -28,8 +28,13 @@ const Commodity = () => {
     axios
       .get("http://3.6.248.144/api/v1/commodity/all")
       .then(response => {
-        setCommodities(response.data);
-        console.log(response.data);
+        // Sort the data based on createdAt time
+        const sortedData = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        setCommodities(sortedData);
+        console.log(sortedData);
       })
       .catch(error => {
         console.error("Error fetching data:", error);

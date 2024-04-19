@@ -5,12 +5,11 @@ const Breadcrumb = () => {
   const location = useLocation();
   let pathnames = location.pathname.split("/").filter(x => x);
 
-  // Ignore values with numeric IDs at the end
-  const isNumericID = str => /^\d+$/.test(str);
+  // Function to check if a string contains any digits
+  const containsDigits = str => /\d/.test(str);
 
-  if (pathnames.length > 0 && isNumericID(pathnames[pathnames.length - 1])) {
-    pathnames.pop();
-  }
+  // Remove segments containing digits from the pathnames array
+  pathnames = pathnames.filter(name => !containsDigits(name));
 
   return (
     <nav

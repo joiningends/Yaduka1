@@ -35,7 +35,14 @@ function Contract() {
         const response = await axios.get(
           `http://3.6.248.144/api/v1/contracts/${userId}/draft`
         );
-        setContracts(response.data);
+
+        // Sort the data based on createdAt time in descending order
+        const sortedContracts = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setContracts(sortedContracts);
+        console.log(sortedContracts);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching contracts:", error);

@@ -4,6 +4,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function EditProductDetails() {
   const { selectedAdminId, selectedLocationId } = useParams();
@@ -14,6 +15,7 @@ function EditProductDetails() {
   const itemsPerPage = 5;
   const tablesPerPage = 2;
   const partyId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,12 +102,17 @@ function EditProductDetails() {
       );
       toast.success("Data saved successfully!");
       setTimeout(() => {
-        window.location.href = "/Requisition/addRequisition";
+        window.location.href = "/Requisition";
       }, 1000);
     } catch (error) {
       console.error("Error saving data:", error);
       toast.error("Error saving data. Please try again.");
     }
+  };
+
+  const handleCancel = () => {
+    // Navigate to "/addRequisition"
+    navigate("/requisition/addRequisition");
   };
 
   const indexOfLastTable = currentPage * tablesPerPage;
@@ -234,7 +241,8 @@ function EditProductDetails() {
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <button
             className="btn btn-danger"
-            onClick={() => setRequiredQuantities({})}
+            onClick={() => handleCancel()}
+            style={{ marginRight: "1rem" }}
           >
             Cancel
           </button>

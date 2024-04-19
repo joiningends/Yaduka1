@@ -35,9 +35,13 @@ const Employee = () => {
       const response = await axios.get(
         `http://3.6.248.144/api/v1/users/${userId}`
       );
+      // Sort the response data based on createdAt time in descending order
+      const sortedData = response.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
       console.log(userId);
-      setUserData(response.data);
-      console.log(response.data);
+      setUserData(sortedData);
+      console.log(sortedData);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }

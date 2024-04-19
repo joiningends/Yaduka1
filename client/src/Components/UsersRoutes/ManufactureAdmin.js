@@ -87,7 +87,7 @@ const ManufactureAdmin = () => {
         <Route path="/DetailsArea/:id" element={<DetailsArea />} />
         <Route path="/InventoryReport" element={<InventoryReport />} />
         <Route
-          path="/editProductDetails/:selectedAdminId/:selectedLocationId"
+          path="requisition/addRequisition/editProductDetails/:selectedAdminId/:selectedLocationId"
           element={<EditProductDetails />}
         />
         <Route

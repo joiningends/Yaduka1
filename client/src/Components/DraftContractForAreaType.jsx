@@ -56,7 +56,7 @@ function DraftContractForAreaType() {
   }, [storageId]);
 
   const handleAddSpace = () => {
-    if (selectedSpaceIds.length > 0) {
+    if (selectedSpaceIds.length > 0 && rate >= 0) {
       setSelectedStorageSpaces([
         ...selectedStorageSpaces,
         {
@@ -80,7 +80,6 @@ function DraftContractForAreaType() {
 
   const handleClearData = () => {
     setSelectedSpaceIds([]);
-    setInQty(1);
     setRate(0);
   };
 
@@ -89,7 +88,6 @@ function DraftContractForAreaType() {
       const dataToSend = {
         storagespaces: selectedStorageSpaces,
       };
-      console.log(dataToSend);
 
       const response = await axios.put(
         `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
@@ -240,14 +238,12 @@ function DraftContractForAreaType() {
                     In Qty <span className="text-danger">*</span>
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control rounded-pill"
                     id="inQty"
                     name="inQty"
                     value={inQty}
-                    min="1"
-                    onChange={e => setInQty(e.target.value)}
-                    required
+                    readOnly
                   />
                 </div>
                 <div className="mb-3">
@@ -265,6 +261,19 @@ function DraftContractForAreaType() {
                     required
                   />
                 </div>
+                <div className="mb-3">
+                  <label htmlFor="amount" className="form-label">
+                    Amount
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    id="amount"
+                    name="amount"
+                    value={inQty * rate}
+                    readOnly
+                  />
+                </div>
                 <div className="text-center">
                   <button
                     type="button"
@@ -272,6 +281,7 @@ function DraftContractForAreaType() {
                     onClick={handleAddSpace}
                     style={{
                       background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                      marginRight: "1rem",
                     }}
                   >
                     Add+

@@ -32,7 +32,13 @@ function Quality() {
         const response = await axios.get(
           "http://3.6.248.144/api/v1/quality/all"
         );
-        setData(response.data);
+
+        // Sort the data based on the createdAt time, from newest to oldest
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -58,7 +58,7 @@ function EditRequisitionDetails() {
     console.log(requestData);
     // Check if requestData is empty or unchanged
     if (requestData.length === 0) {
-      window.location.href = "/Requisition/addRequisition";
+      window.location.href = "/Requisition";
       return;
     }
 
@@ -66,7 +66,7 @@ function EditRequisitionDetails() {
       await axios.put(`http://3.6.248.144/api/v1/ref/request/qty`, requestData);
       toast.success("Data saved successfully!");
       setTimeout(() => {
-        window.location.href = "/Requisition/addRequisition";
+        window.location.href = "/Requisition";
       }, 1000);
     } catch (error) {
       console.error("Error saving data:", error);

@@ -5,6 +5,8 @@ import axios from "axios";
 function DetailsArea() {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,7 +15,6 @@ function DetailsArea() {
           `http://3.6.248.144/api/v1/contracts/contract-area/${id}`
         );
         setProductDetails(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
@@ -26,13 +27,28 @@ function DetailsArea() {
     return <div>Loading...</div>;
   }
 
-  const columns = ["StorageSpace", "Quantity", "Rate", "Amount"];
-  const data = productDetails.map(detail => ({
-    StorageSpace: detail.storagespaces?.space,
-    Quantity: detail.qty,
-    Rate: detail.rate,
-    Amount: detail.amount,
-  }));
+  const selectedAreaDetails = productDetails[0].AreaSpaceDetails; // Assuming we are selecting the first area for storage space
+
+  // Calculate totals for each column
+  const totals = selectedAreaDetails.reduce(
+    (acc, detail) => {
+      acc.qty += detail.qty;
+      acc.rate += detail.rate;
+      acc.amount += detail.amount;
+      return acc;
+    },
+    { qty: 0, rate: 0, amount: 0 }
+  );
+
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = selectedAreaDetails.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const columns = ["Storage Space", "Quantity", "Rate", "Amount"];
 
   return (
     <div className="container mt-5">
@@ -51,15 +67,50 @@ function DetailsArea() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, rowIndex) => (
+                {currentItems.map((detail, rowIndex) => (
                   <tr key={rowIndex}>
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column]}</td>
-                    ))}
+                    <td>{detail.space}</td>
+                    <td>{detail.qty}</td>
+                    <td>{detail.rate}</td>
+                    <td>{detail.amount}</td>
                   </tr>
                 ))}
+                <tr>
+                  <td>
+                    <strong>Total</strong>
+                  </td>
+                  <td>
+                    <strong>{totals.qty}</strong>
+                  </td>
+                  <td>
+                    <strong>{totals.rate}</strong>
+                  </td>
+                  <td>
+                    <strong>{totals.amount}</strong>
+                  </td>
+                </tr>
               </tbody>
             </table>
+            {/* Pagination */}
+            <ul className="pagination">
+              {Array(Math.ceil(selectedAreaDetails.length / itemsPerPage))
+                .fill()
+                .map((_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      currentPage === index + 1 ? "active" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => setCurrentPage(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+            </ul>
           </div>
         </div>
       </div>

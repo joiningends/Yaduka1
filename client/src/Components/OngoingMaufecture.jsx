@@ -13,6 +13,7 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
+  Pagination,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,9 @@ function OngoingMaufecture() {
   const [filteredContracts, setFilteredContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const rowsPerPage = 5;
 
   // Retrieve userId from local storage
   const userId = localStorage.getItem("id");
@@ -72,6 +75,17 @@ function OngoingMaufecture() {
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const indexOfLastContract = page * rowsPerPage;
+  const indexOfFirstContract = indexOfLastContract - rowsPerPage;
+  const currentContracts = filteredContracts.slice(
+    indexOfFirstContract,
+    indexOfLastContract
+  );
+
   return (
     <div style={{ margin: "0 1rem" }}>
       <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
@@ -79,7 +93,7 @@ function OngoingMaufecture() {
       </Typography>
 
       <TextField
-        label="Search by Storage Type, Party Name, or Storage Name"
+        label="Search by Storage Type, Party Name, or Location"
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -100,58 +114,81 @@ function OngoingMaufecture() {
         >
           <CircularProgress />
         </div>
-      ) : filteredContracts.length > 0 ? (
-        <TableContainer
-          component={Paper}
-          sx={{ borderRadius: "12px", margin: "1rem 0" }}
-        >
-          <Table sx={{ borderRadius: "12px" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <b>Contract Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Storage Type</b>
-                </TableCell>
-                <TableCell>
-                  <b>Storage Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Action</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredContracts.map(contract => (
-                <TableRow key={contract.id}>
-                  <TableCell>{contract.slno}</TableCell>
-                  <TableCell>{contract.storagetype}</TableCell>
-                  <TableCell>{contract.location.storagename}</TableCell>
+      ) : currentContracts.length > 0 ? (
+        <>
+          <TableContainer
+            component={Paper}
+            sx={{ borderRadius: "12px", margin: "1rem 0" }}
+          >
+            <Table sx={{ borderRadius: "12px" }}>
+              <TableHead>
+                <TableRow>
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      style={{
-                        background: "linear-gradient(263deg, #34b6df, #34d0be)",
-                        color: "#fff",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          background:
-                            "linear-gradient(263deg, #34b6df, #34d0be)",
-                        },
-                      }}
-                      onClick={() =>
-                        handleViewContract(contract.id, contract.storagetype)
-                      }
-                    >
-                      View
-                    </Button>
+                    <b>S. No</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Party Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Contract Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Location</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Storage Type</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Action</b>
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {currentContracts.map((contract, index) => (
+                  <TableRow key={contract?.id}>
+                    <TableCell>{indexOfFirstContract + index + 1}</TableCell>
+                    <TableCell>{contract?.partyuser?.name}</TableCell>
+                    <TableCell>{contract?.slno}</TableCell>
+                    <TableCell>{contract?.location?.storagename}</TableCell>
+                    <TableCell>{contract?.storagetype}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        style={{
+                          background:
+                            "linear-gradient(263deg, #34b6df, #34d0be)",
+                          color: "#fff",
+                          borderRadius: "8px",
+                        }}
+                        onClick={() =>
+                          handleViewContract(contract.id, contract.storagetype)
+                        }
+                      >
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Pagination
+              count={Math.ceil(filteredContracts.length / rowsPerPage)}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+              shape="rounded"
+              sx={{
+                marginTop: "1rem",
+                "& .Mui-selected": {
+                  background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                  color: "#fff",
+                },
+              }}
+            />
+          </div>
+        </>
       ) : (
         <p>No ongoing contracts found.</p>
       )}

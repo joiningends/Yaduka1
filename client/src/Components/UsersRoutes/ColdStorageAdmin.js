@@ -120,7 +120,10 @@ const ColdStorageAdmin = () => {
         />
         <Route path="/Ongoing/OngoingByArea/:id" element={<OngoingByArea />} />
         <Route path="/DetailsProduct/:id" element={<DetailsProduct />} />
-        <Route path="/DetailsArea/:id" element={<DetailsArea />} />
+        <Route
+          path="/Ongoing/DetailsArea/:id"
+          element={<DetailsArea />}
+        />
         <Route path="/Contract" element={<Contract />} />
         <Route path="/Contract/AddContract" element={<AddConctract />} />
         <Route path="/MaterialMovement" element={<MaterialMovement />} />
@@ -171,7 +174,7 @@ const ColdStorageAdmin = () => {
           element={<EditMaterialMovmentColdStorage />}
         />
         <Route
-          path="/CompletedEditMaterialMovement/:id/:storageId"
+          path="/CompletedMaterialMovement/CompletedEditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovementColdStorageCompleted />}
         />
       </Routes>

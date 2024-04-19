@@ -9,7 +9,9 @@ function OngoingByArea() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  console.log(contractData);
   const userId = localStorage.getItem("id");
+  console.log(`http://3.6.248.144/api/v1/contracts/onging/${userId}/${id}`);
 
   useEffect(() => {
     axios
@@ -49,7 +51,7 @@ function OngoingByArea() {
   };
 
   const handleVariantClick = () => {
-    navigate(`/DetailsArea/${id}`);
+    navigate(`/Ongoing/DetailsArea/${id}`);
   };
 
   return (
@@ -150,7 +152,7 @@ function OngoingByArea() {
             </form>
 
             <div className="mt-4">
-              <h4>Product Type Contract Items</h4>
+              <h4>Area Type</h4>
               <form>
                 <div className="mb-3">
                   <label>Last Invoice Data (Created At)</label>
@@ -177,7 +179,9 @@ function OngoingByArea() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={formatDateString(contractData.nextInvoiceDate)}
+                    value={formatDateString(
+                      contractData?.contract?.nextinvoicedate
+                    )}
                     readOnly
                   />
                 </div>
@@ -196,8 +200,9 @@ function OngoingByArea() {
                     type="button"
                     className="btn btn-danger rounded-pill ms-2"
                     onClick={cancelContract}
+                    style={{ marginLeft: "1rem" }}
                   >
-                    Cancel Contract
+                    Close Contract
                   </button>
                   <button
                     type="button"

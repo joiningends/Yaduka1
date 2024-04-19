@@ -190,28 +190,17 @@ function OngoingByAreaForManufecture() {
                     readOnly
                   />
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label>Action</label>
                   <button
                     type="button"
                     className="btn btn-danger rounded-pill ms-2"
                     onClick={cancelContract}
+                    style={{ marginLeft: "1rem" }}
                   >
-                    Cancel Contract
+                    Close Contract
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary rounded-pill ms-2"
-                    style={{
-                      background: "linear-gradient(263deg, #34b6df, #34d0be)",
-                      color: "#fff",
-                      marginLeft: "1rem",
-                    }}
-                    onClick={() => handleVariantClick()}
-                  >
-                    View
-                  </button>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

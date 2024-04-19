@@ -34,8 +34,14 @@ function Ongoing() {
     axios
       .get(`http://3.6.248.144/api/v1/contracts/${userId}/ongoinf`)
       .then(response => {
-        setContracts(response.data);
-        console.log(response.data);
+        // Sort the data based on createdAt time
+        const sortedContracts = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        // Set the sorted contracts
+        setContracts(sortedContracts);
+        console.log(sortedContracts);
         setLoading(false);
       })
       .catch(error => {

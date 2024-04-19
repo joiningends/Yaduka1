@@ -31,7 +31,11 @@ const Location = () => {
     axios
       .get(`http://3.6.248.144/api/v1/location/${userId}`)
       .then(response => {
-        setLocations(response.data);
+        // Sort the locations array based on createdAt time
+        const sortedLocations = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setLocations(sortedLocations);
       })
       .catch(error => {
         console.error("Error fetching data:", error);

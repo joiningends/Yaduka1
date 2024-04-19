@@ -30,7 +30,13 @@ const ComodityType = () => {
     axios
       .get("http://3.6.248.144/api/v1/commoditytype/all")
       .then(response => {
-        setRows(response.data);
+        // Sort the data based on createdAt time from new to old
+        const sortedData = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        setRows(sortedData);
+        console.log(sortedData);
         setLoading(false);
       })
       .catch(error => {

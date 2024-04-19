@@ -34,7 +34,12 @@ function Completed() {
     axios
       .get(`http://3.6.248.144/api/v1/contracts/clod/closed/${userId}`)
       .then(response => {
-        setContracts(response.data);
+        // Sort the data based on createdAt time in descending order
+        const sortedContracts = response.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setContracts(sortedContracts);
         setLoading(false);
       })
       .catch(error => {
