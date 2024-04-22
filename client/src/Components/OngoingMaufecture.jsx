@@ -34,6 +34,7 @@ function OngoingMaufecture() {
     setLoading(true);
 
     // Fetch ongoing contracts for a specific user
+    console.log(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`);
     axios
       .get(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`)
       .then(response => {

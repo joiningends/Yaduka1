@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { RingLoader } from "react-spinners";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const AddEmployee = () => {
   const initialValues = {
     name: "",
@@ -16,25 +17,16 @@ const AddEmployee = () => {
   };
 
   const [userTypeId, setTypeId] = useState(null);
-
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-
   const userId = localStorage.getItem("id");
 
-  const validatePhoneNumber = value => {
-    const phoneNumberPattern = /^\d{10}$/;
-    return phoneNumberPattern.test(value)
-      ? undefined
-      : "Please enter a valid 10-digit phone number.";
+  const validateCompanyName = value => {
+    return value ? undefined : "Company Name is required";
   };
 
-  const validateEmail = value => {
-    const emailPattern = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-    return emailPattern.test(value)
-      ? undefined
-      : "Please enter a valid Gmail address.";
+  const validateCompanyAddress = value => {
+    return value ? undefined : "Company Address is required";
   };
 
   useEffect(() => {
@@ -48,8 +40,6 @@ const AddEmployee = () => {
         console.error("Error fetching data:", error);
       }
     };
-
-    // Call the fetchData function when the component mounts
     fetchData();
   }, []);
 
@@ -75,7 +65,7 @@ const AddEmployee = () => {
           setTimeout(() => {
             setLoading(false);
             navigate("/employee");
-          }, 1500); // Adjust the delay time (in milliseconds) as needed
+          }, 1500);
         },
       });
     } catch (error) {
@@ -91,12 +81,12 @@ const AddEmployee = () => {
   };
 
   const handleCancel = () => {
-    navigate("/employee"); // Navigates to "/employee" when cancel button is clicked
+    navigate("/employee");
   };
 
   return (
     <div className="container mt-5">
-      {loading ? ( // Render loader when 'loading' state is true
+      {loading ? (
         <div className="d-flex justify-content-center align-items-center">
           <RingLoader color="#36D7B7" loading={loading} size={150} />
         </div>
@@ -111,7 +101,22 @@ const AddEmployee = () => {
                 <h4 className="card-title">Add Employee</h4>
               </div>
               <div className="card-body">
-                <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+                <Formik
+                  initialValues={initialValues}
+                  onSubmit={handleSubmit}
+                  validateOnChange={false}
+                  validateOnBlur={false}
+                  validate={values => {
+                    const errors = {};
+                    if (!values.companyName) {
+                      errors.companyName = "Company Name is required";
+                    }
+                    if (!values.companyAddress) {
+                      errors.companyAddress = "Company Address is required";
+                    }
+                    return errors;
+                  }}
+                >
                   <Form>
                     <div className="row mb-3">
                       <div className="col-md-6">
@@ -135,7 +140,6 @@ const AddEmployee = () => {
                           className="form-control rounded-pill"
                           id="phoneNumber"
                           name="phoneNumber"
-                          validate={validatePhoneNumber}
                           required
                         />
                         <ErrorMessage
@@ -155,7 +159,6 @@ const AddEmployee = () => {
                           className="form-control rounded-pill"
                           id="email"
                           name="email"
-                          validate={validateEmail}
                         />
                         <ErrorMessage
                           name="email"
@@ -172,6 +175,12 @@ const AddEmployee = () => {
                           className="form-control rounded-pill"
                           id="companyName"
                           name="companyName"
+                          validate={validateCompanyName}
+                        />
+                        <ErrorMessage
+                          name="companyName"
+                          component="div"
+                          className="text-danger"
                         />
                       </div>
                     </div>
@@ -185,6 +194,12 @@ const AddEmployee = () => {
                           className="form-control rounded-pill"
                           id="companyAddress"
                           name="companyAddress"
+                          validate={validateCompanyAddress}
+                        />
+                        <ErrorMessage
+                          name="companyAddress"
+                          component="div"
+                          className="text-danger"
                         />
                       </div>
                       <div className="col-md-6">

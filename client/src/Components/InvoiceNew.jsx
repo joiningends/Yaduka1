@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, useFormik } from "formik";
 import Select from "react-select";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 function InvoiceNew() {
@@ -38,11 +36,9 @@ function InvoiceNew() {
         }));
         setPartyOptions(options);
       } else {
-        toast.error("Failed to fetch party options");
       }
     } catch (error) {
       console.error("Error fetching party options:", error);
-      toast.error("An error occurred while fetching party options");
     }
   };
 
@@ -59,11 +55,9 @@ function InvoiceNew() {
         }));
         setStorageLocationOptions(options);
       } else {
-        toast.error("Failed to fetch storage locations");
       }
     } catch (error) {
       console.error("Error fetching storage locations:", error);
-      toast.error("An error occurred while fetching storage locations");
     }
   };
 
@@ -84,14 +78,11 @@ function InvoiceNew() {
           }));
           setContractOptions(options);
         } else {
-          toast.error("Invalid contract data received");
         }
       } else {
-        toast.error("Failed to fetch contract options");
       }
     } catch (error) {
       console.error("Error fetching contract options:", error);
-      toast.error("An error occurred while fetching contract options");
     }
   };
 
@@ -105,11 +96,9 @@ function InvoiceNew() {
         const data = await response.json();
         setInvoiceDetails(data.invoiceDetails);
       } else {
-        toast.error("Failed to fetch invoice details");
       }
     } catch (error) {
       console.error("Error fetching invoice details:", error);
-      toast.error("An error occurred while fetching invoice details");
     }
   };
 
@@ -117,12 +106,8 @@ function InvoiceNew() {
     try {
       setIsLoading(true);
       // ... (unchanged)
-      toast.success("Invoice submitted successfully!", {
-        onClose: () => navigate("/invoice"),
-      });
     } catch (error) {
       console.error("Error submitting invoice:", error);
-      toast.error("Failed to submit invoice.");
     } finally {
       setIsLoading(false);
     }
@@ -163,7 +148,6 @@ function InvoiceNew() {
           newWindow.location.href = url;
         } else {
           console.error("Window object is not defined.");
-          toast.error("Failed to open in a new tab.");
         }
       };
 
@@ -172,7 +156,6 @@ function InvoiceNew() {
         openInNewTab(pdfUrl);
       } else {
         console.error("Error fetching PDF:", pdfResponse.statusText);
-        toast.error("Failed to view PDF.");
       }
 
       const inResponse = await fetch(inUrl);
@@ -180,11 +163,9 @@ function InvoiceNew() {
         openInNewTab(inUrl);
       } else {
         console.error("Error fetching inUrl:", inResponse.statusText);
-        toast.error("Failed to view inUrl.");
       }
     } catch (error) {
       console.error("Error viewing invoice:", error);
-      toast.error("Failed to view invoice.");
     }
   };
 
@@ -297,7 +278,6 @@ function InvoiceNew() {
           </div>
         </div>
       </div>
-      <ToastContainer />
       {isLoading && (
         <div className="text-center mt-3">
           <p>Loading...</p>

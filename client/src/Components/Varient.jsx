@@ -82,8 +82,9 @@ const Variant = () => {
       });
   };
 
+  const indexOfFirstRow = (page - 1) * rowsPerPage;
   const indexOfLastRow = page * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+
   const currentVariants = variantData
     .filter(
       variant =>

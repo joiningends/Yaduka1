@@ -49,6 +49,11 @@ function AddParty() {
 
   const handleSubmit = async () => {
     try {
+      if (!formData.companyName || !formData.companyAddress) {
+        toast.error("Company Name and Company Address are required.");
+        return;
+      }
+
       const postData = {
         name: formData.name,
         mobileNumber: formData.phoneNumber,
@@ -166,6 +171,7 @@ function AddParty() {
                           companyName: e.target.value,
                         })
                       }
+                      required
                     />
                   </div>
                 </div>
@@ -186,6 +192,7 @@ function AddParty() {
                           companyAddress: e.target.value,
                         })
                       }
+                      required
                     />
                   </div>
                   <div className="col-md-6">

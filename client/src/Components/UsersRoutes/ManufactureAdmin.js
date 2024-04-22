@@ -91,7 +91,7 @@ const ManufactureAdmin = () => {
           element={<EditProductDetails />}
         />
         <Route
-          path="/editRequisition/:id/:storageId"
+          path="/Requisition/editRequisition/:id/:storageId"
           element={<EditRequisitionDetails />}
         />
         <Route

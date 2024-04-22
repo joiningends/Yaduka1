@@ -12,6 +12,7 @@ function CompletedAreaView() {
         const response = await axios.get(
           `http://3.6.248.144/api/v1/contracts/closed/Area/${id}`
         );
+        console.log(response.data);
         setCompletedContractData(response.data);
       } catch (error) {
         console.error("Error fetching completed contract data:", error);
@@ -118,19 +119,7 @@ function CompletedAreaView() {
                   readOnly
                 />
               </div>
-              <div>
-                <label htmlFor="under" className="form-label">
-                  Under:
-                </label>
-                <input
-                  type="text"
-                  className="form-control rounded-pill"
-                  id="under"
-                  value={completedContractData[0]?.Contract?.under}
-                  readOnly
-                />
-              </div>
-              <div className="text-center mt-4">
+              {/* <div className="text-center mt-4">
                 <Link to={`/CompletedContract/DetailsArea/${id}`}>
                   <button
                     type="button"
@@ -142,7 +131,7 @@ function CompletedAreaView() {
                     View Stock Balance
                   </button>
                 </Link>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -34,10 +34,21 @@ function EditRequisitionDetails() {
   const handleTablePageChange = pageNumber => setCurrentTablePage(pageNumber);
   const handleRequiredQuantityChange = (e, contractId) => {
     const value = parseInt(e.target.value);
-    setRequiredQuantities(prevState => ({
-      ...prevState,
-      [contractId]: value,
-    }));
+    const availableQuantity =
+      data
+        .flatMap(item => item.contracts)
+        .find(contract => contract.contractproductid === contractId)?.qty || 0;
+
+    if (value <= availableQuantity) {
+      setRequiredQuantities(prevState => ({
+        ...prevState,
+        [contractId]: value,
+      }));
+    } else {
+      // Show an error message or handle the validation failure
+      // For example, you can display a toast notification
+      toast.error("Quantity cannot exceed available quantity.");
+    }
   };
 
   const handleSave = async () => {

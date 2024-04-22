@@ -137,7 +137,7 @@ function AddContract() {
   };
 
   const handleCancel = () => {
-    navigate("/contracts");
+    navigate("/contract");
   };
 
   return (

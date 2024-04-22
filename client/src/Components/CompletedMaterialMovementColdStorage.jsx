@@ -18,7 +18,6 @@ function CompletedMaterialMovementColdStorage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState([]);
-  const [modalPageNumber, setModalPageNumber] = useState(0);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const modalItemsPerPage = 3;
   const itemsPerPage = 5;
@@ -37,8 +36,6 @@ function CompletedMaterialMovementColdStorage() {
           value: location.id,
           label: location.storagename,
         }));
-
-        console.log(response);
         setLocations(options);
         setIsLoading(false);
       })
@@ -111,8 +108,7 @@ function CompletedMaterialMovementColdStorage() {
         }
       )
       .then(response => {
-        console.log("Request successful:", response.data);
-        setRequestData(response.data[0]);
+        setRequestData(response.data);
         setSubmitting(false);
       })
       .catch(error => {
@@ -138,7 +134,6 @@ function CompletedMaterialMovementColdStorage() {
       .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
       .then(response => {
         setModalData(response.data);
-        console.log(response.data);
         setSelectedItemId(item.id);
         setShowModal(true);
       })
@@ -159,6 +154,7 @@ function CompletedMaterialMovementColdStorage() {
   };
 
   const renderRequestData = requestData
+    .flat() // Flatten the array of arrays into a single array
     .slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage)
     .map((item, index) => (
       <tr key={index}>

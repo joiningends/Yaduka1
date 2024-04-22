@@ -10,14 +10,13 @@ function AddVariant() {
     commodityId: "",
     cropDuration: "",
     uploadImage: "",
-    isImported: undefined,
-    isFarmable: undefined,
+    isImported: "false",
+    isFarmable: "false",
   };
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [commodities, setCommodities] = useState([]);
-  console.log(commodities);
 
   useEffect(() => {
     fetchCommodities();
@@ -45,14 +44,12 @@ function AddVariant() {
       const { variant, commodityId, cropDuration, isImported, isFarmable } =
         values;
 
-      // Selecting the file from input
       const fileInput = document.getElementById("uploadImage");
       const file = fileInput.files[0];
-      // Convert isImported and isFarmable to boolean values
+
       const convertedIsImported = isImported === "true";
       const convertedIsFarmable = isFarmable === "true";
 
-      // Creating FormData and appending the image
       const formData = new FormData();
       formData.append("image", file);
       formData.append("varient", variant);
@@ -67,14 +64,12 @@ function AddVariant() {
       });
 
       if (response.ok) {
-        const responseData = await response.json();
-        // Handle success response as needed
         toast.success("Variant information submitted successfully!");
         setTimeout(() => {
           navigate("/Variant");
         }, 2000);
       } else {
-        const errorData = await response.json(); // Fetch and log the error data
+        const errorData = await response.json();
         console.error("Failed to submit variant information:", errorData);
         toast.error("Failed to submit variant information.");
       }
@@ -92,8 +87,19 @@ function AddVariant() {
   });
 
   const handleCancel = () => {
-    // Handle cancel action
-    navigate("/variant"); // Navigate to '/variant' on cancel button click
+    navigate("/variant");
+  };
+
+  const handleImportedChange = e => {
+    const importedValue = e.target.value === "true";
+    formik.setFieldValue("isFarmable", importedValue ? "false" : "true");
+    formik.setFieldValue("isImported", e.target.value);
+  };
+
+  const handleFarmableChange = e => {
+    const farmableValue = e.target.value === "true";
+    formik.setFieldValue("isImported", farmableValue ? "false" : "true");
+    formik.setFieldValue("isFarmable", e.target.value);
   };
 
   return (
@@ -181,10 +187,9 @@ function AddVariant() {
                           className="form-check-input"
                           id="importedYes"
                           name="isImported"
-                          value={true}
-                          onChange={() =>
-                            formik.setFieldValue("isImported", true)
-                          }
+                          value="true"
+                          checked={formik.values.isImported === "true"}
+                          onChange={handleImportedChange}
                         />
                         <label
                           className="form-check-label"
@@ -199,10 +204,9 @@ function AddVariant() {
                           className="form-check-input"
                           id="importedNo"
                           name="isImported"
-                          value={false}
-                          onChange={() =>
-                            formik.setFieldValue("isImported", false)
-                          }
+                          value="false"
+                          checked={formik.values.isImported === "false"}
+                          onChange={handleImportedChange}
                         />
                         <label
                           className="form-check-label"
@@ -222,10 +226,10 @@ function AddVariant() {
                           className="form-check-input"
                           id="farmableYes"
                           name="isFarmable"
-                          value={true}
-                          onChange={() =>
-                            formik.setFieldValue("isFarmable", true)
-                          }
+                          value="true"
+                          checked={formik.values.isFarmable === "true"}
+                          onChange={handleFarmableChange}
+                          disabled={formik.values.isImported === "true"}
                         />
                         <label
                           className="form-check-label"
@@ -240,10 +244,10 @@ function AddVariant() {
                           className="form-check-input"
                           id="farmableNo"
                           name="isFarmable"
-                          value={false}
-                          onChange={() =>
-                            formik.setFieldValue("isFarmable", false)
-                          }
+                          value="false"
+                          checked={formik.values.isFarmable === "false"}
+                          onChange={handleFarmableChange}
+                          disabled={formik.values.isImported === "true"}
                         />
                         <label
                           className="form-check-label"

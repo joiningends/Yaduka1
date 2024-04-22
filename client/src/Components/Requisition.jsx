@@ -74,7 +74,9 @@ function Requisition() {
 
   const handleEdit = () => {
     if (selectedItem) {
-      navigate(`/EditRequisition/${selectedItem.id}/${selectedItem.storageId}`);
+      navigate(
+        `/Requisition/EditRequisition/${selectedItem.id}/${selectedItem.storageId}`
+      );
     }
   };
 

@@ -43,6 +43,7 @@ function ProductVariant() {
           `http://3.6.248.144/api/v1/product/all1/${id}`
         );
         setProductVariants(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching product variants:", error);
       } finally {
@@ -166,7 +167,7 @@ function ProductVariant() {
                     <TableCell>{variant.varient.varient}</TableCell>
                     <TableCell>{variant.quality.quality}</TableCell>
                     <TableCell>{variant.size.size}</TableCell>
-                    <TableCell>{variant.unit.unit}</TableCell>
+                    <TableCell>{variant?.newUnit}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

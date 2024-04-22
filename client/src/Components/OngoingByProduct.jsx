@@ -28,7 +28,7 @@ function OngoingByProduct() {
   }, [id]);
 
   const handleVariantClick = () => {
-    navigate(`/DetailsProduct/${id}`);
+    navigate(`/Ongoing/DetailsProduct/${id}`);
   };
 
   if (loading) {
@@ -169,7 +169,9 @@ function OngoingByProduct() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={formatDateString(contractData?.nextInvoiceDate)}
+                    value={formatDateString(
+                      contractData?.contract?.nextinvoicedate
+                    )}
                     readOnly
                   />
                 </div>
@@ -190,6 +192,7 @@ function OngoingByProduct() {
                     style={{
                       background: "linear-gradient(263deg, #34b6df, #34d0be)",
                       color: "#fff",
+                      marginLeft: "1rem",
                     }}
                     onClick={() => handleVariantClick()}
                   >

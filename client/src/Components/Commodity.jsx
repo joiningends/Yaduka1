@@ -100,9 +100,16 @@ const Commodity = () => {
               : ""}
           </TableCell>
           <TableCell>
-            <Button variant="contained" style={buttonStyle}>
+            <Button
+              variant="contained"
+              style={buttonStyle}
+              onClick={() =>
+                navigate(`/commodity/editCommodity/${commodity.id}`)
+              }
+            >
               Edit
             </Button>
+
             <Button
               variant="contained"
               style={{
@@ -139,7 +146,7 @@ const Commodity = () => {
       >
         <div>
           <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-            Commodity Type
+            Commodity
           </Typography>
         </div>
         <div>

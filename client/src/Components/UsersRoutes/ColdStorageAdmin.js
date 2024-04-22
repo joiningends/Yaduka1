@@ -55,6 +55,7 @@ import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
 import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
 import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
 import EditMaterialMovementColdStorageCompleted from "../EditMaterialMovementColdStorageCompleted";
+import EditCommodity from "../EditCommodity";
 
 const ColdStorageAdmin = () => {
   return (
@@ -86,6 +87,10 @@ const ColdStorageAdmin = () => {
         />
         <Route path="/Commodity" element={<Commodity />} />
         <Route path="/Commodity/AddCommodity" element={<AddCommodity />} />
+        <Route
+          path="/Commodity/EditCommodity/:id"
+          element={<EditCommodity />}
+        />
         <Route path="/PackagingType" element={<PackagingType />} />
         <Route
           path="/PackagingType/AddPackagingType"
@@ -119,11 +124,11 @@ const ColdStorageAdmin = () => {
           element={<OngoingByProduct />}
         />
         <Route path="/Ongoing/OngoingByArea/:id" element={<OngoingByArea />} />
-        <Route path="/DetailsProduct/:id" element={<DetailsProduct />} />
         <Route
-          path="/Ongoing/DetailsArea/:id"
-          element={<DetailsArea />}
+          path="/Ongoing/DetailsProduct/:id"
+          element={<DetailsProduct />}
         />
+        <Route path="/Ongoing/DetailsArea/:id" element={<DetailsArea />} />
         <Route path="/Contract" element={<Contract />} />
         <Route path="/Contract/AddContract" element={<AddConctract />} />
         <Route path="/MaterialMovement" element={<MaterialMovement />} />

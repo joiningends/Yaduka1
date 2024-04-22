@@ -104,15 +104,29 @@ function DraftContractForProductType() {
   };
 
   const handleQuantityChange = e => {
-    setQuantity(e.target.value);
-    const calculatedAmount = Number(e.target.value) * Number(rate);
-    setAmount(calculatedAmount);
+    const inputQuantity = e.target.value;
+    if (inputQuantity >= 0) {
+      setQuantity(inputQuantity);
+      const calculatedAmount = Number(inputQuantity) * Number(rate);
+      setAmount(calculatedAmount);
+    } else {
+      // Display an error message or handle the invalid input
+      // For example, you can show a toast message or prevent the input
+      console.error("Quantity cannot be negative.");
+    }
   };
 
   const handleRateChange = e => {
-    setRate(e.target.value);
-    const calculatedAmount = Number(quantity) * Number(e.target.value);
-    setAmount(calculatedAmount);
+    const inputRate = e.target.value;
+    if (inputRate >= 0) {
+      setRate(inputRate);
+      const calculatedAmount = Number(quantity) * Number(inputRate);
+      setAmount(calculatedAmount);
+    } else {
+      // Display an error message or handle the invalid input
+      // For example, you can show a toast message or prevent the input
+      console.error("Rate cannot be negative.");
+    }
   };
 
   const handleSubmit = async () => {
@@ -434,15 +448,17 @@ function DraftContractForProductType() {
                     </table>
                   </div>
                 )}
-                <div className="mt-3 text-center">
-                  <button
-                    type="button"
-                    className="btn btn-primary rounded-pill"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </button>
-                </div>
+                {storageSpaces.length > 0 && (
+                  <div className="mt-3 text-center">
+                    <button
+                      type="button"
+                      className="btn btn-primary rounded-pill"
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                )}
               </form>
             ) : (
               <p>Loading contract data...</p>

@@ -127,25 +127,13 @@ function CompletedProductView() {
               readOnly
             />
           </div>
-          <div className="mb-3">
-            <label htmlFor="under" className="form-label">
-              Under
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-pill"
-              id="under"
-              value={contract.space?.under}
-              readOnly
-            />
-          </div>
-          <button
+          {/* <button
             type="button"
             className="btn btn-primary rounded-pill"
             onClick={handleViewStockClick}
           >
             View Stock
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

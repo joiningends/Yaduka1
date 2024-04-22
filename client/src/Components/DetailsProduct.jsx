@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 function DetailsProduct() {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,34 +28,73 @@ function DetailsProduct() {
     return <div>Loading...</div>;
   }
 
+  // Pagination
+  const itemsPerPage = 8;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = productDetails.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const handlePageChange = pageNumber => setCurrentPage(pageNumber);
+
+  // Data transformation
+  const columns = [
+    {
+      dataField: "Name",
+      text: "Name",
+    },
+    {
+      dataField: "Quantity",
+      text: "Quantity",
+    },
+    {
+      dataField: "Rate",
+      text: "Rate",
+    },
+    {
+      dataField: "Amount",
+      text: "Amount",
+    },
+  ];
+
+  const data = currentItems.map((detail, index) => ({
+    id: index + 1,
+    Name: `${detail.product.commodity?.commodity} | ${detail.product.varient?.varient} || ${detail.product.unit?.unit}`,
+    Quantity: detail.qty,
+    Rate: detail.rate,
+    Amount: detail.amount,
+  }));
+
+  const paginationOptions = {
+    sizePerPage: itemsPerPage,
+    totalSize: productDetails.length,
+    onPageChange: handlePageChange,
+  };
+
   return (
     <div className="container mt-5">
       <div className="col-md-12 col-lg-12 col-xl-12">
         <div className="card" style={{ borderRadius: "2rem" }}>
-          <div className="card-header">
+          <div
+            className="card-header bg-dark text-white"
+            style={{ borderRadius: "2rem 2rem 0 0" }}
+          >
             <h4 className="card-title">Product Details</h4>
           </div>
           <div className="card-body">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Rate</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productDetails.map((detail, index) => (
-                  <tr key={index}>
-                    <td>{`${detail.product.commodity?.commodity} | ${detail.product.varient?.varient} || ${detail.product.unit?.unit}`}</td>
-                    <td>{detail.qty}</td>
-                    <td>{detail.rate}</td>
-                    <td>{detail.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={data}
+              columns={columns}
+              pagination={paginationFactory(paginationOptions)}
+              bordered
+              striped
+              hover
+              wrapperClasses="table-responsive"
+              headerClasses="bg-dark text-white"
+              bodyClasses="bg-white"
+            />
           </div>
         </div>
       </div>
