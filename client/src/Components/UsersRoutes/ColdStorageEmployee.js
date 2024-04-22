@@ -55,6 +55,7 @@ import EditMaterialMovementColdStorageCompleted from "../EditMaterialMovementCol
 import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
 import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
 import CompletedEditCompletedMaterialMovement from "../CompletedEditCompletedMaterialMovement";
+import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
 
 const ColdStorageEmployee = () => {
   return (
@@ -175,6 +176,10 @@ const ColdStorageEmployee = () => {
           element={<CompletedEditCompletedMaterialMovement />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route
+          path="/InventoryReport"
+          element={<InventoryReportForColdStorage />}
+        />
       </Routes>
     </div>
   );

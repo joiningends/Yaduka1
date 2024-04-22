@@ -141,7 +141,7 @@ const Employee = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Sno</b>
+                <b>Serial No</b>
               </TableCell>
               <TableCell>
                 <b>Name</b>

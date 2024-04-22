@@ -35,9 +35,12 @@ function ManufectureEmployee() {
       const response = await axios.get(
         `http://3.6.248.144/api/v1/users/get/${userId}`
       );
+      const sortedData = response.data.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
       console.log(userId);
-      setUserData(response.data);
-      console.log(response.data);
+      setUserData(sortedData);
+      console.log(sortedData);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -137,7 +140,7 @@ function ManufectureEmployee() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <b>Sno</b>
+                <b>Serial No.</b>
               </TableCell>
               <TableCell>
                 <b>Name</b>

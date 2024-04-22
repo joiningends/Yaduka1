@@ -23,6 +23,8 @@ import CompletedAreaView from "../CompletedAreaView";
 import CompletedProductView from "../CompletedProductView";
 import DetailsCompeteProduct from "../DetailsCompeteProduct";
 import DetailsCompleteArea from "../DetailsCompleteArea";
+import CompletedRequisition from "../CompletedRequisitin";
+import CompletedRequisitionDetails from "../CompletedRequisitionDetails";
 const ManufactureEmployee = () => {
   return (
     <div>
@@ -39,6 +41,10 @@ const ManufactureEmployee = () => {
           element={<AddRequisition />}
         />
         <Route path="/CompletedRequisition" element={<CompletedRequisitin />} />
+        <Route
+          path="/Requisition/completedRequisition/:id"
+          element={<CompletedRequisitionDetails />}
+        />
         <Route
           path="/Requisition/ViewCompletedRequisition/:id"
           element={<ViewCompletedRequisition />}

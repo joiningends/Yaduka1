@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 function DetailsArea() {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,93 +28,64 @@ function DetailsArea() {
     return <div>Loading...</div>;
   }
 
-  const selectedAreaDetails = productDetails[0].AreaSpaceDetails; // Assuming we are selecting the first area for storage space
-
-  // Calculate totals for each column
-  const totals = selectedAreaDetails.reduce(
-    (acc, detail) => {
-      acc.qty += detail.qty;
-      acc.rate += detail.rate;
-      acc.amount += detail.amount;
-      return acc;
-    },
-    { qty: 0, rate: 0, amount: 0 }
-  );
-
   // Pagination
+  const itemsPerPage = 8;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = selectedAreaDetails.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = productDetails.slice(indexOfFirstItem, indexOfLastItem);
 
-  const columns = ["Storage Space", "Quantity", "Rate", "Amount"];
+  // Change page
+  const handlePageChange = pageNumber => setCurrentPage(pageNumber);
+
+  // Data transformation
+  const columns = [
+    {
+      dataField: "StorageSpace",
+      text: "Storage Space",
+    },
+    {
+      dataField: "Quantity",
+      text: "Quantity",
+    },
+    {
+      dataField: "Rate",
+      text: "Rate",
+    },
+    {
+      dataField: "Amount",
+      text: "Amount",
+    },
+  ];
+
+  const data = currentItems.map((detail, index) => ({
+    id: index + 1,
+    StorageSpace: detail.AreaSpaceDetails.map(space => space.space).join(", "),
+    Quantity: detail.contractspac.qty,
+    Rate: detail.contractspac.rate,
+    Amount: detail.contractspac.amount,
+  }));
+
+  const paginationOptions = {
+    sizePerPage: itemsPerPage,
+    totalSize: productDetails.length,
+    onPageChange: handlePageChange,
+  };
 
   return (
     <div className="container mt-5">
-      <div className="col-md-12 col-lg-12 col-xl-12">
-        <div className="card" style={{ borderRadius: "2rem" }}>
-          <div className="card-header">
-            <h4 className="card-title">Area Details</h4>
-          </div>
-          <div className="card-body">
-            <table className="table">
-              <thead>
-                <tr>
-                  {columns.map((column, index) => (
-                    <th key={index}>{column}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((detail, rowIndex) => (
-                  <tr key={rowIndex}>
-                    <td>{detail.space}</td>
-                    <td>{detail.qty}</td>
-                    <td>{detail.rate}</td>
-                    <td>{detail.amount}</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td>
-                    <strong>Total</strong>
-                  </td>
-                  <td>
-                    <strong>{totals.qty}</strong>
-                  </td>
-                  <td>
-                    <strong>{totals.rate}</strong>
-                  </td>
-                  <td>
-                    <strong>{totals.amount}</strong>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {/* Pagination */}
-            <ul className="pagination">
-              {Array(Math.ceil(selectedAreaDetails.length / itemsPerPage))
-                .fill()
-                .map((_, index) => (
-                  <li
-                    key={index}
-                    className={`page-item ${
-                      currentPage === index + 1 ? "active" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </div>
-      </div>
+      <BootstrapTable
+        bootstrap4
+        keyField="id"
+        data={data}
+        columns={columns}
+        pagination={paginationFactory(paginationOptions)}
+        bordered
+        striped
+        hover
+        wrapperClasses="table-responsive"
+        headerClasses="bg-dark text-white"
+        bodyClasses="bg-white"
+      />
     </div>
   );
 }

@@ -162,6 +162,11 @@ const SideBar = () => {
             ],
           },
           { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          {
+            name: "Inventory Report",
+            icon: <FaFileInvoice />,
+            path: "/InventoryReport",
+          },
         ]);
         break;
       case "manufectureemployee":
