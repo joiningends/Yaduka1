@@ -109,8 +109,11 @@ function MaterialMovement() {
         }
       )
       .then(response => {
-        console.log("Request successful:", response.data);
-        setRequestData(response.data[0]);
+        const mergedData = response.data.reduce((acc, curr) => {
+          return acc.concat(curr);
+        }, []);
+        console.log("Request successful:", mergedData);
+        setRequestData(mergedData);
         setSubmitting(false);
       })
       .catch(error => {
@@ -151,7 +154,7 @@ function MaterialMovement() {
 
   const handleEdit = () => {
     navigate(
-      `/EditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
+      `/MaterialMovement/EditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
     );
   };
 

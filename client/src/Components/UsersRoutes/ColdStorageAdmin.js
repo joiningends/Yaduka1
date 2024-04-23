@@ -175,7 +175,7 @@ const ColdStorageAdmin = () => {
           element={<InventoryReportForColdStorage />}
         />
         <Route
-          path="/EditMaterialMovement/:id/:storageId"
+          path="/MaterialMovement/EditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovmentColdStorage />}
         />
         <Route

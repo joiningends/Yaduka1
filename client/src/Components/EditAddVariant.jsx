@@ -48,6 +48,14 @@ function EditAddVariant() {
           isImported: data.isImported.toString(),
           isFarmable: data.farmable.toString(),
         });
+        console.log({
+          variant: data.varient,
+          commodityId: data.commodityId.toString(),
+          cropDuration: data.cropDuration,
+          uploadImage: data.image,
+          isImported: data.isImported.toString(),
+          isFarmable: data.farmable.toString(),
+        });
       } else {
         console.error("Failed to fetch variant data");
       }
@@ -209,7 +217,7 @@ function EditAddVariant() {
                         name="isImported"
                         value="true"
                         onChange={handleChange}
-                        checked={variantData.isImported === "true"}
+                        checked={variantData.isImported == "true"}
                       />
                       <label className="form-check-label" htmlFor="importedYes">
                         Yes
@@ -223,7 +231,7 @@ function EditAddVariant() {
                         name="isImported"
                         value="false"
                         onChange={handleChange}
-                        checked={variantData.isImported === "false"}
+                        checked={variantData.isImported == "false"}
                       />
                       <label className="form-check-label" htmlFor="importedNo">
                         No
@@ -242,7 +250,7 @@ function EditAddVariant() {
                         name="isFarmable"
                         value="true"
                         onChange={handleChange}
-                        checked={variantData.isFarmable === "true"}
+                        checked={variantData.isFarmable == "true"}
                       />
                       <label className="form-check-label" htmlFor="farmableYes">
                         Yes
@@ -256,7 +264,7 @@ function EditAddVariant() {
                         name="isFarmable"
                         value="false"
                         onChange={handleChange}
-                        checked={variantData.isFarmable === "false"}
+                        checked={variantData.isFarmable == "false"}
                       />
                       <label className="form-check-label" htmlFor="farmableNo">
                         No

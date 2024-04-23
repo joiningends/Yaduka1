@@ -77,7 +77,7 @@ function CompletedContractManufecture() {
   return (
     <div style={{ margin: "0 1rem" }}>
       <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-        Ongoing Contracts
+        Complete Contracts
       </Typography>
 
       <TextField

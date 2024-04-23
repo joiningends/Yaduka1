@@ -104,7 +104,7 @@ const AddEmployee = () => {
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleSubmit}
-                  validateOnChange={false}
+                  validateOnChange={true} // Enable real-time validation on change
                   validateOnBlur={false}
                   validate={values => {
                     const errors = {};
@@ -113,6 +113,20 @@ const AddEmployee = () => {
                     }
                     if (!values.companyAddress) {
                       errors.companyAddress = "Company Address is required";
+                    }
+                    if (!values.phoneNumber) {
+                      errors.phoneNumber = "Phone Number is required";
+                    } else if (!/^\d{10}$/i.test(values.phoneNumber)) {
+                      errors.phoneNumber = "Invalid phone number format";
+                    }
+                    if (!values.email) {
+                      errors.email = "Email is required";
+                    } else if (
+                      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+                        values.email
+                      )
+                    ) {
+                      errors.email = "Invalid email address";
                     }
                     return errors;
                   }}
