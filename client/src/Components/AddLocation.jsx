@@ -43,7 +43,7 @@ function AddLocation() {
   const handleSubmit = values => {
     console.log("Submitted data:", values);
     // You can perform additional actions with the submitted data
-    toast.success("Location Type added successfully!");
+    toast.success("Location added successfully!");
   };
 
   const handleAddSpaceDetail = (arrayHelpers) => {

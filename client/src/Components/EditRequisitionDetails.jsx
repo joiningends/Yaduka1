@@ -75,7 +75,7 @@ function EditRequisitionDetails() {
 
     try {
       await axios.put(`http://3.6.248.144/api/v1/ref/request/qty`, requestData);
-      toast.success("Data saved successfully!");
+      toast.success("Requisition updated successfully!");
       setTimeout(() => {
         window.location.href = "/Requisition";
       }, 1000);
@@ -220,7 +220,7 @@ function EditRequisitionDetails() {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Update
           </button>
         </div>
       )}

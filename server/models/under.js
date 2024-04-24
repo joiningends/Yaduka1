@@ -16,7 +16,12 @@ const Under = sequelize.define("Under", {
     type: DataTypes.INTEGER,
     
     allowNull: true,
-  }
+  },
+  locationunder:{
+    type: DataTypes.INTEGER,
+    
+    allowNull: true,
+  },
   
 });
 

@@ -145,7 +145,7 @@ function AddProduct() {
 
       // Set a timeout to navigate after showing the toast message
       setTimeout(() => {
-        navigate("/product");
+        navigate("/Product");
       }, 2000); // 2000 milliseconds (2 seconds)
       console.log("Response:", response.data);
     } catch (error) {

@@ -63,9 +63,9 @@ const ColdStorageEmployee = () => {
       <SideBar />
       <Breadcrumb />
       <Routes>
-        <Route path="/employee" element={<Employee />} />
-        <Route path="/employee/AddEmployee" element={<AddEmployee />} />
-        <Route path="/employee/EditEmployee/:id" element={<EditEmployee />} />
+        <Route path="/Employee" element={<Employee />} />
+        <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
+        <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
         <Route path="/Party" element={<Party />} />
         <Route path="/Party/AddParty" element={<AddParty />} />
         <Route path="/Party/EditParty/:phoneNumber" element={<EditParty />} />
@@ -78,11 +78,11 @@ const ColdStorageEmployee = () => {
         <Route path="/CommodityType" element={<ComodityType />} />
 
         <Route
-          path="/commoditytype/AddCommodityType"
+          path="/CommodityType/AddCommodityType"
           element={<AddCommodityType />}
         />
         <Route
-          path="/commoditytype/AddCommodityType/:id"
+          path="/CommodityType/AddCommodityType/:id"
           element={<AddCommodityTypeEdit />}
         />
         <Route path="/Commodity" element={<Commodity />} />
@@ -93,7 +93,7 @@ const ColdStorageEmployee = () => {
           element={<AddPackagingType />}
         />
         <Route
-          path="/packagingtype/editpackagingtype/:id"
+          path="/PackagingType/EditpackagingType/:id"
           element={<EditPackagingType />}
         />
         <Route path="/Size" element={<Size />} />
@@ -104,14 +104,14 @@ const ColdStorageEmployee = () => {
         <Route path="/Quality/EditAddQuality/:id" element={<EditQuality />} />
 
         <Route path="/Variant" element={<Variant />} />
-        <Route path="/variant/AddVariant" element={<AddVariant />} />
-        <Route path="/variant/AddVariant/:id" element={<EditAddVariant />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/Variant/AddVariant" element={<AddVariant />} />
+        <Route path="/Variant/AddVariant/:id" element={<EditAddVariant />} />
+        <Route path="/Product" element={<Product />} />
         <Route
-          path="/product/productVariant/:id"
+          path="/Product/ProductVariant/:id"
           element={<ProductVariant />}
         />
-        <Route path="/product/AddProduct" element={<AddProduct />} />
+        <Route path="/Product/AddProduct" element={<AddProduct />} />
         <Route path="/Location" element={<Location />} />
         <Route path="/Location/AddLocation" element={<AddLocationn />} />
         <Route path="/Ongoing" element={<Ongoing />} />

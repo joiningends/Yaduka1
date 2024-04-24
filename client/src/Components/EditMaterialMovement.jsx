@@ -35,12 +35,19 @@ function EditMaterialMovement() {
   }, [id]);
 
   const handleDeliveryQtyChange = (productId, event) => {
-    const newDeliveryQty = parseInt(event.target.value, 10) || 0; // Parse the input value as an integer, default to 0 if not a valid number
+    const newDeliveryQty = parseInt(event.target.value, 10) || 0;
+    const availableQty =
+      materialData.find(data => data.id === productId)?.contractproduct.qty ||
+      0;
     const requiredQty =
       materialData.find(data => data.id === productId)?.requireqty || 0;
 
-    // Ensure the new delivery quantity is within the required quantity limit
-    const validDeliveryQty = Math.min(newDeliveryQty, requiredQty);
+    // Ensure the new delivery quantity is within the available and required quantity limits
+    const validDeliveryQty = Math.min(
+      newDeliveryQty,
+      availableQty,
+      requiredQty
+    );
 
     // Update the deliveryQuantities object with the valid value
     setDeliveryQuantities(prevQuantities => ({
@@ -200,7 +207,7 @@ function EditMaterialMovement() {
                   }}
                   onClick={handleSubmit}
                 >
-                  Submit
+                  Update
                 </Button>
                 <Button
                   variant="contained"

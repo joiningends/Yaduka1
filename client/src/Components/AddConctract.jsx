@@ -125,7 +125,7 @@ function AddContract() {
       if (response.status === 201) {
         toast.success("Contract added successfully!");
         setLoading(false);
-        navigate("/contract");
+        navigate("/Contract");
       } else {
         throw new Error("Failed to add contract");
       }
@@ -137,7 +137,7 @@ function AddContract() {
   };
 
   const handleCancel = () => {
-    navigate("/contract");
+    navigate("/Contract");
   };
 
   return (

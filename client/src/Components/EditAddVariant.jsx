@@ -278,7 +278,7 @@ function EditAddVariant() {
                       type="button"
                       className="btn btn-danger rounded-pill me-2"
                       onClick={() => {
-                        navigate("/variant");
+                        navigate("/Variant");
                       }}
                     >
                       Cancel

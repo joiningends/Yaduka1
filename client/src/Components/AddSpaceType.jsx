@@ -10,7 +10,7 @@ function AddSpaceType() {
 
   const handleSubmit = values => {
     console.log("Submitted data:", values);
-    toast.success("Form submitted successfully!");
+    toast.success("Space Type added successfully!");
   };
 
   return (

@@ -2,30 +2,31 @@ const router = require("express").Router();
 const varientController = require("../Controllers/varientController");
 const multer = require("multer");
 
-// Configure multer storage
 const FILE_TYPE_MAP = {
   'image/png': 'png',
   'image/jpeg': 'jpeg',
   'image/jpg': 'jpg'
 };
-const storage = multer.diskStorage({
-    destination: function destination(req, file, cb) {
-      const isValid = FILE_TYPE_MAP[file.mimetype];
-      let uploadError = new Error('Invalid image type');
-  
-      if (isValid) {
-        uploadError = null;
-      }
-      cb(uploadError, 'public/uplds');
-    },
-    filename: function (req, file, cb) {
-      const fileName = file.originalname.split(' ').join('-');
-      const extension = FILE_TYPE_MAP[file.mimetype];
-      cb(null, `${fileName}-${Date.now()}.${extension}`);
-    }
-  });
-  const upload = multer({ storage });
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'public/uplds');
+  },
+  filename: function(req, file, cb) {
+    const fileName = file.originalname.split(' ').join('-');
+    const extension = FILE_TYPE_MAP[file.mimetype] || ''; // Default to empty string if extension not found
+    cb(null, `${fileName}-${Date.now()}.${extension}`);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: MAX_FILE_SIZE // Set maximum file size
+  }
+});
 
 
 router.get("/all", varientController.allVarient);

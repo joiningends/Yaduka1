@@ -41,7 +41,7 @@ function EditPackagingType() {
       toast.success("Packaging Type updated successfully!");
       setLoading(false);
       setTimeout(() => {
-        navigate("/packagingtype"); // Redirect to "/packagingtype" after 2000 milliseconds (2 seconds)
+        navigate("/PackagingType"); // Redirect to "/packagingtype" after 2000 milliseconds (2 seconds)
       }, 2000);
     } catch (error) {
       console.error("Error updating data:", error);
@@ -51,7 +51,7 @@ function EditPackagingType() {
   };
 
   const handleCancel = () => {
-    navigate("/packagingtype");
+    navigate("/PackagingType");
   };
 
   return (
@@ -103,7 +103,7 @@ function EditPackagingType() {
                     {loading ? (
                       <Spinner animation="border" variant="light" size="sm" />
                     ) : (
-                      "Save"
+                      "Update"
                     )}
                   </button>
                 </div>

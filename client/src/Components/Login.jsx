@@ -25,7 +25,7 @@ function Login() {
       );
 
       if (response.ok) {
-        navigate(`/otp/${phoneNumber}`);
+        navigate(`/Otp/${phoneNumber}`);
         toast.success("OTP sent successfully");
       } else {
         toast.error("Failed to send OTP. Please enter a valid number.");

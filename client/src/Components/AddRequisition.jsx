@@ -143,7 +143,7 @@ function AddRequisition() {
 
   const handleEditDetails = () => {
     window.open(
-      `/requisition/addRequisition/editProductDetails/${selectedAdminId}/${selectedLocationId}`,
+      `/Requisition/AddRequisition/EditProductDetails/${selectedAdminId}/${selectedLocationId}`,
       "_blank"
     ); // Navigate to editProductDetails page
   };

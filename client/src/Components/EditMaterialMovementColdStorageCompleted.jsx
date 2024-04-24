@@ -32,46 +32,35 @@ function EditMaterialMovementColdStorageCompleted() {
 
   const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   const handleTablePageChange = pageNumber => setCurrentTablePage(pageNumber);
-  const handleDeliveredQuantityChange = (e, contractId, requireQty) => {
-    const value = parseInt(e.target.value) || 0;
-    if (value <= requireQty) {
+  const handleDeliveredQuantityChange = (
+    e,
+    contractId,
+    requireQty,
+    availableQty
+  ) => {
+    const value = parseInt(e.target.value);
+    if (value <= requireQty && value <= availableQty) {
       setDeliveredQuantities(prevState => ({
         ...prevState,
         [contractId]: value,
       }));
     } else {
-      toast.error("Delivered quantity cannot exceed required quantity.");
+      toast.error(
+        "Delivered quantity cannot exceed required quantity or available quantity."
+      );
     }
   };
 
   const handleSave = async () => {
     try {
-      const deliveryData = Object.keys(deliveredQuantities)
-        .map(productId => {
-          const product = data.find(item =>
-            item.contracts.some(
-              contract => contract.contractproductid === parseInt(productId)
-            )
-          );
-          const contract = product.contracts.find(
-            contract => contract.contractproductid === parseInt(productId)
-          );
-          const deliveryQty = deliveredQuantities[productId];
-          return {
-            id: contract.requstionid,
-            deliveryQty: deliveryQty,
-          };
-        })
-        .filter(item => item !== null);
-
-      for (const contract of data.flatMap(item => item.contracts)) {
-        if (!(contract.contractproductid in deliveredQuantities)) {
-          deliveryData.push({
-            id: contract.requstionid,
-            deliveryQty: 0,
-          });
-        }
-      }
+      const deliveryData = data.flatMap(item =>
+        item.contracts.map(contract => ({
+          id: contract.requstionid,
+          deliveryQty:
+            deliveredQuantities[contract.contractproductid] ||
+            contract.deliveryQty,
+        }))
+      );
 
       const response = await axios.put(
         "http://3.6.248.144/api/v1/ref",
@@ -178,17 +167,19 @@ function EditMaterialMovementColdStorageCompleted() {
                       <input
                         type="number"
                         min="0"
-                        max={contract.requireQty}
+                        max={Math.min(contract.requireQty, contract.qty)}
                         value={
                           deliveredQuantities[contract.contractproductid] ||
                           contract.deliveryQty
                         }
                         onChange={e => {
                           const requireQty = contract.requireQty;
+                          const availableQty = contract.qty;
                           handleDeliveredQuantityChange(
                             e,
                             contract.contractproductid,
-                            requireQty
+                            requireQty,
+                            availableQty
                           );
                         }}
                         style={{ width: "70px", padding: "5px" }}
@@ -224,7 +215,7 @@ function EditMaterialMovementColdStorageCompleted() {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Update
           </button>
         </div>
       )}

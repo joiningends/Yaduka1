@@ -66,7 +66,7 @@ const Commodity = () => {
         toast.success("Commodity deleted successfully");
         setTimeout(() => {
           window.location.reload();
-        }, 20000);
+        }, 2000);
       })
       .catch(error => {
         console.error("Error deleting commodity:", error);
@@ -104,7 +104,7 @@ const Commodity = () => {
               variant="contained"
               style={buttonStyle}
               onClick={() =>
-                navigate(`/commodity/editCommodity/${commodity.id}`)
+                navigate(`/Commodity/EditCommodity/${commodity.id}`)
               }
             >
               Edit
@@ -153,7 +153,7 @@ const Commodity = () => {
           <Button
             variant="contained"
             style={buttonStyle}
-            onClick={() => navigate("/commodity/AddCommodity")}
+            onClick={() => navigate("/Commodity/AddCommodity")}
           >
             Add Commodity
           </Button>

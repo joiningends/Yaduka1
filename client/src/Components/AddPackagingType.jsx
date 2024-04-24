@@ -34,7 +34,7 @@ function AddPackagingType() {
       toast.success("Packaging Type added successfully!");
       setLoading(false);
       setTimeout(() => {
-        navigate("/packagingtype");
+        navigate("/PackagingType");
       }, 3000); // Redirect to '/packagingtype' after 3 seconds (adjust as needed)
     } catch (error) {
       console.error("Error adding packaging type:", error);
@@ -44,7 +44,7 @@ function AddPackagingType() {
   };
 
   const handleCancel = () => {
-    navigate("/packagingtype");
+    navigate("/PackagingType");
   };
 
   return (

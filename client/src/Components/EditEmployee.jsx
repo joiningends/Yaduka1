@@ -44,13 +44,13 @@ const EditEmployee = () => {
       console.log(updatedValues);
 
       if (response.status === 200) {
-        toast.success("Employee details saved successfully!", {
+        toast.success("Employee details updated successfully!", {
           onClose: () => {
             setLoading(false);
           },
         });
         setTimeout(() => {
-          navigate("/employee");
+          navigate("/Employee");
         }, 2000);
       } else {
         toast.error("Failed to save employee details.");
@@ -93,7 +93,7 @@ const EditEmployee = () => {
   }, [id]);
 
   const handleCancel = () => {
-    navigate("/employee");
+    navigate("/Employee");
   };
 
   return (
@@ -247,7 +247,7 @@ const EditEmployee = () => {
                               marginLeft: "10px",
                             }}
                           >
-                            Save
+                            Update
                           </button>
                         </div>
                       </div>

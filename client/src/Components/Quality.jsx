@@ -70,13 +70,13 @@ function Quality() {
   const handleDelete = async id => {
     try {
       await axios.delete(`http://3.6.248.144/api/v1/quality/delete/${id}`);
-      toast.success("Item deleted successfully", {
+      toast.success("Quality deleted successfully", {
         onClose: () => window.location.reload(), // Reload the page when the toast is closed
       });
       // You may perform other actions here after successful deletion
     } catch (error) {
       console.error("Error deleting data:", error);
-      toast.error("Failed to delete item");
+      toast.error("Failed to delete Quality");
     }
   };
 

@@ -32,7 +32,7 @@ function AddCommodityType() {
         toast.success("Commodity Type added successfully!");
 
         setTimeout(() => {
-          navigate("/commoditytype");
+          navigate("/CommodityType");
         }, 2000);
       } else {
         const errorData = await response.json();
@@ -48,7 +48,7 @@ function AddCommodityType() {
   };
 
   const handleCancel = () => {
-    navigate("/commoditytype");
+    navigate("/CommodityType");
   };
 
   return (

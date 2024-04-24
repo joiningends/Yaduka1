@@ -42,7 +42,7 @@ function AddCommodityTypeEdit() {
 
       toast.success("Commodity Type edited successfully!");
       setTimeout(() => {
-        navigate("/commoditytype");
+        navigate("/CommodityType");
       }, 2000);
     } catch (error) {
       console.error("Error editing data:", error);
@@ -51,7 +51,7 @@ function AddCommodityTypeEdit() {
   };
 
   const handleCancel = () => {
-    navigate("/commoditytype");
+    navigate("/CommodityType");
   };
 
   if (loading) {

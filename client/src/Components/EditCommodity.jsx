@@ -93,7 +93,7 @@ function EditCommodity() {
   };
 
   const handleCancel = () => {
-    navigate("/commodity");
+    navigate("/Commodity");
   };
 
   const handleViewImage = () => {
@@ -157,6 +157,9 @@ function EditCommodity() {
                     <label htmlFor="image" className="form-label">
                       Upload Image <span className="text-danger">*</span>
                     </label>
+                    <small className="text-muted">
+                      Image size should not exceed 5 MB
+                    </small>
                     <div className="d-flex align-items-center">
                       <input
                         type="file"
@@ -166,7 +169,11 @@ function EditCommodity() {
                         accept="image/*"
                         onChange={event => {
                           const file = event.target.files[0];
-                          setFieldValue("image", file);
+                          if (file && file.size > 5 * 1024 * 1024) {
+                            toast.error("Image size should not exceed 5 MB");
+                          } else {
+                            setFieldValue("image", file);
+                          }
                         }}
                         style={{ width: "48%" }}
                       />
@@ -197,7 +204,7 @@ function EditCommodity() {
                         marginLeft: "10px",
                       }}
                     >
-                      Submit
+                      Update
                     </button>
                   </div>
                 </Form>

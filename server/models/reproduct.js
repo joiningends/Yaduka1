@@ -19,6 +19,15 @@ const Reproduct = sequelize.define('reproduct', {
     allowNull: true,
     defaultValue:0
   },
+  previousqty:{
+    type: DataTypes.FLOAT,
+    allowNull: false,
+},
+Status:{
+  type: DataTypes.FLOAT,
+    allowNull: false,
+}
+
 });
 
 module.exports = Reproduct;

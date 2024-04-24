@@ -114,7 +114,7 @@ function InvoiceForManufacture() {
   };
 
   const handleCancel = () => {
-    navigate("/invoices");
+    navigate("/Invoices");
   };
 
   const formik = useFormik({

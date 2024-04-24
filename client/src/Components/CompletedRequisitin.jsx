@@ -42,7 +42,7 @@ function CompletedRequisition() {
 
   const handleViewDetails = id => {
     console.log(`Viewing details of item with ID: ${id}`);
-    navigate(`/Requisition/completedRequisition/${id}`);
+    navigate(`/Requisition/CompletedRequisition/${id}`);
   };
 
   return (

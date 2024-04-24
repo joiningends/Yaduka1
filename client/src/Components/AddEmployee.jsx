@@ -13,7 +13,7 @@ const AddEmployee = () => {
     email: "",
     companyName: "",
     companyAddress: "",
-    isTerminate: false,
+    isTerminate: "false", // Preselect "No"
   };
 
   const [userTypeId, setTypeId] = useState(null);
@@ -60,11 +60,11 @@ const AddEmployee = () => {
         postData
       );
       console.log("Server Response:", response.data);
-      toast.success("Form submitted successfully!", {
+      toast.success("Employee Added Successfully!", {
         onClose: () => {
           setTimeout(() => {
             setLoading(false);
-            navigate("/employee");
+            navigate("/Employee");
           }, 1500);
         },
       });
@@ -81,7 +81,7 @@ const AddEmployee = () => {
   };
 
   const handleCancel = () => {
-    navigate("/employee");
+    navigate("/Employee");
   };
 
   return (
@@ -242,6 +242,7 @@ const AddEmployee = () => {
                             id="terminateNo"
                             name="isTerminate"
                             value="false"
+                            defaultChecked // Preselect "No"
                           />
                           <label
                             className="form-check-label"

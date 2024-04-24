@@ -42,7 +42,7 @@ const ManufactureEmployee = () => {
         />
         <Route path="/CompletedRequisition" element={<CompletedRequisitin />} />
         <Route
-          path="/Requisition/completedRequisition/:id"
+          path="/Requisition/CompletedRequisition/:id"
           element={<CompletedRequisitionDetails />}
         />
         <Route
@@ -72,9 +72,9 @@ const ManufactureEmployee = () => {
         />
         <Route path="/OngoingContract" element={<OngoingContract />} />
         <Route path="/Invoice" element={<InvoiceForManufacture />} />
-        <Route path="/employee" element={<ManufectureEmployee />} />
-        <Route path="/employee/AddEmployee" element={<AddEmployee />} />
-        <Route path="/employee/EditEmployee/:id" element={<EditEmployee />} />
+        <Route path="/Employee" element={<ManufectureEmployee />} />
+        <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
+        <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
         <Route path="/Ongoing" element={<OngoingMaufecture />} />
         <Route
           path="/Ongoing/OngoingByArea/:id"

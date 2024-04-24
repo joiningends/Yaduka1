@@ -56,7 +56,7 @@ function ManufectureEmployee() {
 
   useEffect(() => {
     if (isDeleted) {
-      toast.success("User deleted successfully!", {
+      toast.success("Manufecture Employee deleted successfully!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000, // Toast message duration
       });
@@ -115,7 +115,7 @@ function ManufectureEmployee() {
               color: "#fff",
               borderRadius: "8px",
             }}
-            onClick={() => navigate("/employee/AddEmployee")}
+            onClick={() => navigate("/Employee/AddEmployee")}
           >
             Add Employee
           </Button>

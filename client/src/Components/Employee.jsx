@@ -116,7 +116,7 @@ const Employee = () => {
               color: "#fff",
               borderRadius: "8px",
             }}
-            onClick={() => navigate("/employee/AddEmployee")}
+            onClick={() => navigate("/Employee/AddEmployee")}
           >
             Add Employee
           </Button>

@@ -39,7 +39,7 @@ function EditQuality() {
           console.error("Error fetching quality:", error);
         });
     }
-  }, [id]);
+  }, []);
 
   const setInitialValues = qualityData => {
     initialValues.variantId = qualityData.varientId;
@@ -156,7 +156,7 @@ function EditQuality() {
                         marginLeft: "10px",
                       }}
                     >
-                      {loading ? "Saving..." : "Save"}
+                      {loading ? "Saving..." : "Update"}
                     </button>
                   </div>
                 </Form>

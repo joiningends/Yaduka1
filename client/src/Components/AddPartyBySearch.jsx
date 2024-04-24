@@ -81,9 +81,9 @@ function AddParty() {
         postData
       );
 
-      toast.success("Form submitted successfully!");
+      toast.success("Party added successfully!");
       setTimeout(() => {
-        navigate("/party");
+        navigate("/Party");
       }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -98,7 +98,7 @@ function AddParty() {
 
   const handleCancel = e => {
     e.preventDefault();
-    navigate("/party");
+    navigate("/Party");
   };
 
   return (

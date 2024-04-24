@@ -68,11 +68,11 @@ function Size() {
       .delete(`http://3.6.248.144/api/v1/size/delete/${id}`)
       .then(() => {
         setData(data.filter(item => item.id !== id));
-        toast.success("Item deleted successfully");
+        toast.success("Size deleted successfully");
       })
       .catch(error => {
         console.error("Error deleting item:", error);
-        toast.error(`Error deleting item with ID ${id}`);
+        toast.error(`Error deleting Size with ID ${id}`);
       });
   };
 

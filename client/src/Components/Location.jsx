@@ -61,7 +61,7 @@ const Location = () => {
   };
 
   const handleAddLocation = () => {
-    navigate("/location/AddLocation");
+    navigate("/Location/AddLocation");
   };
 
   const indexOfLastLocation = page * rowsPerPage;

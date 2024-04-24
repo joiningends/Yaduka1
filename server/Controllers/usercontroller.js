@@ -121,7 +121,7 @@ exports.create = async (req, res) => {
         });
         res.status(200).json(existingUser);
       } else {
-        res.status(400).json({ error: "Association already exists" });
+        res.status(400).json({ error: "Party already exists" });
       }
     } else {
       // Create a new user and save the association in UserUnder table
@@ -151,7 +151,7 @@ exports.create = async (req, res) => {
     }
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Error creating user" });
+    res.status(500).json({ error: "Error creating Party" });
   }
 };
 

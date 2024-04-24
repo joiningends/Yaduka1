@@ -51,7 +51,7 @@ function PackagingType() {
   };
 
   const handleEditPackagingType = id => {
-    navigate(`/packagingtype/editpackagingtype/${id}`);
+    navigate(`/PackagingType/EditPackagingType/${id}`);
   };
 
   const handleDeletePackagingType = id => {
@@ -80,7 +80,7 @@ function PackagingType() {
   const handleAddPackagingType = () => {
     // Add logic here to navigate or handle adding a new packaging type
     // For instance:
-    navigate("/packagingtype/AddPackagingType");
+    navigate("/PackagingType/AddPackagingType");
   };
 
   const indexOfLastRow = page * rowsPerPage;

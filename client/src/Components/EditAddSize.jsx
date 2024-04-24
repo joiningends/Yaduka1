@@ -145,7 +145,7 @@ function EditAddSize() {
                             size="sm"
                           />
                         ) : (
-                          "Save"
+                          "Update"
                         )}
                       </button>
                     </div>

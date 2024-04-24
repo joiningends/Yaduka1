@@ -74,7 +74,7 @@ function Password() {
         console.log(response.data);
 
         if (response.data.role === "coldstorageadmin") {
-          window.location.href = "/employee";
+          window.location.href = "/Employee";
         } else if (response.data.role === "manufectureemployee") {
           window.location.href = "/Requisition";
         } else if (response.data.role === "manufectureadmin") {
@@ -92,11 +92,11 @@ function Password() {
   };
 
   const handleSetPassword = () => {
-    window.location.href = `/setPassword/${userData.id}/${number}/${otp}`;
+    window.location.href = `/SetPassword/${userData.id}/${number}/${otp}`;
   };
 
   const handleForgotPassword = () => {
-    window.location.href = `/forgotPassword/${userData.id}/${number}/${otp}`;
+    window.location.href = `/ForgotPassword/${userData.id}/${number}/${otp}`;
   };
 
   return (

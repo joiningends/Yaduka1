@@ -71,9 +71,9 @@ const ManufactureAdmin = () => {
         />
         <Route path="/OngoingContract" element={<OngoingContract />} />
         <Route path="/Invoice" element={<InvoiceForManufacture />} />
-        <Route path="/employee" element={<ManufectureEmployee />} />
-        <Route path="/employee/AddEmployee" element={<AddEmployee />} />
-        <Route path="/employee/EditEmployee/:id" element={<EditEmployee />} />
+        <Route path="/Employee" element={<ManufectureEmployee />} />
+        <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
+        <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
         <Route path="/Ongoing" element={<OngoingMaufecture />} />
         <Route
           path="/Ongoing/OngoingByArea/:id"
@@ -87,15 +87,15 @@ const ManufactureAdmin = () => {
         <Route path="/DetailsArea/:id" element={<DetailsArea />} />
         <Route path="/InventoryReport" element={<InventoryReport />} />
         <Route
-          path="requisition/addRequisition/editProductDetails/:selectedAdminId/:selectedLocationId"
+          path="Requisition/AddRequisition/EditProductDetails/:selectedAdminId/:selectedLocationId"
           element={<EditProductDetails />}
         />
         <Route
-          path="/Requisition/editRequisition/:id/:storageId"
+          path="/Requisition/EditRequisition/:id/:storageId"
           element={<EditRequisitionDetails />}
         />
         <Route
-          path="/Requisition/completedRequisition/:id"
+          path="/Requisition/CompletedRequisition/:id"
           element={<CompletedRequisitionDetails />}
         />
       </Routes>

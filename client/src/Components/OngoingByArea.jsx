@@ -31,7 +31,7 @@ function OngoingByArea() {
       await axios.put(`http://3.6.248.144/api/v1/contracts/${id}/status`, {
         status: "Closed",
       });
-      navigate("/ongoing");
+      navigate("/Ongoing");
     } catch (error) {
       console.error("Error cancelling contract:", error);
     }

@@ -76,7 +76,7 @@ function DetailsProduct() {
       <div className="col-md-12 col-lg-12 col-xl-12">
         <div className="card" style={{ borderRadius: "2rem" }}>
           <div
-            className="card-header bg-dark text-white"
+            className="card-header text-black"
             style={{ borderRadius: "2rem 2rem 0 0" }}
           >
             <h4 className="card-title">Product Details</h4>
@@ -92,7 +92,7 @@ function DetailsProduct() {
               striped
               hover
               wrapperClasses="table-responsive"
-              headerClasses="bg-dark text-white"
+              headerClasses=" text-black"
               bodyClasses="bg-white"
             />
           </div>

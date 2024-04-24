@@ -64,7 +64,7 @@ function ProductVariant() {
   };
 
   const handleAddProductVariant = () => {
-    navigate("/product");
+    navigate("/Product");
   };
 
   const indexOfLastRow = page * rowsPerPage;

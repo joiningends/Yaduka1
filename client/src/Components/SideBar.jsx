@@ -44,15 +44,15 @@ const SideBar = () => {
     switch (storedRole) {
       case "coldstorageadmin":
         setMenuItems([
-          { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
-          { name: "Employee", icon: <FaUser />, path: "/employee" },
-          { name: "Party", icon: <FaEnvelope />, path: "/party" },
+          { name: "Dashboard", icon: <FaHome />, path: "/Dashboard" },
+          { name: "Employee", icon: <FaUser />, path: "/Employee" },
+          { name: "Party", icon: <FaEnvelope />, path: "/Party" },
           { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
           { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
           { name: "Size", icon: <FaWrench />, path: "/Size" },
           { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
           { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
-          { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Product", icon: <FaCubes />, path: "/Product" },
           { name: "Commodity", icon: <FaWrench />, path: "/Commodity" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
           {
@@ -92,7 +92,7 @@ const SideBar = () => {
         break;
       case "manufectureadmin":
         setMenuItems([
-          { name: "Employee", icon: <FaUser />, path: "/employee" },
+          { name: "Employee", icon: <FaUser />, path: "/Employee" },
           {
             name: "Inventory Report",
             icon: <FaUser />,
@@ -129,10 +129,10 @@ const SideBar = () => {
         break;
       case "coldstorageemployee":
         setMenuItems([
-          { name: "Party", icon: <FaEnvelope />, path: "/party" },
+          { name: "Party", icon: <FaEnvelope />, path: "/Party" },
           { name: "Size", icon: <FaWrench />, path: "/Size" },
           { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
-          { name: "Product", icon: <FaCubes />, path: "/product" },
+          { name: "Product", icon: <FaCubes />, path: "/Product" },
           { name: "Location", icon: <FaMapMarker />, path: "/Location" },
           {
             name: "Contract",
@@ -254,7 +254,7 @@ const SideBar = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("role");
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/Login");
   };
 
   const filteredMenuItems = menuItems.filter(item =>

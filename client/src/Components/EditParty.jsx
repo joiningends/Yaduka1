@@ -83,9 +83,9 @@ function EditParty() {
         updatedValues
       );
 
-      toast.success("Party details saved successfully!");
+      toast.success("Party details updated successfully!");
       setTimeout(() => {
-        navigate("/party");
+        navigate("/Party");
       }, 2000);
     } catch (error) {
       console.error("Error saving data:", error);
@@ -100,7 +100,7 @@ function EditParty() {
 
   const handleCancel = e => {
     e.preventDefault();
-    navigate("/party");
+    navigate("/Party");
   };
 
   return (
@@ -274,7 +274,7 @@ function EditParty() {
                       }}
                       onClick={handleSubmit}
                     >
-                      Save
+                      Update
                     </button>
                   </div>
                 </div>

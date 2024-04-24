@@ -19,16 +19,19 @@ const party = require("../models/party");
 const UserUnder = require("../models/userunder");
 const GstType = require("../models/gsttype");
 const GstRate = require("../models/gstrate");
-const Storagespace = require("../models/storagespace");
-const StoragespaceArea = require("../models/storagespacearea");
-const Reproduct = require("../models/reproduct");
+const Storagespace =require("../models/storagespace")
+const StoragespaceArea =require("../models/storagespacearea")
+const Reproduct =require("../models/reproduct")
 const {
   sendWhatsAppMessage,
   sendWhatsAppMessageMedia,
   getSentMessageCount,
   getSentMessages,
 } = require("../Controllers/whatsappController");
-const { sendnotificationByEmail } = require("../Controllers/emailController");
+const {
+  sendnotificationByEmail
+} = require("../Controllers/emailController");
+
 
 exports.createContract = async (req, res) => {
   const userId = req.params.id;
@@ -254,6 +257,7 @@ exports.getDraftContractById = async (req, res) => {
   }
 };
 
+
 exports.updateContract = async (req, res) => {
   try {
     const contractId = req.params.id;
@@ -293,70 +297,67 @@ exports.updateContract = async (req, res) => {
     const { storagespaces } = req.body;
 
     if (storagespaces && Array.isArray(storagespaces)) {
-      await Promise.all(
-        storagespaces.map(async space => {
-          const newContractsp = await ContractSpace.create({
-            ...space,
-            contractId: existingContract.id,
-          });
+      await Promise.all(storagespaces.map(async space => {
+        const newContractsp = await ContractSpace.create({
+          ...space,
+          contractId: existingContract.id,
+        });
 
-          const rooms = space.storagespace;
+        const rooms = space.storagespace;
 
-          if (Array.isArray(rooms)) {
-            await Promise.all(
-              rooms.map(async room => {
-                await StoragespaceArea.create({
-                  Areaspaces: room,
-                  contractspace: newContractsp.id,
-                });
-              })
-            );
-          } else if (rooms) {
-            await Storagespace.create({
-              Areaspaces: rooms,
-              contractspace: newContractsp.id,
+        if (Array.isArray(rooms)) {
+          await Promise.all(rooms.map(async room => {
+            await StoragespaceArea.create({
+              Areaspaces: room,
+              contractspace: newContractsp.id
             });
-          }
-        })
-      );
+          }));
+        } else if (rooms) {
+          await Storagespace.create({
+            Areaspaces: rooms,
+            contractspace: newContractsp.id
+          });
+        }
+      }));
     }
 
     const contractProducts = await ContractSpace.findAll({
       where: { contractId: existingContract.id },
     });
 
-    const storages = await Promise.all(
-      contractProducts.map(async store => {
-        const storagespaces = await StoragespaceArea.findAll({
-          where: { contractspace: store.id },
-          include: [
-            {
-              model: SpaceDetails,
-              as: "AreaSpaceDetails",
-            },
-            {
-              model: ContractSpace,
-              as: "contractspac",
-            },
-          ],
-        });
+    const storages = await Promise.all(contractProducts.map(async store => {
+      const storagespaces = await StoragespaceArea.findAll({
+        where: { contractspace: store.id },
+        include: [
+          {
+            model: SpaceDetails,
+            as: 'AreaSpaceDetails',
+          },
+          {
+            model: ContractSpace,
+            as: 'contractspac',
+          },
+        ],
+      });
 
-        return {
-          contractspac: storagespaces[0].contractspac,
-          AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
-        };
-      })
-    );
+      return {
+        contractspac: storagespaces[0].contractspac,
+        AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
+      };
+    }));
+
+   
+
 
     const tableData = storages.map(product => ({
-      storagespace: Array.isArray(product.AreaSpaceDetails)
-        ? product.AreaSpaceDetails.map(detail => detail.space).join(", ")
-        : product.AreaSpaceDetails.space,
+      storagespace: Array.isArray(product.AreaSpaceDetails) ?
+        product.AreaSpaceDetails.map(detail => detail.space).join(', ') :
+        product.AreaSpaceDetails.space,
       qty: product.contractspac.qty,
       rate: product.contractspac.rate,
       amount: product.contractspac.amount,
     }));
-    console.log(tableData);
+console.log(tableData)
     const pdfFilePath = await generatePDF(
       under,
       existingContract.id,
@@ -369,6 +370,7 @@ exports.updateContract = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const generateInvoiceNumber = async (userId, currentYear) => {
   // Get the count of invoices generated for the user in the current year
@@ -383,11 +385,9 @@ const generateInvoiceNumber = async (userId, currentYear) => {
       },
     },
   });
-  console.log(userId);
+console.log(userId)
   // Increment the count and format it with leading zeros
-  const invoiceNumber = `INV_${userId}_${currentYear.toString().slice(-2)}_${(
-    count + 1
-  )
+  const invoiceNumber = `INV_${userId}_${currentYear.toString().slice(-2)}_${(count + 1)
     .toString()
     .padStart(4, "0")}`;
 
@@ -449,18 +449,20 @@ exports.updateContractforproduct = async (req, res) => {
               ...space,
               contractId: existingContract.id,
             });
-            console.log(newContractProduct);
+console.log(newContractProduct)
             const rooms = space.storagespace;
-            const productId = space.productid;
+            const productId =space.productid;
             console.log("allrooms", rooms);
             if (Array.isArray(rooms)) {
+              
               await Promise.all(
                 rooms.map(async room => {
                   await Storagespace.create({
+
                     productspaces: room,
                     contractproduct: newContractProduct.id,
                     contractId: existingContract.id,
-                    productid: productId,
+                    productid:productId
                   });
                 })
               );
@@ -470,10 +472,11 @@ exports.updateContractforproduct = async (req, res) => {
                 productspaces: rooms,
                 contractproduct: newContractProduct.id,
                 contractId: existingContract.id,
-                productid: productId,
+                productid:productId
               });
             }
             // If rooms is null or undefined, there is nothing to do, so you can omit it.
+            
           }
         })
       );
@@ -483,46 +486,40 @@ exports.updateContractforproduct = async (req, res) => {
       where: { contractId: existingContract.id },
     });
 
-    const storages = await Promise.all(
-      contractProducts.map(async store => {
-        const storagespaces = await Storagespace.findAll({
-          where: { contractproduct: store.id },
-          include: [
-            {
-              model: ContractProduct,
-              as: "contractp",
-            },
-            {
-              model: SpaceDetails,
-              as: "productSpaceDetails",
-            },
-          ],
-        });
-        return {
-          contractp: storagespaces[0].contractp,
-          productSpaceDetails: storagespaces.map(
-            space => space.productSpaceDetails
-          ),
-        };
-      })
-    );
-
+    const storages = await Promise.all(contractProducts.map(async store => {
+      const storagespaces = await Storagespace.findAll({
+        where: { contractproduct: store.id },
+        include: [
+          {
+            model: ContractProduct,
+            as: 'contractp',
+          },
+          {
+            model: SpaceDetails,
+            as: 'productSpaceDetails',
+          },
+        ],
+      });
+      return {
+        contractp: storagespaces[0].contractp,
+        productSpaceDetails: storagespaces.map(space => space.productSpaceDetails),
+      };
+    }));
+    
+    
+    
     const tableData = storages.map(product => ({
-      storagespace: Array.isArray(product.productSpaceDetails)
-        ? product.productSpaceDetails.map(detail => detail.space).join(", ")
-        : product.productSpaceDetails.space,
-      qty: product.contractp.qty,
+      storagespace: Array.isArray(product.productSpaceDetails) ? 
+      product.productSpaceDetails.map(detail => detail.space).join(', ') : 
+      product.productSpaceDetails.space, 
+      qty: product.contractp.qty, 
       rate: product.contractp.rate,
       amount: product.contractp.amount,
     }));
-
-    console.log(tableData);
-    const pdfFilePath = await generatePDF(
-      under,
-      existingContract.id,
-      tableData
-    );
-
+    
+    console.log(tableData)
+    const pdfFilePath = await generatePDF(under, existingContract.id, tableData);
+    
     res.status(200).json(existingContract);
   } catch (error) {
     console.error(error);
@@ -749,33 +746,33 @@ exports.getContractSpacesByContractId = async (req, res) => {
     const contractId = req.params.contractId;
 
     // Fetch contract spaces based on the contractId and where contract.status is not 'Closed'
-
+   
     const contractProducts = await ContractSpace.findAll({
       where: { contractId: contractId },
     });
 
-    const storages = await Promise.all(
-      contractProducts.map(async store => {
-        const storagespaces = await StoragespaceArea.findAll({
-          where: { contractspace: store.id },
-          include: [
-            {
-              model: SpaceDetails,
-              as: "AreaSpaceDetails",
-            },
-            {
-              model: ContractSpace,
-              as: "contractspac",
-            },
-          ],
-        });
+    const storages = await Promise.all(contractProducts.map(async store => {
+      const storagespaces = await StoragespaceArea.findAll({
+        where: { contractspace: store.id },
+        include: [
+          {
+            model: SpaceDetails,
+            as: 'AreaSpaceDetails',
+          },
+          {
+            model: ContractSpace,
+            as: 'contractspac',
+          },
+        ],
+      });
 
-        return {
-          contractspac: storagespaces[0].contractspac,
-          AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
-        };
-      })
-    );
+      return {
+        contractspac: storagespaces[0].contractspac,
+        AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
+      };
+    }));
+
+   
 
     res.status(200).json(storages);
   } catch (error) {
@@ -895,10 +892,12 @@ exports.getAllContractsByPartyAndStorage = async (req, res) => {
     });
 
     if (!contracts || contracts.length === 0) {
-      return res.status(404).json({
-        message:
-          "No contracts found for the provided partyId, storageId, and storagetype=Product",
-      });
+      return res
+        .status(404)
+        .json({
+          message:
+            "No contracts found for the provided partyId, storageId, and storagetype=Product",
+        });
     }
 
     // Extract all details of each contract including storage information
@@ -1377,41 +1376,41 @@ function generateFooters(doc, tableData, invoiceDetails) {
     // Reset the footerTop for the new page
     footerTop = 50; // You can adjust this value based on your new page layout
   }
-  if (invoiceDetails.gstrate) {
-    if (invoiceDetails.gsttype === "CGST&SGST") {
-      const CGST = invoiceDetails.gstrate / 2;
-      const SGST = invoiceDetails.gstrate / 2;
+  if (invoiceDetails.gstrate ) {
+  if (invoiceDetails.gsttype === "CGST&SGST") {
+    const CGST = invoiceDetails.gstrate / 2;
+    const SGST = invoiceDetails.gstrate / 2;
 
-      doc.font("Helvetica-Bold").fontSize(12);
-      doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
-      doc.text("Total Taxable Value", 50, footerTop + 25);
-      doc.text("GST on Above:", 50, footerTop + 45);
-      doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 45);
-      doc.text("CGST", 50, footerTop + 60);
-      doc.text(`${CGST}%`, 420, footerTop + 60);
-      doc.text("SGST", 50, footerTop + 75);
-      doc.text(`${SGST}%`, 420, footerTop + 75);
-      doc.text("Total Invoice Value", 50, footerTop + 90);
-      doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 90);
-    } else {
-      doc.font("Helvetica-Bold").fontSize(12);
-      doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
-      doc.text("Total Taxable Value", 50, footerTop + 25);
-
-      doc.text("GST on Above:", 50, footerTop + 45);
-      doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 45);
-      doc.text("IGST", 50, footerTop + 60);
-      doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 60);
-      doc.text("Total Invoice Value", 50, footerTop + 75);
-      doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 75);
-    }
+    doc.font("Helvetica-Bold").fontSize(12);
+    doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
+    doc.text("Total Taxable Value", 50, footerTop + 25);
+    doc.text("GST on Above:", 50, footerTop + 45);
+    doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 45);
+    doc.text("CGST", 50, footerTop + 60);
+    doc.text(`${CGST}%`, 420, footerTop + 60);
+    doc.text("SGST", 50, footerTop + 75);
+    doc.text(`${SGST}%`, 420, footerTop + 75);
+    doc.text("Total Invoice Value", 50, footerTop + 90);
+    doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 90);
   } else {
+    doc.font("Helvetica-Bold").fontSize(12);
     doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
     doc.text("Total Taxable Value", 50, footerTop + 25);
 
     doc.text("GST on Above:", 50, footerTop + 45);
-    doc.text("No", 420, footerTop + 45);
+    doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 45);
+    doc.text("IGST", 50, footerTop + 60);
+    doc.text(`${invoiceDetails.gstrate}%`, 420, footerTop + 60);
+    doc.text("Total Invoice Value", 50, footerTop + 75);
+    doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 75);
+  }
+  }else{
+    doc.text(`Total Fee: ${invoiceDetails.totalAmount}`, 420, footerTop + 5);
+    doc.text("Total Taxable Value", 50, footerTop + 25);
 
+    doc.text("GST on Above:", 50, footerTop + 45);
+    doc.text("NA", 420, footerTop + 45);
+    
     doc.text("Total Invoice Value", 50, footerTop + 75);
     doc.text(`${invoiceDetails.amounts}`, 420, footerTop + 75);
   }
@@ -1517,19 +1516,21 @@ const generatePDF = async (userId, existingContract, tableData) => {
     if (!party) {
       throw new Error("User not found");
     }
-    let amounts = 0;
-    let totalAmount = 0;
-    if (contract.gstRate) {
-      totalAmount = tableData.reduce((total, rowData) => {
-        return total + rowData.amount;
-      }, 0);
-      amounts = totalAmount + (totalAmount * contract.gstRate.percentage) / 100;
-    } else {
-      totalAmount = tableData.reduce((total, rowData) => {
-        return total + rowData.amount;
-      }, 0);
-      amounts = totalAmount;
-    }
+    let amounts =0
+    let totalAmount=0
+    if(contract.gstRate){
+     totalAmount = tableData.reduce((total, rowData) => {
+      return total + rowData.amount;
+    }, 0);
+     amounts =
+      totalAmount + (totalAmount * contract.gstRate.percentage) / 100;
+  }else{
+    totalAmount = tableData.reduce((total, rowData) => {
+      return total + rowData.amount;
+    }, 0);
+    amounts =
+      totalAmount ;
+  }
     const invoice = await Invoice.create({
       userId,
       contractId: contract.id,
@@ -1545,64 +1546,64 @@ const generatePDF = async (userId, existingContract, tableData) => {
 
     const bank = banks[0];
 
-    let invoiceDetails = {};
+    let invoiceDetails={}
     const sign = signs[0];
-    if (contract.gstRate) {
-      invoiceDetails = {
-        invoicename: invoice.name,
-        clientName: party.name,
-        clientAddress: party.address,
-        mobileNumber: party.mobileNumber,
-        date: new Date(),
-        invoiceNumber: invoiceNumber,
-        gsttype: contract.gstType.name,
-        gstrate: contract.gstRate.percentage,
-        totalAmount: totalAmount,
-        amounts: amounts,
-        name: address.name,
-        street: address.street,
-        city: address.city,
-        state: address.state,
-        telephone: address.telephone,
-        email: address.email,
-        website: address.website,
-        GSTN: address.GSTN,
-        storage: contract.storagetype,
-        accountname: bank.accountname,
-        bankName: bank.bankName,
-        accountNumber: bank.accountNumber,
-        IFSC: bank.IFSC,
-        accounttype: bank.accounttype,
-        foundername: sign.name,
-      };
-    } else {
-      invoiceDetails = {
-        invoicename: invoice.name,
-        clientName: party.name,
-        clientAddress: party.address,
-        mobileNumber: party.mobileNumber,
-        date: new Date(),
-        invoiceNumber: invoiceNumber,
-
-        totalAmount: totalAmount,
-        amounts: amounts,
-        name: address.name,
-        street: address.street,
-        city: address.city,
-        state: address.state,
-        telephone: address.telephone,
-        email: address.email,
-        website: address.website,
-        GSTN: address.GSTN,
-        storage: contract.storagetype,
-        accountname: bank.accountname,
-        bankName: bank.bankName,
-        accountNumber: bank.accountNumber,
-        IFSC: bank.IFSC,
-        accounttype: bank.accounttype,
-        foundername: sign.name,
-      };
-    }
+    if(contract.gstRate){
+     invoiceDetails = {
+      invoicename: invoice.name,
+      clientName: party.name,
+      clientAddress: party.address,
+      mobileNumber: party.mobileNumber,
+      date: new Date(),
+      invoiceNumber: invoiceNumber,
+      gsttype: contract.gstType.name,
+      gstrate: contract.gstRate.percentage,
+      totalAmount: totalAmount,
+      amounts: amounts,
+      name: address.name,
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      telephone: address.telephone,
+      email: address.email,
+      website: address.website,
+      GSTN: address.GSTN,
+      storage: contract.storagetype,
+      accountname: bank.accountname,
+      bankName: bank.bankName,
+      accountNumber: bank.accountNumber,
+      IFSC: bank.IFSC,
+      accounttype: bank.accounttype,
+      foundername: sign.name,
+    };
+  }else{
+     invoiceDetails = {
+      invoicename: invoice.name,
+      clientName: party.name,
+      clientAddress: party.address,
+      mobileNumber: party.mobileNumber,
+      date: new Date(),
+      invoiceNumber: invoiceNumber,
+      
+      totalAmount: totalAmount,
+      amounts: amounts,
+      name: address.name,
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      telephone: address.telephone,
+      email: address.email,
+      website: address.website,
+      GSTN: address.GSTN,
+      storage: contract.storagetype,
+      accountname: bank.accountname,
+      bankName: bank.bankName,
+      accountNumber: bank.accountNumber,
+      IFSC: bank.IFSC,
+      accounttype: bank.accounttype,
+      foundername: sign.name,
+    };
+  }
     console.log(invoiceDetails);
     const doc = new PDFDocument();
     const writeStream = fs.createWriteStream(filePath);
@@ -1626,6 +1627,8 @@ const generatePDF = async (userId, existingContract, tableData) => {
         reject(err);
       });
     });
+
+    
 
     return filePath;
   } catch (error) {
@@ -1673,10 +1676,12 @@ exports.getAllContractsByPartyAndStorageforinvoice = async (req, res) => {
     });
 
     if (!contracts || contracts.length === 0) {
-      return res.status(404).json({
-        message:
-          "No contracts found for the provided partyId, storageId, and storagetype=Product",
-      });
+      return res
+        .status(404)
+        .json({
+          message:
+            "No contracts found for the provided partyId, storageId, and storagetype=Product",
+        });
     }
 
     // Extract all details of each contract including storage information
@@ -1732,9 +1737,9 @@ exports.getAllInvoicesByContractId = async (req, res) => {
 
 exports.getStorageIdByPartymanuf = async (req, res) => {
   try {
-    const partyId = req.params.id;
+  const partyId = req.params.id;
 
-    const party = await userTable.findByPk(partyId);
+  const party = await userTable.findByPk(partyId);
 
     if (!party) {
       return res.status(404).json({ error: "Party not found" });
@@ -1750,7 +1755,7 @@ exports.getStorageIdByPartymanuf = async (req, res) => {
     }
     // Find all contracts with the given partyId and include associated Location data
     const contracts = await Contract.findAll({
-      where: { partyId: under },
+      where: { partyId:under },
       include: [
         {
           model: Location,
@@ -1840,12 +1845,13 @@ const { Op } = require("sequelize");
 const varient = require("../models/varient");
 const Requisition = require("../models/requisition");
 
+
 cron.schedule(
   "0 0 * * *",
   async () => {
     try {
       const today = new Date();
-
+      
       const contracts = await Contract.findAll({
         where: {
           status: {
@@ -1857,128 +1863,122 @@ cron.schedule(
 
       await Promise.all(
         contracts.map(async contract => {
-          if (contract.storagetype === "Area") {
+          
+          if (contract.storagetype === 'Area') {
             let { nextinvoicedate, renewaldays } = contract;
-
+    
             // Parse the nextinvoicedate string into a Date object
             let nextInvoiceDate = new Date(nextinvoicedate);
-
+            
             if (nextInvoiceDate.toDateString() === today.toDateString()) {
               const userId = contract.under;
-
+              
               const contractProducts = await ContractSpace.findAll({
                 where: { contractId: contract.id },
               });
-
-              const storages = await Promise.all(
-                contractProducts.map(async store => {
-                  const storagespaces = await StoragespaceArea.findAll({
-                    where: { contractspace: store.id },
-                    include: [
-                      {
-                        model: SpaceDetails,
-                        as: "AreaSpaceDetails",
-                      },
-                      {
-                        model: ContractSpace,
-                        as: "contractspac",
-                      },
-                    ],
-                  });
-                  return {
-                    contractspac: storagespaces[0].contractspac,
-                    AreaSpaceDetails: storagespaces.map(
-                      space => space.AreaSpaceDetails
-                    ),
-                  };
-                })
-              );
-
-              const tableData = storages.map(product => ({
-                storagespace: Array.isArray(product.AreaSpaceDetails)
-                  ? product.AreaSpaceDetails.map(detail => detail.space).join(
-                      ", "
-                    )
-                  : product.AreaSpaceDetails.space,
-                qty: product.contractspac.qty,
-                rate: product.contractspac.rate,
-                amount: product.contractspac.amount,
-              }));
-
-              const pdfFilePath = await generatePDF(
-                userId,
-                contract.id,
-                tableData
-              );
-
-              const renewalDays = parseInt(contract.renewaldays, 10);
-              const contractStartDate = new Date(today);
-
-              const nextInvoiceDate = new Date(contractStartDate);
-              nextInvoiceDate.setDate(
-                contractStartDate.getDate() + renewalDays
-              );
-
-              (contract.nextinvoicedate = nextInvoiceDate.toISOString()),
-                console.log(nextInvoiceDate);
-              await contract.save();
-            }
-          } else {
-            const contractProducts = await ContractProduct.findAll({
-              where: { contractId: existingContract.id },
-            });
-
-            const storages = await Promise.all(
-              contractProducts.map(async store => {
-                const storagespaces = await Storagespace.findAll({
-                  where: { contractproduct: store.id },
+              
+              const storages = await Promise.all(contractProducts.map(async store => {
+                const storagespaces = await StoragespaceArea.findAll({
+                  where: { contractspace: store.id },
                   include: [
                     {
-                      model: ContractProduct,
-                      as: "contractp",
+                      model: SpaceDetails,
+                      as: 'AreaSpaceDetails',
                     },
                     {
-                      model: SpaceDetails,
-                      as: "productSpaceDetails",
+                      model: ContractSpace,
+                      as: 'contractspac',
                     },
                   ],
                 });
                 return {
-                  contractp: storagespaces[0].contractp,
-                  productSpaceDetails: storagespaces.map(
-                    space => space.productSpaceDetails
-                  ),
+                  contractspac: storagespaces[0].contractspac,
+                  AreaSpaceDetails: storagespaces.map(space => space.AreaSpaceDetails),
                 };
-              })
-            );
-
+              }));
+          
+             
+          
+          
+              const tableData = storages.map(product => ({
+                storagespace: Array.isArray(product.AreaSpaceDetails) ?
+                  product.AreaSpaceDetails.map(detail => detail.space).join(', ') :
+                  product.AreaSpaceDetails.space,
+                qty: product.contractspac.qty,
+                rate: product.contractspac.rate,
+                amount: product.contractspac.amount,
+              }));
+              
+              const pdfFilePath = await generatePDF(userId, contract.id, tableData);
+               
+              const renewalDays = parseInt(contract.renewaldays, 10);
+              const contractStartDate = new Date(today);
+          
+              const nextInvoiceDate = new Date(contractStartDate);
+              nextInvoiceDate.setDate(contractStartDate.getDate() + renewalDays);
+          
+              
+          
+              contract.nextinvoicedate = nextInvoiceDate.toISOString(),
+              console.log(nextInvoiceDate)
+              await contract.save();
+            }
+          }else{
+          
+            const contractProducts = await ContractProduct.findAll({
+              where: { contractId: existingContract.id },
+            });
+        
+            const storages = await Promise.all(contractProducts.map(async store => {
+              const storagespaces = await Storagespace.findAll({
+                where: { contractproduct: store.id },
+                include: [
+                  {
+                    model: ContractProduct,
+                    as: 'contractp',
+                  },
+                  {
+                    model: SpaceDetails,
+                    as: 'productSpaceDetails',
+                  },
+                ],
+              });
+              return {
+                contractp: storagespaces[0].contractp,
+                productSpaceDetails: storagespaces.map(space => space.productSpaceDetails),
+              };
+            }));
+            
+            
+            
             const tableData = storages.map(product => ({
-              storagespace: Array.isArray(product.productSpaceDetails)
-                ? product.productSpaceDetails
-                    .map(detail => detail.space)
-                    .join(", ")
-                : product.productSpaceDetails.space,
-              qty: product.contractp.qty,
+              storagespace: Array.isArray(product.productSpaceDetails) ? 
+              product.productSpaceDetails.map(detail => detail.space).join(', ') : 
+              product.productSpaceDetails.space, 
+              qty: product.contractp.qty, 
               rate: product.contractp.rate,
               amount: product.contractp.amount,
             }));
+            
+            
+            const pdfFilePath = await generatePDF(under, existingContract.id, tableData);
+            
+                 
+                const renewalDays = parseInt(contract.renewaldays, 10);
+                const contractStartDate = new Date(today);
+            
+                const nextInvoiceDate = new Date(contractStartDate);
+                nextInvoiceDate.setDate(contractStartDate.getDate() + renewalDays);
+            
+                
+            
+                contract.nextinvoicedate = nextInvoiceDate.toISOString(),
+                console.log(nextInvoiceDate)
+                await contract.save();
+              
+            }
 
-            const pdfFilePath = await generatePDF(
-              under,
-              existingContract.id,
-              tableData
-            );
-
-            const renewalDays = parseInt(contract.renewaldays, 10);
-            const contractStartDate = new Date(today);
-
-            const nextInvoiceDate = new Date(contractStartDate);
-            nextInvoiceDate.setDate(contractStartDate.getDate() + renewalDays);
-
-            (contract.nextinvoicedate = nextInvoiceDate.toISOString()),
-              console.log(nextInvoiceDate);
-            await contract.save();
-          }
+          
         })
       );
 
@@ -1989,9 +1989,11 @@ cron.schedule(
   },
   {
     scheduled: true,
-    timezone: "Asia/Kolkata",
+    timezone: "Asia/Kolkata", 
   }
 );
+
+
 
 cron.schedule(
   "*/5 * * * *",
@@ -2023,7 +2025,7 @@ cron.schedule(
           const contract = await Contract.findOne({
             where: {
               id: contractId,
-              status: "Ongoing",
+              status:"Ongoing"
             },
           });
 
@@ -2173,6 +2175,7 @@ exports.viewclosedcontractca = async (req, res) => {
             status: "Closed",
           },
         },
+        
       ],
     });
 
@@ -2219,31 +2222,35 @@ exports.viewclosedcontractcaproduct = async (req, res) => {
   }
 };
 
+
+
 exports.extractproduct = async (req, res) => {
   try {
+  
     const userId = req.params.under;
-    const location = req.params.location;
-    const partyid = req.params.partyid;
+  const location = req.params.location;
+const partyid= req.params.partyid;
 
-    const user = await userTable.findByPk(userId);
+  const user = await userTable.findByPk(userId);
+  
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-    let under = null;
+  let under = null;
 
-    if (user.userTypeId === 3) {
-      // If user type ID is 3, set under to the user ID
-      under = userId;
-    } else if (user.userTypeId === 5) {
-      // If user type ID is 5, set under to the user's under value
-      under = user.under;
-    }
-    const party = await userTable.findByPk(partyid);
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
 
     if (!party) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
     let partyunder = null;
 
@@ -2256,22 +2263,25 @@ exports.extractproduct = async (req, res) => {
     }
 
     const contractIds = await Contract.findAll({
+     
       where: {
         under,
-        storageId: location,
-        status: "Ongoing",
-        storagetype: "product",
-        partyId: partyunder,
-      },
+        storageId:location,
+        status:'Ongoing',
+        storagetype: 'product',
+        partyId: partyunder
+        
+
+      }
     });
-    console.log(contractIds);
+console.log(contractIds)
     // Extract contract IDs from the result
     const ids = contractIds.map(contract => contract.id);
 
     // Retrieve all contract products based on the extracted contract IDs
     let contractProducts = await ContractProduct.findAll({
       where: {
-        contractId: ids,
+        contractId: ids
       },
       include: [
         {
@@ -2292,14 +2302,14 @@ exports.extractproduct = async (req, res) => {
     contractProducts.forEach(contractProduct => {
       const productName = contractProduct.productid;
       const productDetails = {
-        contractproductid: contractProduct.id,
+        contractproductid:contractProduct.id,
         variant: contractProduct.product.varient?.varient,
         quality: contractProduct.product.quality?.quality,
         size: contractProduct.product.size?.size,
         unit: contractProduct.product.unit?.unit,
         commodity: contractProduct.product.commodity?.commodity,
       };
-
+      
       const qty = contractProduct.qty; // Assuming 'qty' is the field representing quantity
       if (productMap.has(productName)) {
         productMap.get(productName).qty += qty;
@@ -2317,36 +2327,37 @@ exports.extractproduct = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 exports.inventoryreportpop = async (req, res) => {
   try {
     const product = req.params.id;
-    const userId = req.params.under;
-    const location = req.params.location;
-    const partyid = req.params.partyid;
+  const userId = req.params.under;
+  const location = req.params.location;
+const partyid= req.params.partyid;
 
-    const user = await userTable.findByPk(userId);
+  const user = await userTable.findByPk(userId);
+  
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-    let under = null;
+  let under = null;
 
-    if (user.userTypeId === 3) {
-      // If user type ID is 3, set under to the user ID
-      under = userId;
-    } else if (user.userTypeId === 5) {
-      // If user type ID is 5, set under to the user's under value
-      under = user.under;
-    }
-    const party = await userTable.findByPk(partyid);
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
 
     if (!party) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
     let partyunder = null;
 
@@ -2358,22 +2369,25 @@ exports.inventoryreportpop = async (req, res) => {
       partyunder = user.under;
     }
 
-    const contractIds = await Contract.findAll({
-      where: {
-        under,
-        storageId: location,
-        status: "Ongoing",
-        storagetype: "product",
-        partyId: partyunder,
-      },
-    });
 
-    const ids = contractIds.map(contract => contract.id);
+  
+  const contractIds = await Contract.findAll({
+     
+    where: {
+      under,
+      storageId:location,
+      status:'Ongoing',
+      storagetype: 'product',
+      partyId: partyunder
+    }
+  });
+
+  const ids = contractIds.map(contract => contract.id);
     // Fetch contract spaces based on the contractId and where contract.status is 'Closed'
     const contractSpaces = await Storagespace.findAll({
-      where: {
+      where: { 
         contractId: ids,
-        productid: product,
+        productid:product
       },
       include: [
         {
@@ -2386,14 +2400,14 @@ exports.inventoryreportpop = async (req, res) => {
               where: {
                 status: "Ongoing",
               },
-            },
-          ],
+            }
+          ]
         },
         {
           model: SpaceDetails,
           as: "productSpaceDetails",
-        },
-      ],
+        }
+      ]
     });
 
     // Restructuring the data to group contracts and their associated product details
@@ -2403,7 +2417,7 @@ exports.inventoryreportpop = async (req, res) => {
       if (!contracts[contractId]) {
         contracts[contractId] = {
           contract: space.contractp,
-          productDetails: [],
+          productDetails: []
         };
       }
       contracts[contractId].productDetails.push(space.productSpaceDetails);
@@ -2418,31 +2432,33 @@ exports.inventoryreportpop = async (req, res) => {
   }
 };
 
+
 exports.detailsbutton = async (req, res) => {
   try {
-    const userId = req.params.under;
-    const location = req.params.location;
-    const partyid = req.params.partyid;
+  const userId = req.params.under;
+  const location = req.params.location;
+const partyid= req.params.partyid;
 
-    const user = await userTable.findByPk(userId);
+  const user = await userTable.findByPk(userId);
+  
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-    let under = null;
+  let under = null;
 
-    if (user.userTypeId === 3) {
-      // If user type ID is 3, set under to the user ID
-      under = userId;
-    } else if (user.userTypeId === 5) {
-      // If user type ID is 5, set under to the user's under value
-      under = user.under;
-    }
-    const party = await userTable.findByPk(partyid);
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const party = await userTable.findByPk(partyid);
 
     if (!party) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
     let partyunder = null;
 
@@ -2458,10 +2474,10 @@ exports.detailsbutton = async (req, res) => {
       where: {
         under,
         storageId: location,
-        status: "Ongoing",
-        storagetype: "product",
-        partyId: partyunder,
-      },
+        status: 'Ongoing',
+        storagetype: 'product',
+        partyId: partyunder
+      }
     });
 
     const ids = contractIds.map(contract => contract.id);
@@ -2493,13 +2509,13 @@ exports.detailsbutton = async (req, res) => {
                 { model: Commodity },
               ],
             },
-          ],
+          ]
         },
         {
           model: SpaceDetails,
           as: "productSpaceDetails",
-        },
-      ],
+        }
+      ]
     });
 
     const contracts = {};
@@ -2508,7 +2524,7 @@ exports.detailsbutton = async (req, res) => {
       if (!contracts[contractId]) {
         contracts[contractId] = {
           contract: space.contractp,
-          productDetails: [],
+          productDetails: []
         };
       }
       contracts[contractId].productDetails.push(space.productSpaceDetails);
@@ -2523,22 +2539,22 @@ exports.detailsbutton = async (req, res) => {
         if (!productDetailsMap[productId]) {
           productDetailsMap[productId] = {
             id: productId,
-            varient: contract.product.varient?.varient,
+            varient:contract.product.varient?.varient,
             commodity: contract.product?.commodity?.commodity,
             size: contract.product?.size?.size,
             quality: contract.product?.quality?.quality,
             unit: contract.product?.unit?.unit,
-            contracts: [],
+            contracts: []
           };
         }
         productDetailsMap[productId].contracts.push({
-          contractid: contract.space.id,
+          contractid:contract.space.id,
           contractproductid: contract.id,
           slno: contract.space.slno,
           qty: contract.qty,
           spacedetails: item.productDetails.map(detail => ({
-            space: detail.space, // Extract space details here
-          })),
+            space: detail.space // Extract space details here
+          }))
         });
       }
     });
@@ -2552,12 +2568,15 @@ exports.detailsbutton = async (req, res) => {
   }
 };
 
+
 exports.extractproductsformaterialmove = async (req, res) => {
+  
   const userId = req.params.under;
   const location = req.params.location; // Removed extra comma
   const partyids = req.body.partyid; // Assuming partyid is an array of IDs
-
+  
   const user = await userTable.findByPk(userId);
+  
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -2580,24 +2599,24 @@ exports.extractproductsformaterialmove = async (req, res) => {
         where: {
           under,
           storageId: location,
-          status: "Ongoing",
-          storagetype: "product",
-          partyId: partyid,
+          status: 'Ongoing',
+          storagetype: 'product',
+          partyId: partyid
         },
         include: [
           {
             model: userTable,
             as: "partyuser",
-            attributes: ["id", "name", "mobileNumber"],
-          },
-        ],
+            attributes: ['id', 'name', 'mobileNumber']
+          }
+        ]
       });
 
       const ids = contractIds.map(contract => contract.id);
 
       const contractProducts = await ContractProduct.findAll({
         where: {
-          contractId: ids,
+          contractId: ids
         },
         include: [
           {
@@ -2623,32 +2642,34 @@ exports.extractproductsformaterialmove = async (req, res) => {
     res.status(200).json(allResults);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 // Helper function to process contract products and extract relevant information
 
-function processData(contractProducts, partyUser) {
-  const productMap = new Map();
-  contractProducts.forEach(contractProduct => {
-    const productName = contractProduct.productid;
-    const productDetails = {
-      Productid: contractProduct.productid,
-      contractproductid: contractProduct.id,
-      variant: contractProduct.product.varient?.varient,
-      quality: contractProduct.product.quality?.quality,
-      size: contractProduct.product.size?.size,
-      unit: contractProduct.product.unit?.unit,
-      commodity: contractProduct.product.commodity?.commodity,
-    };
-
-    const qty = contractProduct.qty; // Assuming 'qty' is the field representing quantity
-    if (productMap.has(productName)) {
-      productMap.get(productName).qty += qty;
-    } else {
-      productMap.set(productName, { qty, ...productDetails });
-    }
+ 
+    function processData(contractProducts,partyUser) {
+      const productMap = new Map();
+      contractProducts.forEach(contractProduct => {
+        const productName = contractProduct.productid;
+        const productDetails = {
+           Productid:contractProduct.productid,
+          contractproductid: contractProduct.id,
+          variant: contractProduct.product.varient?.varient,
+          quality: contractProduct.product.quality?.quality,
+          size: contractProduct.product.size?.size,
+          unit: contractProduct.product.unit?.unit,
+          commodity: contractProduct.product.commodity?.commodity,
+        };
+    
+        const qty = contractProduct.qty; // Assuming 'qty' is the field representing quantity
+        if (productMap.has(productName)) {
+          productMap.get(productName).qty += qty;
+        } else {
+          productMap.set(productName, { qty, ...productDetails });
+        }
+    
   });
 
   const products = Array.from(productMap.values());
@@ -2656,40 +2677,45 @@ function processData(contractProducts, partyUser) {
   return { partyUser, products };
 }
 
+  
+
+
 exports.manufactureid = async (req, res) => {
   try {
-    const userId = req.params.under;
-    const user = await userTable.findByPk(userId);
+  const userId = req.params.under;
+  const user = await userTable.findByPk(userId);
+  
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-    let under = null;
+  let under = null;
 
-    if (user.userTypeId === 3) {
-      // If user type ID is 3, set under to the user ID
-      under = userId;
-    } else if (user.userTypeId === 5) {
-      // If user type ID is 5, set under to the user's under value
-      under = user.under;
-    }
-    const location = req.params.location;
+  if (user.userTypeId === 3) {
+    // If user type ID is 3, set under to the user ID
+    under = userId;
+  } else if (user.userTypeId === 5) {
+    // If user type ID is 5, set under to the user's under value
+    under = user.under;
+  }
+  const location = req.params.location;
 
+  
     const contractIds = await Contract.findAll({
       where: {
         under,
         storageId: location,
-        status: "Ongoing",
-        storagetype: "product",
+        status: 'Ongoing',
+        storagetype: 'product',
       },
       include: [
         {
           model: userTable,
           as: "partyuser",
-          attributes: ["id", "name", "mobileNumber"],
-        },
-      ],
+          attributes: ['id', 'name','mobileNumber']
+        }
+      ]
     });
 
     const uniqueParties = [];
@@ -2702,7 +2728,7 @@ exports.manufactureid = async (req, res) => {
         uniqueParties.push({
           id: partyId,
           name: contract.partyuser.name,
-          mobileNumber: contract.partyuser.mobileNumber, // Assuming the name attribute is retrieved from the included userTable model
+           mobileNumber:contract.partyuser.mobileNumber// Assuming the name attribute is retrieved from the included userTable model
         });
       }
     });
@@ -2710,9 +2736,15 @@ exports.manufactureid = async (req, res) => {
     res.status(200).json(uniqueParties);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
+
+
 
 // Define the cron job
 cron.schedule(
@@ -2721,11 +2753,11 @@ cron.schedule(
     try {
       const today = new Date();
       const contractIdsToNotify = []; // Array to store contract IDs for notification
-
+      
       // Fetch contracts that are ongoing and not closed
       const contracts = await Contract.findAll({
         where: {
-          storagetype: "Product",
+          storagetype: 'Product',
           status: {
             [Op.not]: "Closed",
             [Op.eq]: "Ongoing",
@@ -2738,14 +2770,12 @@ cron.schedule(
         contracts.map(async contract => {
           let { nextinvoicedate } = contract;
           let nextInvoiceDate = new Date(nextinvoicedate);
-
+          
           // Calculate the difference in milliseconds between nextInvoiceDate and today
           const differenceInMs = nextInvoiceDate.getTime() - today.getTime();
 
           // Convert milliseconds to days
-          const differenceInDays = Math.ceil(
-            differenceInMs / (1000 * 60 * 60 * 24)
-          );
+          const differenceInDays = Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
 
           if (differenceInDays <= 3) {
             // If differenceInDays is less than or equal to 3, store the contract ID
@@ -2767,15 +2797,13 @@ cron.schedule(
             {
               model: Requisition,
               as: "requtaion",
-            },
-          ],
+            }
+          ]
         });
 
         const contractSpaces = await Storagespace.findAll({
           where: {
-            contractproduct: contractIds.map(
-              contract => contract.contractproductid
-            ),
+            contractproduct: contractIds.map(contract => contract.contractproductid),
           },
           include: [
             {
@@ -2800,13 +2828,13 @@ cron.schedule(
                     { model: Commodity },
                   ],
                 },
-              ],
+              ]
             },
             {
               model: SpaceDetails,
               as: "productSpaceDetails",
-            },
-          ],
+            }
+          ]
         });
 
         const contracts = {};
@@ -2815,7 +2843,7 @@ cron.schedule(
           if (!contracts[contractId]) {
             contracts[contractId] = {
               contract: space.contractp,
-              productDetails: [],
+              productDetails: []
             };
           }
           contracts[contractId].productDetails.push(space.productSpaceDetails);
@@ -2839,27 +2867,17 @@ cron.schedule(
               };
             }
             productDetailsMap[productId].contracts.push({
-              productname: `${contract.product.varient?.varient || ""} ${
-                contract.product.commodity?.commodity || ""
-              } ${contract.product.size?.size || ""} ${
-                contract.product.quality?.quality || ""
-              } ${contract.product.unit?.unit || ""}`,
+              productname: `${contract.product.varient?.varient || ''} ${contract.product.commodity?.commodity || ''} ${contract.product.size?.size || ''} ${contract.product.quality?.quality || ''} ${contract.product.unit?.unit || ''}`,
               contractid: contract.space.id,
               contractproductid: contract.id,
               slno: contract.space.slno,
               under: contract.space.under,
               qty: contract.qty,
               spacedetails: item.productDetails.map(detail => ({
-                space: detail.space, // Extract space details here
+                space: detail.space // Extract space details here
               })),
-              requstionid:
-                contractIds.find(
-                  reproduct => reproduct.contractproductid === contract.id
-                )?.requtaion.id || null,
-              reqSlNo:
-                contractIds.find(
-                  reproduct => reproduct.contractproductid === contract.id
-                )?.requtaion.slno || null,
+              requstionid: contractIds.find(reproduct => reproduct.contractproductid === contract.id)?.requtaion.id || null,
+              reqSlNo: contractIds.find(reproduct => reproduct.contractproductid === contract.id)?.requtaion.slno || null,
             });
           }
         });
@@ -2897,12 +2915,12 @@ cron.schedule(
             size: contract.size,
             quality: contract.quality,
             unit: contract.unit,
-            contracts: contract.slno, // Add a conditional check here
+            contracts: contract.slno // Add a conditional check here
           }));
           requisitions.push({
             requstionnumber: reqSlNo,
             under: contracts[0].under,
-            products: products,
+            products: products
           });
         }
         responseDatas.push(requisitions);
@@ -2913,11 +2931,9 @@ cron.schedule(
         const userId = requisition[0].under;
         const user = await userTable.findByPk(userId);
         let emailMessage = `For the given requisition request: ${requisition[0].requstionnumber}, the following contracts will be auto-renewed in the next 3 days:\n\n`;
-
+        
         requisition[0].products.forEach((product, productIndex) => {
-          emailMessage += `${productIndex + 1}. Product Name: ${
-            product.productname
-          }\n`;
+          emailMessage += `${productIndex + 1}. Product Name: ${product.productname}\n`;
           emailMessage += `   - Contract: ${product.contracts}\n`;
         });
 
@@ -2938,18 +2954,27 @@ cron.schedule(
   },
   {
     scheduled: true,
-    timezone: "Asia/Kolkata",
+    timezone: "Asia/Kolkata", 
   }
 );
+
+
+
+
+
+
+
+
+
 
 exports.test = async (req, res) => {
   try {
     const today = new Date();
     const contractIdsToNotify = []; // Array to store contract IDs for notification
-
+    
     const contracts = await Contract.findAll({
       where: {
-        storagetype: "Product",
+        storagetype: 'Product',
         status: {
           [Op.not]: "Closed",
           [Op.eq]: "Ongoing",
@@ -2961,14 +2986,12 @@ exports.test = async (req, res) => {
       contracts.map(async contract => {
         let { nextinvoicedate } = contract;
         let nextInvoiceDate = new Date(nextinvoicedate);
-
+          
         // Calculate the difference in milliseconds between nextInvoiceDate and today
         const differenceInMs = nextInvoiceDate.getTime() - today.getTime();
 
         // Convert milliseconds to days
-        const differenceInDays = Math.ceil(
-          differenceInMs / (1000 * 60 * 60 * 24)
-        );
+        const differenceInDays = Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
 
         if (differenceInDays <= 3) {
           // If differenceInDays is less than or equal to 3, store the contract ID
@@ -2990,15 +3013,13 @@ exports.test = async (req, res) => {
           {
             model: Requisition,
             as: "requtaion",
-          },
-        ],
+          }]
       });
-
+      
+      
       const contractSpaces = await Storagespace.findAll({
         where: {
-          contractproduct: contractIds.map(
-            contract => contract.contractproductid
-          ),
+          contractproduct: contractIds.map(contract => contract.contractproductid),
         },
         include: [
           {
@@ -3023,13 +3044,13 @@ exports.test = async (req, res) => {
                   { model: Commodity },
                 ],
               },
-            ],
+            ]
           },
           {
             model: SpaceDetails,
             as: "productSpaceDetails",
-          },
-        ],
+          }
+        ]
       });
 
       const contracts = {};
@@ -3038,7 +3059,7 @@ exports.test = async (req, res) => {
         if (!contracts[contractId]) {
           contracts[contractId] = {
             contract: space.contractp,
-            productDetails: [],
+            productDetails: []
           };
         }
         contracts[contractId].productDetails.push(space.productSpaceDetails);
@@ -3062,28 +3083,18 @@ exports.test = async (req, res) => {
             };
           }
           productDetailsMap[productId].contracts.push({
-            productname: `${contract.product.varient?.varient || ""} ${
-              contract.product.commodity?.commodity || ""
-            } ${contract.product.size?.size || ""} ${
-              contract.product.quality?.quality || ""
-            } ${contract.product.unit?.unit || ""}`,
-
+            productname: `${contract.product.varient?.varient || ''} ${contract.product.commodity?.commodity || ''} ${contract.product.size?.size || ''} ${contract.product.quality?.quality || ''} ${contract.product.unit?.unit || ''}`,
+            
             contractid: contract.space.id,
             contractproductid: contract.id,
             slno: contract.space.slno,
             under: contract.space.under,
             qty: contract.qty,
             spacedetails: item.productDetails.map(detail => ({
-              space: detail.space, // Extract space details here
+              space: detail.space // Extract space details here
             })),
-            requstionid:
-              contractIds.find(
-                reproduct => reproduct.contractproductid === contract.id
-              )?.requtaion.id || null,
-            reqSlNo:
-              contractIds.find(
-                reproduct => reproduct.contractproductid === contract.id
-              )?.requtaion.slno || null,
+            requstionid: contractIds.find(reproduct => reproduct.contractproductid === contract.id)?.requtaion.id || null,
+            reqSlNo: contractIds.find(reproduct => reproduct.contractproductid === contract.id)?.requtaion.slno || null,
           });
         }
       });
@@ -3121,26 +3132,29 @@ exports.test = async (req, res) => {
           size: contract.size,
           quality: contract.quality,
           unit: contract.unit,
-          contracts: contract.slno, // Add a conditional check here
+          contracts: contract.slno // Add a conditional check here
         }));
         requisitions.push({
           requstionnumber: reqSlNo,
           under: contracts[0].under,
-          products: products,
+          products: products
         });
       }
       responseDatas.push(requisitions);
     }
 
+   
+    
+    
+    
+    
     for (const requisition of responseDatas) {
       const userId = requisition[0].under;
       const user = await userTable.findByPk(userId);
       let emailMessage = `For the given requisition request: ${requisition[0].requstionnumber}, the following contracts will be auto-renewed in the next 3 days:\n\n`;
-
+      
       requisition[0].products.forEach((product, productIndex) => {
-        emailMessage += `${productIndex + 1}. Product Name: ${
-          product.productname
-        }\n`;
+        emailMessage += `${productIndex + 1}. Product Name: ${product.productname}\n`;
         emailMessage += `   - Contract: ${product.contracts}\n`;
       });
 
@@ -3155,15 +3169,13 @@ exports.test = async (req, res) => {
     }
 
     // Your existing code...
-
-    res.status(200).json({
+    
+    res.status(200).json({ 
       datas: responseDatas,
-      message: "Invoice generation completed.",
+      message: "Invoice generation completed." 
     });
   } catch (error) {
     console.error("Error generating invoices:", error);
-    res
-      .status(500)
-      .json({ error: "Error sending notification. Please try again later." });
+    res.status(500).json({ error: "Error sending notification. Please try again later." });
   }
 };

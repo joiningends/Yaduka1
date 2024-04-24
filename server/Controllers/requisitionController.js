@@ -318,7 +318,8 @@ exports.getRequisitionIdcompleted = async (req, res) => {
   
   
   
-  exports.updateDeliveryQty = async (req, res) => {
+
+exports.updateDeliveryQty = async (req, res) => {
     try {
         const deliveryDataArray = req.body; // Assuming the array of data is in the request body
         let success = true;
@@ -328,35 +329,68 @@ exports.getRequisitionIdcompleted = async (req, res) => {
         for (const deliveryData of deliveryDataArray) {
             const { id, deliveryQty } = deliveryData;
 
-            // Update the record in the database
-            await Reproduct.update(
-                { deliveryQty: deliveryQty },
-                { where: { id: id } }
-            );
+            const existingReproduct = await Reproduct.findOne({
+                where: { id }
+            });
 
-            // Manually fetch the updated row
-            const updatedRow = await Reproduct.findOne({ where: { id: id } });
+            if (existingReproduct.Status === 1) {
+                await Reproduct.update(
+                    {
+                        deliveryQty: deliveryQty,
+                        previousqty: deliveryQty,
+                        Status: 2
+                    },
+                    { where: { id: id } }
+                );
 
-            // Check if the update was successful
-            if (!updatedRow) {
-                success = false;
-                break;
-            }
+                // Manually fetch the updated row
+                const updatedRow = await Reproduct.findOne({ where: { id: id } });
 
-            // Set the value of updatedReproduct for the last successful update
-            updatedReproduct = updatedRow;
-
-            // Assuming 'contractproductid' and 'requationId' are column names in your Reproduct table
-            const { contractproductid } = updatedReproduct;
-
-            // Subtract delivered quantity from contract product quantity
-            await ContractProduct.decrement(
-                'qty',
-                {
-                    by: deliveryQty,
-                    where: { id: contractproductid }
+                // Check if the update was successful
+                if (!updatedRow) {
+                    success = false;
+                    break;
                 }
-            );
+
+                // Set the value of updatedReproduct for the last successful update
+                updatedReproduct = updatedRow;
+
+                // Assuming 'contractproductid' is a column name in your Reproduct table
+                const { contractproductid } = updatedReproduct;
+
+                // Subtract delivered quantity from contract product quantity
+                await ContractProduct.decrement(
+                    'qty',
+                    {
+                        by: deliveryQty,
+                        where: { id: contractproductid }
+                    }
+                    
+                );
+              
+            } else {
+                const updatedRow = await Reproduct.findOne({ where: { id: id } });
+
+                updatedReproduct = updatedRow;
+
+                const { contractproductid } = updatedReproduct;
+
+                const updatedReproduc = await ContractProduct.findOne({ where: { id: contractproductid } });
+                const newQty = updatedReproduc.qty - (deliveryQty - existingReproduct.previousqty);
+console.log(deliveryQty )
+                await ContractProduct.update(
+                    { qty: newQty },
+                    { where: { id: contractproductid } }
+                );
+
+                await Reproduct.update(
+                    {
+                        deliveryQty: deliveryQty,
+                        previousqty: deliveryQty
+                    },
+                    { where: { id: id } }
+                );
+            }
         }
 
         // If all updates were successful, update the status to 'Completed' for corresponding requationId
@@ -381,6 +415,7 @@ exports.getRequisitionIdcompleted = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 
 
@@ -436,6 +471,8 @@ exports.createRequisition = async (req, res) => {
           contractId: product.contractId,
           storageId: product.storageId,
           requationId: newRequisition.id,
+          previousqty:0,
+          Status:1,
         })))
       );
       newRequisition.setReproducts(products); // Associate products with the requisition

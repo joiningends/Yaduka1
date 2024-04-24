@@ -100,7 +100,7 @@ function EditProductDetails() {
         `http://3.6.248.144/api/v1/ref/create/${partyId}`,
         requestData
       );
-      toast.success("Data saved successfully!");
+      toast.success("Product Details updated successfully!");
       setTimeout(() => {
         window.location.href = "/Requisition";
       }, 1000);
@@ -112,7 +112,7 @@ function EditProductDetails() {
 
   const handleCancel = () => {
     // Navigate to "/addRequisition"
-    navigate("/requisition/addRequisition");
+    navigate("/Requisition/AddRequisition");
   };
 
   const indexOfLastTable = currentPage * tablesPerPage;
@@ -247,7 +247,7 @@ function EditProductDetails() {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Update
           </button>
         </div>
       )}

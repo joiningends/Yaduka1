@@ -72,7 +72,7 @@ function Party() {
   };
 
   const handleAddParty = () => {
-    navigate("/party/AddParty");
+    navigate("/Party/AddParty");
   };
 
   const indexOfLastRow = page * rowsPerPage;
@@ -123,7 +123,7 @@ function Party() {
       .then(response => {
         console.log(response);
         if (response.data.record !== null && response.data) {
-          navigate(`/party/AddParty/${phoneNumberInput}`);
+          navigate(`/Party/AddParty/${phoneNumberInput}`);
           console.log("hello");
         } else {
           setSearchResultMessage("No phone number found in records.");
@@ -269,6 +269,7 @@ function Party() {
             fullWidth
             value={phoneNumberInput}
             onChange={e => setPhoneNumberInput(e.target.value)}
+            style={{ marginBottom: "1rem" }}
           />
           <Button
             variant="contained"

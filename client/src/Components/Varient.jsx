@@ -58,7 +58,7 @@ const Variant = () => {
   };
 
   const handleEdit = id => {
-    navigate(`/variant/AddVariant/${id}`);
+    navigate(`/Variant/AddVariant/${id}`);
   };
 
   const handleDelete = id => {
@@ -118,7 +118,7 @@ const Variant = () => {
               borderRadius: "8px",
             }}
             onClick={() => {
-              navigate("/variant/AddVariant");
+              navigate("/Variant/AddVariant");
             }}
           >
             Add Variant

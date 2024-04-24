@@ -92,11 +92,11 @@ function AddLocationn() {
       });
 
       setLoading(false);
-      navigate("/location");
+      navigate("/Location");
     } catch (error) {
       console.error("Error processing form:", error);
       setLoading(false);
-      toast.error("Failed to submit form");
+      toast.error("Failed to add location");
     }
   };
 
@@ -154,7 +154,7 @@ function AddLocationn() {
   };
 
   const handleCancel = () => {
-    navigate("/location");
+    navigate("/Location");
   };
 
   return (

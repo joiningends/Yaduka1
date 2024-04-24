@@ -230,7 +230,7 @@ function EditMaterialMovmentColdStorage() {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Update
           </button>
         </div>
       )}

@@ -41,10 +41,10 @@ function AddParty() {
   };
 
   const validateEmail = value => {
-    const emailPattern = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(value)
       ? undefined
-      : "Please enter a valid Gmail address.";
+      : "Please enter a valid email address.";
   };
 
   const handleSubmit = async () => {
@@ -68,9 +68,9 @@ function AddParty() {
         postData
       );
 
-      toast.success("Form submitted successfully!");
+      toast.success("Party added successfully!");
       setTimeout(() => {
-        navigate("/party");
+        navigate("/Party");
       }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error.response.data.error);
@@ -85,7 +85,7 @@ function AddParty() {
 
   const handleCancel = e => {
     e.preventDefault();
-    navigate("/party");
+    navigate("/Party");
   };
 
   return (
@@ -97,7 +97,7 @@ function AddParty() {
         >
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
-              <h4 className="card-title">Add Employee</h4>
+              <h4 className="card-title">Add Party</h4>
             </div>
             <div className="card-body">
               <form>

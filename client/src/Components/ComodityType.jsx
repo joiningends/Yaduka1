@@ -50,7 +50,7 @@ const CommodityType = () => {
   };
 
   const handleAddCommodityType = () => {
-    navigate("/commoditytype/AddCommodityType");
+    navigate("/CommodityType/AddCommodityType");
   };
 
   const handleDeleteCommodityType = id => {
@@ -75,7 +75,7 @@ const CommodityType = () => {
   };
 
   const handleEditCommodityType = id => {
-    navigate(`/commoditytype/AddCommodityType/${id}`);
+    navigate(`/CommodityType/AddCommodityType/${id}`);
   };
 
   const handleChange = (event, value) => {

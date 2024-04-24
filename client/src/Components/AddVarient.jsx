@@ -64,7 +64,7 @@ function AddVariant() {
       });
 
       if (response.ok) {
-        toast.success("Variant information submitted successfully!");
+        toast.success("Variant submitted successfully!");
         setTimeout(() => {
           navigate("/Variant");
         }, 2000);
@@ -87,7 +87,7 @@ function AddVariant() {
   });
 
   const handleCancel = () => {
-    navigate("/variant");
+    navigate("/Variant");
   };
 
   const handleImportedChange = e => {

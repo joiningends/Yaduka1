@@ -73,19 +73,34 @@ function DetailsArea() {
 
   return (
     <div className="container mt-5">
-      <BootstrapTable
-        bootstrap4
-        keyField="id"
-        data={data}
-        columns={columns}
-        pagination={paginationFactory(paginationOptions)}
-        bordered
-        striped
-        hover
-        wrapperClasses="table-responsive"
-        headerClasses="bg-dark text-white"
-        bodyClasses="bg-white"
-      />
+      <div className="row justify-content-center">
+        <div className="col-md-10">
+          <div className="card">
+            <div
+              className="card-header text-black"
+              style={{ borderRadius: "0.5rem 0.5rem 0 0" }}
+            >
+              <h4 className="card-title">Details Area</h4>
+            </div>
+            <div className="card-body">
+              <BootstrapTable
+                bootstrap4
+                keyField="id"
+                data={data}
+                columns={columns}
+                pagination={paginationFactory(paginationOptions)}
+                bordered
+                striped
+                hover
+                wrapperClasses="table-responsive"
+                headerClasses="bg-light text-black"
+                bodyClasses="bg-white"
+                noDataIndication={() => "No data found"}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
