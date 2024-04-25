@@ -32,15 +32,24 @@ function EditMaterialMovmentColdStorage() {
 
   const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   const handleTablePageChange = pageNumber => setCurrentTablePage(pageNumber);
-  const handleDeliveredQuantityChange = (e, contractId, requireQty) => {
+  const handleDeliveredQuantityChange = (
+    e,
+    contractId,
+    availableQty,
+    requireQty
+  ) => {
     const value = parseInt(e.target.value) || 0; // Default to 0 if value is falsy
-    if (value <= requireQty) {
+    if (value <= availableQty && value <= requireQty) {
       setDeliveredQuantities(prevState => ({
         ...prevState,
         [contractId]: value,
       }));
     } else {
-      toast.error("Delivered quantity cannot exceed required quantity.");
+      if (value > availableQty) {
+        toast.error("Delivered quantity cannot exceed available quantity.");
+      } else {
+        toast.error("Delivered quantity cannot exceed required quantity.");
+      }
     }
   };
 
@@ -185,15 +194,17 @@ function EditMaterialMovmentColdStorage() {
                       <input
                         type="number"
                         min="0"
-                        max={contract.requireQty}
+                        max={Math.min(contract.qty, contract.requireQty)} // Set max attribute to the minimum of available and required quantity
                         value={
                           deliveredQuantities[contract.contractproductid] || ""
                         }
                         onChange={e => {
+                          const availableQty = contract.qty;
                           const requireQty = contract.requireQty;
                           handleDeliveredQuantityChange(
                             e,
                             contract.contractproductid,
+                            availableQty,
                             requireQty
                           );
                         }}

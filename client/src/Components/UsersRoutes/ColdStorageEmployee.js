@@ -160,7 +160,7 @@ const ColdStorageEmployee = () => {
           element={<DetailsCompeteProduct />}
         />
         <Route
-          path="/EditMaterialMovement/:id/:storageId"
+          path="/MaterialMovement/EditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovmentColdStorage />}
         />
         <Route
@@ -172,7 +172,7 @@ const ColdStorageEmployee = () => {
           element={<ViewCompletedMaterialMovement />}
         />
         <Route
-          path="/CompletedEditMaterialMovement/:id/:storageId"
+          path="MaterialMovement/CompletedEditMaterialMovement/:id/:storageId"
           element={<CompletedEditCompletedMaterialMovement />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />

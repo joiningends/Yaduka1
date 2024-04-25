@@ -177,7 +177,9 @@ function OngoingByAreaForManufecture() {
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    value={formatDateString(contractData.nextInvoiceDate)}
+                    value={formatDateString(
+                      contractData?.contract?.nextinvoicedate
+                    )}
                     readOnly
                   />
                 </div>

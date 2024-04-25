@@ -29,7 +29,6 @@ function AddParty() {
       }
     };
 
-    // Call the fetchData function when the component mounts
     fetchData();
   }, []);
 
@@ -49,6 +48,11 @@ function AddParty() {
 
   const handleSubmit = async () => {
     try {
+      if (!formData.name) {
+        toast.error("Name field is required.");
+        return;
+      }
+
       if (!formData.companyName || !formData.companyAddress) {
         toast.error("Company Name and Company Address are required.");
         return;
@@ -150,6 +154,7 @@ function AddParty() {
                       onChange={e =>
                         setFormData({ ...formData, email: e.target.value })
                       }
+                      required
                     />
                     <div className="text-danger">
                       {validateEmail(formData.email)}
@@ -210,6 +215,7 @@ function AddParty() {
                         onChange={() =>
                           setFormData({ ...formData, isTerminate: true })
                         }
+                        required
                       />
                       <label
                         className="form-check-label"
@@ -229,6 +235,7 @@ function AddParty() {
                         onChange={() =>
                           setFormData({ ...formData, isTerminate: false })
                         }
+                        required
                       />
                       <label className="form-check-label" htmlFor="terminateNo">
                         No

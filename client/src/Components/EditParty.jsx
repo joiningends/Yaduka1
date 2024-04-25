@@ -18,7 +18,6 @@ function EditParty() {
     companyAddress: "",
     isTerminate: false,
   });
-  console.log(formData);
 
   const userId = localStorage.getItem("id");
 
@@ -44,9 +43,7 @@ function EditParty() {
         const response = await axios.get(
           `http://3.6.248.144/api/v1/users/edit/${phoneNumber}`
         );
-        const partyData = response.data[0]; // Extracting the first item from the array
-        console.log(partyData);
-
+        const partyData = response.data[0];
         const updatedFormData = {
           name: partyData.name || "",
           phoneNumber: String(partyData.mobileNumber) || "",
@@ -75,8 +72,6 @@ function EditParty() {
         address: formData.companyAddress,
         terminate: formData.isTerminate,
       };
-
-      console.log(updatedValues);
 
       await axios.put(
         `http://3.6.248.144/api/v1/users/${partyId}/update`,
@@ -147,6 +142,7 @@ function EditParty() {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handlePhoneNumberChange}
+                      required
                       disabled
                     />
                   </div>
@@ -228,6 +224,7 @@ function EditParty() {
                             isTerminate: true,
                           }))
                         }
+                        required
                       />
                       <label
                         className="form-check-label"
@@ -249,6 +246,7 @@ function EditParty() {
                             isTerminate: false,
                           }))
                         }
+                        required
                       />
                       <label className="form-check-label" htmlFor="terminateNo">
                         No
