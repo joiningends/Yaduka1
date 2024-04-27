@@ -25,7 +25,7 @@ const upload = multer({
     s3: s3,
     bucket: "yasukaimages",
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: "public-read", // Set ACL to allow public read access
+   
     key: function(req, file, cb) {
       const fileName = file.originalname.split(" ").join("-");
      cb(null, `${fileName}-${Date.now()}`);
