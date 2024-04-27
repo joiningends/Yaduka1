@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const varientController = require("../Controllers/varientController");
 const multer = require("multer");
+const multerS3 = require("multer-s3");
+const aws = require("aws-sdk");
 
 const FILE_TYPE_MAP = {
   'image/png': 'png',
@@ -8,27 +10,35 @@ const FILE_TYPE_MAP = {
   'image/jpg': 'jpg'
 };
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+const MAX_FILE_SIZE = 5 * 1024 * 1024; 
 
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/uplds');
-  },
-  filename: function(req, file, cb) {
-    const fileName = file.originalname.split(' ').join('-');
-    const extension = FILE_TYPE_MAP[file.mimetype] || ''; // Default to empty string if extension not found
-    cb(null, `${fileName}-${Date.now()}.${extension}`);
-  }
+// Configure AWS SDK
+aws.config.update({
+  
+  region: "us-south-1" 
 });
 
+const s3 = new aws.S3();
 const upload = multer({
-  storage: storage,
+  storage: multerS3({
+    s3: s3,
+    bucket: "yasukaimages",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    acl: "public-read", // Set ACL to allow public read access
+    key: function(req, file, cb) {
+      const fileName = file.originalname.split(" ").join("-");
+      cb(null, `${fileName}-${Date.now()}`);
+    }
+    
+  }),
   limits: {
     fileSize: MAX_FILE_SIZE // Set maximum file size
   }
 });
 
 
+
+console.log(upload)
 router.get("/all", varientController.allVarient);
 
 //get commodity varient
