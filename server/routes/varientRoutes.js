@@ -15,7 +15,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 // Configure AWS SDK
 aws.config.update({
   
-  region: "us-south-1" 
+  region: "ap-south-1" 
 });
 
 const s3 = new aws.S3();
