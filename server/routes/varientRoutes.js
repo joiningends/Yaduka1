@@ -14,11 +14,12 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 // Configure AWS SDK
 aws.config.update({
-  
   region: "ap-south-1" 
 });
 
 const s3 = new aws.S3();
+
+// Create an instance of multer and configure it
 const upload = multer({
   storage: multerS3({
     s3: s3,
@@ -27,16 +28,13 @@ const upload = multer({
     acl: "public-read", // Set ACL to allow public read access
     key: function(req, file, cb) {
       const fileName = file.originalname.split(" ").join("-");
-      cb(null, `${fileName}-${Date.now()}`);
+      cb(null, ${fileName}-${Date.now()});
     }
-    
   }),
   limits: {
     fileSize: MAX_FILE_SIZE // Set maximum file size
   }
 });
-
-
 
 console.log(upload)
 router.get("/all", varientController.allVarient);
