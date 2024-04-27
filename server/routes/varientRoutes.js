@@ -28,7 +28,7 @@ const upload = multer({
     acl: "public-read", // Set ACL to allow public read access
     key: function(req, file, cb) {
       const fileName = file.originalname.split(" ").join("-");
-      cb(null, ${fileName}-${Date.now()});
+     cb(null, `${fileName}-${Date.now()}`);
     }
   }),
   limits: {
