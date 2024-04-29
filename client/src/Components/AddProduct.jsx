@@ -157,7 +157,7 @@ function AddProduct() {
   };
 
   const handleCancel = () => {
-    navigate("/"); // Update the route as needed
+    navigate("/Product"); // Update the route as needed
   };
 
   useEffect(() => {
