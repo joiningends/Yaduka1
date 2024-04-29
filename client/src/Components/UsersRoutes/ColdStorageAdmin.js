@@ -179,7 +179,7 @@ const ColdStorageAdmin = () => {
           element={<EditMaterialMovmentColdStorage />}
         />
         <Route
-          path="/CompletedMaterialMovement/CompletedEditMaterialMovement/:id/:storageId"
+          path="/MaterialMovement/CompletedEditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovementColdStorageCompleted />}
         />
       </Routes>

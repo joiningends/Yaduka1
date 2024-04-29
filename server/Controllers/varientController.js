@@ -42,7 +42,6 @@ const commodityVarient = async (req, res) => {
   }
 };
 
-
 // create varient
 
 const createVarient = async (req, res) => {
@@ -55,7 +54,7 @@ const createVarient = async (req, res) => {
       const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
       image = `${basePath}${fileName}`;
     }
-console.log(req.file)
+    console.log(req.file);
     const newVarient = await Varient.create({
       varient: varient,
       commodityId: commodityId,
@@ -70,7 +69,6 @@ console.log(req.file)
     res.status(500).json(error);
   }
 };
-
 
 //get single varient
 
@@ -96,8 +94,7 @@ const singleVarient = async (req, res) => {
 
 const updateVarient = async (req, res) => {
   const varientId = req.params.id;
-  const { varient, commodityId, cropDuration, isImported, farmable } =
-    req.body;
+  const { varient, commodityId, cropDuration, isImported, farmable } = req.body;
   try {
     const updateVarients = await Varient.findOne({
       where: {
@@ -105,9 +102,9 @@ const updateVarient = async (req, res) => {
       },
     });
     if (updateVarients) {
-      let image=updateVarients.image;
+      let image = updateVarients.image;
       if (req.file) {
-        image = req.file.filename
+        image = req.file.filename;
       }
       await updateVarients.update({
         varient: varient,
@@ -153,7 +150,7 @@ const downloadFiles = (req, res) => {
   const fileName = req.params.name;
   const path = __basedir + "/wwwroot/varient/";
 
-  res.download(path + fileName, (err) => {
+  res.download(path + fileName, err => {
     if (err) {
       res.status(500).send({
         message: "File can not be downloaded: " + err,
@@ -162,7 +159,7 @@ const downloadFiles = (req, res) => {
   });
 };
 
-const getCommodityToVarient=async (req,res)=>{
+const getCommodityToVarient = async (req, res) => {
   try {
     const { commodityId } = req.params;
     const variants = await Varient.findAll({
@@ -173,7 +170,7 @@ const getCommodityToVarient=async (req,res)=>{
     console.error("Error fetching variants by commodity:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 module.exports = {
   allVarient,
@@ -183,5 +180,5 @@ module.exports = {
   updateVarient,
   deleteVarient,
   downloadFiles,
-  getCommodityToVarient
+  getCommodityToVarient,
 };

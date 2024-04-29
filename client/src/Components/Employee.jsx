@@ -25,8 +25,6 @@ const Employee = () => {
 
   const userId = localStorage.getItem("id");
 
-  console.log(userId);
-
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
@@ -39,9 +37,7 @@ const Employee = () => {
       const sortedData = response.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-      console.log(userId);
       setUserData(sortedData);
-      console.log(sortedData);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -171,7 +167,16 @@ const Employee = () => {
                 <TableCell>{row.mobileNumber}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.companyname}</TableCell>
-                <TableCell>{row.address}</TableCell>
+                <TableCell
+                  style={{
+                    maxWidth: "200px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {row.address}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
@@ -179,6 +184,7 @@ const Employee = () => {
                       background: "linear-gradient(263deg, #34b6df, #34d0be)",
                       color: "#fff",
                       borderRadius: "8px",
+                      marginRight: "8px",
                     }}
                     onClick={() => navigateToEditPage(row.id)}
                   >
