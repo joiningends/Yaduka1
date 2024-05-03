@@ -71,7 +71,7 @@ function InvoicesForColdStorage() {
   };
 
   const handleView = invoiceId => {
-    navigate(`/invoice/${invoiceId}`);
+    navigate(`/Invoices/invoice/${invoiceId}`);
   };
 
   const currentInvoices = invoicesData
@@ -107,7 +107,7 @@ function InvoicesForColdStorage() {
               borderRadius: "8px",
               textTransform: "none",
             }}
-            onClick={() => navigate("/invoice")}
+            onClick={() => navigate("/Invoices/Invoice")}
           >
             View With Filter
           </Button>

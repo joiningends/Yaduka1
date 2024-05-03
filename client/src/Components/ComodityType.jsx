@@ -63,6 +63,7 @@ const CommodityType = () => {
           .get("http://3.6.248.144/api/v1/commoditytype/all")
           .then(response => {
             setRows(response.data);
+            window.location.reload();
           })
           .catch(error => {
             console.error("Error fetching data:", error);

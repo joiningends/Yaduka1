@@ -645,7 +645,8 @@ exports.getongoingContrforarea = async (req, res) => {
         return total + space.amount;
       }, 0);
     }
-   
+    draftContract.nextRentalAmount = nextRentalAmount;
+    await draftContract.save();
 
     // ...
 
@@ -1243,10 +1244,18 @@ exports.getAllContractsByPartyIdcompleted = async (req, res) => {
     if (!party) {
       return res.status(404).json({ error: "Party not found" });
     }
+    let under = null;
 
+    if (party.userTypeId === 4) {
+      // If user type ID is 3, set under to the user ID
+      under = partyId;
+    } else if (party.userTypeId === 8) {
+      // If user type ID is 5, set under to the user's under value
+      under = party.under;
+    }
     // Find all contracts associated with the party
     const contracts = await Contract.findAll({
-      where: { partyId: partyId, status: "Closed" }, // Assuming the foreign key in the Contract model is partyId
+      where: { partyId: under, status: "Closed" }, // Assuming the foreign key in the Contract model is partyId
       include: [
         { association: "location", attributes: ["id", "storagename"] },
         { association: "gstRate", attributes: ["id", "percentage"] },

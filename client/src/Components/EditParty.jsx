@@ -64,14 +64,40 @@ function EditParty() {
 
   const handleSubmit = async () => {
     try {
-      const updatedValues = {
-        name: formData.name,
-        mobileNumber: formData.phoneNumber,
-        email: formData.email,
-        companyname: formData.companyName,
-        address: formData.companyAddress,
-        terminate: formData.isTerminate,
+      // Trim whitespace from input values
+      const trimmedFormData = {
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        companyName: formData.companyName.trim(),
+        companyAddress: formData.companyAddress.trim(),
       };
+
+      // Check if any required field is empty or contains only whitespace
+      if (
+        !trimmedFormData.name ||
+        !trimmedFormData.email ||
+        !trimmedFormData.companyName ||
+        !trimmedFormData.companyAddress ||
+        trimmedFormData.name === "" ||
+        trimmedFormData.email === "" ||
+        trimmedFormData.companyName === "" ||
+        trimmedFormData.companyAddress === ""
+      ) {
+        toast.error("All fields are required.");
+        return;
+      }
+
+      const updatedValues = {
+        name: trimmedFormData.name,
+        mobileNumber: trimmedFormData.phoneNumber,
+        email: trimmedFormData.email,
+        companyname: trimmedFormData.companyName,
+        address: trimmedFormData.companyAddress,
+        terminate: trimmedFormData.isTerminate,
+      };
+
+      console.log(updatedValues);
 
       await axios.put(
         `http://3.6.248.144/api/v1/users/${partyId}/update`,

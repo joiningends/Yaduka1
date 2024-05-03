@@ -12,9 +12,9 @@ const EditEmployee = () => {
     name: "",
     phoneNumber: "",
     email: "",
-    companyname: "",
-    address: "",
-    terminate: false,
+    companyName: "",
+    companyAddress: "",
+    isTerminate: false,
   });
 
   const navigate = useNavigate();
@@ -23,25 +23,43 @@ const EditEmployee = () => {
   const handleSave = async values => {
     setLoading(true);
 
-    // Map old keys to new keys
-    const updatedValues = {
-      name: values.name,
-      mobileNumber: values.phoneNumber,
-      email: values.email,
-      companyname: values.companyName,
-      address: values.companyAddress,
-      terminate: values.isTerminate,
+    // Trim whitespace from input values
+    const trimmedValues = {
+      ...values,
+      name: values.name.trim(),
+      email: values.email.trim(),
+      companyName: values.companyName.trim(),
+      companyAddress: values.companyAddress.trim(),
     };
 
-    console.log(updatedValues);
+    // Check if any required field is empty or contains only whitespace
+    if (
+      !trimmedValues.name ||
+      !trimmedValues.email ||
+      !trimmedValues.companyName ||
+      !trimmedValues.companyAddress ||
+      trimmedValues.name === "" ||
+      trimmedValues.email === "" ||
+      trimmedValues.companyName === "" ||
+      trimmedValues.companyAddress === ""
+    ) {
+      toast.error("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://3.6.248.144/api/v1/users/${id}/update`,
-        updatedValues
+        {
+          name: trimmedValues.name,
+          mobileNumber: trimmedValues.phoneNumber,
+          email: trimmedValues.email,
+          companyname: trimmedValues.companyName,
+          address: trimmedValues.companyAddress,
+          terminate: trimmedValues.isTerminate,
+        }
       );
-
-      console.log(response);
-      console.log(updatedValues);
 
       if (response.status === 200) {
         toast.success("Employee details updated successfully!", {
@@ -79,7 +97,7 @@ const EditEmployee = () => {
           companyAddress: response.data.address,
           isTerminate: response.data.terminate,
         };
-
+        console.log(mappedData);
         setEmployeeData(mappedData);
         setLoading(false);
       } catch (error) {
@@ -130,6 +148,7 @@ const EditEmployee = () => {
                             className="form-control rounded-pill"
                             id="name"
                             name="name"
+                            required
                           />
                         </div>
                         <div className="col-md-6">
@@ -155,6 +174,7 @@ const EditEmployee = () => {
                             className="form-control rounded-pill"
                             id="email"
                             name="email"
+                            required
                           />
                         </div>
                         <div className="col-md-6">
@@ -166,6 +186,7 @@ const EditEmployee = () => {
                             className="form-control rounded-pill"
                             id="companyName"
                             name="companyName"
+                            required
                           />
                         </div>
                       </div>
@@ -183,6 +204,7 @@ const EditEmployee = () => {
                             className="form-control rounded-pill"
                             id="companyAddress"
                             name="companyAddress"
+                            required
                           />
                         </div>
                         <div className="col-md-6">

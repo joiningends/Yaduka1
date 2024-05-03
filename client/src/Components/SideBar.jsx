@@ -86,7 +86,7 @@ const SideBar = () => {
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoices" },
           {
             name: "Inventory Report",
             icon: <FaFileInvoice />,
@@ -115,7 +115,7 @@ const SideBar = () => {
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoices" },
           {
             name: "Requisition",
             icon: <FaCog />,
@@ -176,7 +176,7 @@ const SideBar = () => {
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoices" },
           {
             name: "Inventory Report",
             icon: <FaFileInvoice />,
@@ -200,7 +200,7 @@ const SideBar = () => {
             ],
           },
           { name: "Product", icon: <FaCubes />, path: "/Product" },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoices" },
           {
             name: "Requisition",
             icon: <FaCog />,

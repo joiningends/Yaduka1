@@ -107,7 +107,7 @@ function InvoicesForM() {
               borderRadius: "8px",
               textTransform: "none",
             }}
-            onClick={() => navigate("/invoice")}
+            onClick={() => navigate("/Invoices/Invoice")}
           >
             View With Filter
           </Button>

@@ -98,7 +98,7 @@ const ManufactureAdmin = () => {
           element={<DetailsCompeteProduct />}
         />
         <Route path="/OngoingContract" element={<OngoingContract />} />
-        <Route path="/Invoice" element={<InvoiceForManufacture />} />
+        <Route path="/Invoices/Invoice" element={<InvoiceForManufacture />} />
         <Route path="/Invoices" element={<InvoicesForM />} />
         <Route path="/Employee" element={<ManufectureEmployee />} />
         <Route path="/Employee/AddEmployee" element={<AddEmployee />} />

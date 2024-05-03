@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 function AddParty() {
@@ -16,6 +16,7 @@ function AddParty() {
   const [userTypeId, setTypeId] = useState(null);
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
+  const { partyId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,13 +25,21 @@ function AddParty() {
           `http://3.6.248.144/api/v1/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
+
+        if (partyId) {
+          // Fetch party details if in edit mode
+          const partyResponse = await axios.get(
+            `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party/${partyId}`
+          );
+          setFormData(partyResponse.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [userId, userTypeId, partyId]);
 
   const validatePhoneNumber = value => {
     const phoneNumberPattern = /^\d{10}$/;
@@ -48,31 +57,59 @@ function AddParty() {
 
   const handleSubmit = async () => {
     try {
-      if (!formData.name) {
-        toast.error("Name field is required.");
-        return;
-      }
+      // Trim whitespace from input values
+      const trimmedFormData = {
+        ...formData,
+        name: formData.name.trim(),
+        phoneNumber: formData.phoneNumber.trim(),
+        email: formData.email.trim(),
+        companyName: formData.companyName.trim(),
+        companyAddress: formData.companyAddress.trim(),
+      };
 
-      if (!formData.companyName || !formData.companyAddress) {
-        toast.error("Company Name and Company Address are required.");
+      console.log(trimmedFormData);
+      // Check if any required field is empty or contains only whitespace
+      if (
+        !trimmedFormData.name ||
+        !trimmedFormData.phoneNumber ||
+        !trimmedFormData.email ||
+        !trimmedFormData.companyName ||
+        !trimmedFormData.companyAddress ||
+        trimmedFormData.name === "" ||
+        trimmedFormData.phoneNumber === "" ||
+        trimmedFormData.email === "" ||
+        trimmedFormData.companyName === "" ||
+        trimmedFormData.companyAddress === ""
+      ) {
+        toast.error("All fields are required.");
         return;
       }
 
       const postData = {
-        name: formData.name,
-        mobileNumber: formData.phoneNumber,
-        email: formData.email,
-        address: formData.companyAddress,
-        terminate: formData.isTerminate,
-        companyname: formData.companyName,
+        name: trimmedFormData.name,
+        mobileNumber: trimmedFormData.phoneNumber,
+        email: trimmedFormData.email,
+        address: trimmedFormData.companyAddress,
+        terminate: trimmedFormData.isTerminate,
+        companyname: trimmedFormData.companyName,
       };
 
-      await axios.post(
-        `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party`,
-        postData
-      );
+      if (partyId) {
+        // If in edit mode, update party details
+        await axios.put(
+          `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party/${partyId}`,
+          postData
+        );
+        toast.success("Party details updated successfully!");
+      } else {
+        // If in add mode, add new party
+        await axios.post(
+          `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party`,
+          postData
+        );
+        toast.success("Party added successfully!");
+      }
 
-      toast.success("Party added successfully!");
       setTimeout(() => {
         navigate("/Party");
       }, 2000);
@@ -101,7 +138,7 @@ function AddParty() {
         >
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
-              <h4 className="card-title">Add Party</h4>
+              <h4 className="card-title">Add/Edit Party</h4>
             </div>
             <div className="card-body">
               <form>
@@ -261,7 +298,7 @@ function AddParty() {
                       }}
                       onClick={handleSubmit}
                     >
-                      Submit
+                      {partyId ? "Update" : "Add"}
                     </button>
                   </div>
                 </div>

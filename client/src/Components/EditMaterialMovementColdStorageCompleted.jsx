@@ -67,7 +67,7 @@ function EditMaterialMovementColdStorageCompleted() {
         deliveryData
       );
 
-      window.location.href = "/CompletedMaterialMovement";
+      window.location.href = "/MaterialMovementCompleted";
     } catch (error) {
       console.error("PUT Error:", error.message);
     }

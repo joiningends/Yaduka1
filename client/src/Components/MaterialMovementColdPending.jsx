@@ -29,6 +29,7 @@ function MaterialMovementColdPending() {
   const [selectedStorageId, setSelectedStorageId] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [modalData, setModalData] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
   const userId = localStorage.getItem("id");
   const rowsPerPage = 5;
@@ -42,7 +43,7 @@ function MaterialMovementColdPending() {
         );
         const data = response.data;
         setInvoicesData(data);
-        console.log(data);
+        setTotalPages(Math.ceil(data.length / rowsPerPage));
       } catch (error) {
         console.error("Error fetching invoice data:", error);
       }
@@ -75,6 +76,9 @@ function MaterialMovementColdPending() {
     );
   };
 
+  const startIndex = (page - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+
   const currentInvoices = invoicesData
     .filter(
       invoice =>
@@ -88,7 +92,7 @@ function MaterialMovementColdPending() {
           .includes(search.toLowerCase())
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice((page - 1) * rowsPerPage, page * rowsPerPage);
+    .slice(startIndex, endIndex);
 
   return (
     <div style={{ margin: "0 1rem" }}>
@@ -160,7 +164,7 @@ function MaterialMovementColdPending() {
           <TableBody>
             {currentInvoices.map((invoice, index) => (
               <TableRow key={invoice.id}>
-                <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
+                <TableCell>{startIndex + index + 1}</TableCell>
                 <TableCell>{invoice.slno}</TableCell>
                 <TableCell>
                   {new Date(invoice.date).toLocaleDateString("en-GB", {
@@ -188,6 +192,35 @@ function MaterialMovementColdPending() {
           </TableBody>
         </Table>
       </TableContainer>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={(event, value) => setPage(value)}
+          variant="outlined"
+          shape="rounded"
+          style={{ marginTop: "1rem" }}
+          sx={{
+            "& .MuiPaginationItem-root": {
+              borderRadius: "0px",
+              border: "1px solid #ddd",
+              margin: "0 2px",
+              color: "#34b6df", // Set pagination item color
+            },
+            "& .Mui-selected": {
+              background: "linear-gradient(263deg, #34b6df, #34d0be)",
+              color: "#fff", // Set selected pagination item text color
+              border: "none",
+            },
+          }}
+        />
+      </div>
       <Dialog open={showDialog} onClose={handleCloseDialog}>
         <DialogTitle>Details</DialogTitle>
         <DialogContent>

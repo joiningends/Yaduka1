@@ -191,7 +191,7 @@ function CompletedContractManufecture() {
           </div>
         </>
       ) : (
-        <p>No ongoing contracts found.</p>
+        <p>No Completed Contracts found.</p>
       )}
     </div>
   );

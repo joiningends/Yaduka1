@@ -65,6 +65,40 @@ function AddParty() {
 
   const handleSubmit = async () => {
     try {
+      const trimmedFormData = {
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        companyName: formData.companyName.trim(),
+        companyAddress: formData.companyAddress.trim(),
+      };
+
+      // Check if any required field is empty or contains only whitespace
+      if (
+        !trimmedFormData.name ||
+        !trimmedFormData.email ||
+        !trimmedFormData.companyName ||
+        !trimmedFormData.companyAddress ||
+        trimmedFormData.name === "" ||
+        trimmedFormData.email === "" ||
+        trimmedFormData.companyName === "" ||
+        trimmedFormData.companyAddress === ""
+      ) {
+        toast.error("All fields are required.");
+        return;
+      }
+
+      const updatedValues = {
+        name: trimmedFormData.name,
+        mobileNumber: trimmedFormData.phoneNumber,
+        email: trimmedFormData.email,
+        companyname: trimmedFormData.companyName,
+        address: trimmedFormData.companyAddress,
+        terminate: trimmedFormData.isTerminate,
+      };
+
+      console.log(updatedValues);
+
       const postData = {
         name: formData.name,
         mobileNumber: formData.phoneNumber,

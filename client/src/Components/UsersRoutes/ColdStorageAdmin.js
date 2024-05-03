@@ -183,7 +183,7 @@ const ColdStorageAdmin = () => {
           path="CompletedContract/DetailsProduct/:id"
           element={<DetailsCompeteProduct />}
         />
-        <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route path="/Invoices/Invoice" element={<InvoiceNew />} />
         <Route path="/Invoices" element={<InvoicesForColdStorage />} />
         <Route
           path="/InventoryReport"

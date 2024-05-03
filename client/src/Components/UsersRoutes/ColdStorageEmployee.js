@@ -59,6 +59,7 @@ import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
 import InvoicesForColdStorage from "../InvoicesForColdStorage";
 import MaterialMovementColdPending from "../MaterialMovementColdPending";
 import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
+import InvoiceDetails from "../InvoiceDetails";
 
 const ColdStorageEmployee = () => {
   return (
@@ -235,6 +236,10 @@ const ColdStorageEmployee = () => {
         <Route
           path="/PackagingType/EditPackagingType/:id"
           element={<EditPackagingType />}
+        />
+         <Route
+          path="/Ongoing/InvoiceDetails/:id"
+          element={<InvoiceDetails />}
         />
         <Route path="/Size" element={<Size />} />
         <Route path="/Size/AddSize" element={<AddSize />} />
