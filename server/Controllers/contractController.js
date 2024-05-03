@@ -645,8 +645,7 @@ exports.getongoingContrforarea = async (req, res) => {
         return total + space.amount;
       }, 0);
     }
-    draftContract.nextRentalAmount = nextRentalAmount;
-    await draftContract.save();
+   
 
     // ...
 
