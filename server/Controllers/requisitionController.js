@@ -508,9 +508,7 @@ exports.detailsbuttonedit = async (req, res) => {
             {
               model: Contract,
               as: "space",
-              where: {
-                status: "Ongoing",
-              },
+              
             },
             {
               model: Product,
