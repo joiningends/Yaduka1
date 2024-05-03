@@ -75,6 +75,9 @@ function InvoiceForManufacture() {
 
   const fetchInvoiceDetails = async contractId => {
     try {
+      console.log(
+        `http://3.6.248.144/api/v1/contracts/invoices/all/${contractId}`
+      );
       const response = await fetch(
         `http://3.6.248.144/api/v1/contracts/invoices/all/${contractId}`
       );
@@ -82,6 +85,7 @@ function InvoiceForManufacture() {
       if (response.ok) {
         const data = await response.json();
         setInvoiceDetails(data.invoiceDetails);
+        console.log(data.invoiceDetails);
       } else {
         toast.error("Failed to fetch invoice details");
       }

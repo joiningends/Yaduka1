@@ -3,7 +3,7 @@ const Varient = require("../models/varient");
 const Quality = require("../models/quality");
 const Size = require("../models/size");
 const Unit = require("../models/unit");
-const Commodity = require("../models/commodity")
+const Commodity = require("../models/commodity");
 
 //get all product Data
 
@@ -46,45 +46,68 @@ const allProduct1 = async (req, res) => {
       include: [
         {
           model: Varient,
-        },
-        {
-          model: Quality,
-        },
-        {
-          model: Size,
-        },
-        {
-          model: Unit,
-        },
-        {
-          model: Commodity,
+          include: [
+            {
+              model: Commodity,
+            },
+          ],
         },
       ],
     });
-    if (!data) {
+
+    if (!data || data.length === 0) {
       res.status(404).json({ message: "Not found.." });
+      return;
     }
-    res.status(200).json(data);
+    // Extract unique variants
+    const uniqueVariants = Object.values(
+      data.reduce((acc, product) => {
+        acc[product.varient.id] = acc[product.varient.id] || product.varient;
+        return acc;
+      }, {})
+    );
+
+    res.status(200).json(uniqueVariants);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-// create product data
-
 const createProduct = async (req, res) => {
-  const { packSize, varientId, qualityId, sizeId, unitId, commodityId,quantifiedBy,newUnit } = req.body;
+  const {
+    packSize,
+    varientId,
+    qualityId,
+    sizeId,
+    unitId,
+    commodityId,
+    quantifiedBy,
+    newUnit,
+    length,
+    height,
+    width,
+  } = req.body;
 
   try {
+    let image = null;
+    if (req.file) {
+      const fileName = req.file.key; // Use the key provided by S3 instead of filename
+      const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
+      image = `${basePath}${fileName}`;
+    }
     const newProduct = await Product.create({
       packSize: packSize,
       varientId: varientId,
       qualityId: qualityId,
       sizeId: sizeId,
       unitId: unitId,
-      commodityId:commodityId,
-      quantifiedBy:quantifiedBy,
-      newUnit:newUnit
+      commodityId: commodityId,
+      quantifiedBy: quantifiedBy,
+      newUnit: newUnit,
+      length: length,
+      height: height,
+      width: width,
+      image: image,
     });
 
     res.status(201).json(newProduct);
@@ -117,7 +140,16 @@ const singleProduct = async (req, res) => {
 
 const updateProduuct = async (req, res) => {
   const productId = req.params.id;
-  const { packSize, varientId, qualityId, sizeId, unitId ,commodityId,quantifiedBy,newUnit} = req.body;
+  const {
+    packSize,
+    varientId,
+    qualityId,
+    sizeId,
+    unitId,
+    commodityId,
+    quantifiedBy,
+    newUnit,
+  } = req.body;
   try {
     const findProduct = await Product.findOne({
       where: {
@@ -131,9 +163,9 @@ const updateProduuct = async (req, res) => {
         qualityId: qualityId,
         sizeId: sizeId,
         unitId: unitId,
-        commodityId:commodityId,
-        quantifiedBy:quantifiedBy,
-        newUnit:newUnit
+        commodityId: commodityId,
+        quantifiedBy: quantifiedBy,
+        newUnit: newUnit,
       });
       res.status(200).json(newProduct);
     } else {
@@ -164,6 +196,38 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const allProductvariant = async (req, res) => {
+  const varientId = req.params.VarientId;
+  try {
+    const data = await Product.findAll({
+      where: { varientId: varientId },
+      include: [
+        {
+          model: Varient,
+        },
+        {
+          model: Quality,
+        },
+        {
+          model: Size,
+        },
+        {
+          model: Unit,
+        },
+        {
+          model: Commodity,
+        },
+      ],
+    });
+    if (!data) {
+      res.status(404).json({ message: "Not found.." });
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   createProduct,
   allProduct,
@@ -171,4 +235,5 @@ module.exports = {
   singleProduct,
   updateProduuct,
   deleteProduct,
+  allProductvariant,
 };

@@ -87,8 +87,9 @@ router.post(
   "/coldstorage/:id/:under/:location",
   contractController.manufactureid
 );
-router.get(
-  "/test/the/url",
-  contractController.test
-);
+router.get("/test/the/url", contractController.test);
+
+router.get("/inv/:id", contractController.getAllInvoicesBymanufacture);
+
+router.get("/inv/cold/:id", contractController.getAllInvoicesBycoldstorage);
 module.exports = router;

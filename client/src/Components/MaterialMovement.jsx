@@ -154,7 +154,7 @@ function MaterialMovement() {
 
   const handleEdit = () => {
     navigate(
-      `/MaterialMovement/EditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
+      `/MaterialMovementPending/EditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
     );
   };
 

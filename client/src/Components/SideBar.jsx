@@ -74,15 +74,19 @@ const SideBar = () => {
             icon: <FaArchive />,
             path: "",
             subItems: [
-              { name: "Pending", icon: <FaCog />, path: "/MaterialMovement" },
+              {
+                name: "Pending",
+                icon: <FaCog />,
+                path: "/MaterialMovementPending",
+              },
               {
                 name: "Completed",
                 icon: <FaClock />,
-                path: "/CompletedMaterialMovement",
+                path: "/MaterialMovementCompleted",
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
           {
             name: "Inventory Report",
             icon: <FaFileInvoice />,
@@ -111,7 +115,7 @@ const SideBar = () => {
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
           {
             name: "Requisition",
             icon: <FaCog />,
@@ -125,6 +129,13 @@ const SideBar = () => {
               },
             ],
           },
+          { name: "Commodity Type", icon: <FaBox />, path: "/CommodityType" },
+          { name: "Packaging Type", icon: <FaTags />, path: "/PackagingType" },
+          { name: "Size", icon: <FaWrench />, path: "/Size" },
+          { name: "Quality", icon: <FaBuilding />, path: "/Quality" },
+          { name: "Variant", icon: <FaGlobe />, path: "/Variant" },
+          { name: "Product", icon: <FaCubes />, path: "/Product" },
+          { name: "Commodity", icon: <FaWrench />, path: "/Commodity" },
         ]);
         break;
       case "coldstorageemployee":
@@ -153,15 +164,19 @@ const SideBar = () => {
             icon: <FaArchive />,
             path: "/MaterialMovement",
             subItems: [
-              { name: "Pending", icon: <FaCog />, path: "/MaterialMovement" },
+              {
+                name: "Pending",
+                icon: <FaCog />,
+                path: "/MaterialMovementPending",
+              },
               {
                 name: "Completed",
                 icon: <FaClock />,
-                path: "/CompletedMaterialMovement",
+                path: "/MaterialMovementCompleted",
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
           {
             name: "Inventory Report",
             icon: <FaFileInvoice />,
@@ -184,7 +199,8 @@ const SideBar = () => {
               },
             ],
           },
-          { name: "Invoice", icon: <FaFileInvoice />, path: "/Invoice" },
+          { name: "Product", icon: <FaCubes />, path: "/Product" },
+          { name: "Invoice", icon: <FaFileInvoice />, path: "/invoices" },
           {
             name: "Requisition",
             icon: <FaCog />,

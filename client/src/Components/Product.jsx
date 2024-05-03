@@ -34,7 +34,7 @@ const Product = () => {
   };
 
   const handleCommodityClick = commodityId => {
-    navigate(`/Product/ProductVariant/${commodityId}`);
+    navigate(`/Product/VariantDetails/${commodityId}`);
   };
 
   const handleAddProductClick = () => {
@@ -140,7 +140,7 @@ const ProductCard = ({ commodity }) => {
   const navigate = useNavigate();
 
   const handleCommodityClick = commodityId => {
-    navigate(`/Product/ProductVariant/${commodityId}`);
+    navigate(`/Product/VariantDetails/${commodityId}`);
   };
 
   if (!commodity) {

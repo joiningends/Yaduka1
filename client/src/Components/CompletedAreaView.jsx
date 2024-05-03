@@ -119,8 +119,8 @@ function CompletedAreaView() {
                   readOnly
                 />
               </div>
-              {/* <div className="text-center mt-4">
-                <Link to={`/CompletedContract/DetailsArea/${id}`}>
+              <div className="text-center mt-4">
+                <Link to={`/Ongoing/InvoiceDetails/${id}`}>
                   <button
                     type="button"
                     className="btn btn-primary rounded-pill"
@@ -128,10 +128,10 @@ function CompletedAreaView() {
                       background: "linear-gradient(263deg, #34b6df, #34d0be)",
                     }}
                   >
-                    View Stock Balance
+                    View Invoice Details
                   </button>
                 </Link>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>

@@ -25,7 +25,7 @@ function InventoryReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalPage, setModalPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [modalItemsPerPage] = useState(2); // Adjust as needed
+  const [modalItemsPerPage] = useState(5); // Adjust as needed
 
   useEffect(() => {
     async function fetchAdminOptions() {

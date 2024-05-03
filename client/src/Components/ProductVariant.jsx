@@ -12,7 +12,7 @@ import {
   Pagination,
   TextField,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { RingLoader } from "react-spinners";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -72,10 +72,14 @@ function ProductVariant() {
   const currentRows = productVariants
     .filter(
       variant =>
-        variant.varient.varient.toLowerCase().includes(search.toLowerCase()) ||
-        variant.quality.quality.toLowerCase().includes(search.toLowerCase()) ||
-        variant.size.size.toLowerCase().includes(search.toLowerCase()) ||
-        variant.unit.unit.toLowerCase().includes(search.toLowerCase())
+        (variant.varient &&
+          variant.varient.toLowerCase().includes(search.toLowerCase())) ||
+        (variant.quality &&
+          variant.quality.toLowerCase().includes(search.toLowerCase())) ||
+        (variant.size &&
+          variant.size.toLowerCase().includes(search.toLowerCase())) ||
+        (variant.unit &&
+          variant.unit.toLowerCase().includes(search.toLowerCase()))
     )
     .slice(indexOfFirstRow, indexOfLastRow);
 
@@ -97,7 +101,7 @@ function ProductVariant() {
           >
             <div>
               <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
-                Product Variant
+                Variant Details
               </Typography>
             </div>
             <div>
@@ -134,26 +138,21 @@ function ProductVariant() {
                   <TableCell>
                     <b>Variant</b>
                   </TableCell>
-                  <TableCell>
-                    <b>Quality</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Size</b>
-                  </TableCell>
-                  <TableCell>
-                    <b>Unit</b>
-                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {currentRows.map((variant, index) => (
-                  <TableRow key={variant.id}>
+                  <TableRow
+                    key={variant.id}
+                    component={Link}
+                    to={`/Product/ProductVariant/${variant.id}`}
+                  >
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
-                      {variant.varient.image ? (
+                      {variant.image ? (
                         <img
-                          src={variant.varient.image}
-                          alt={`Image of ${variant.varient.varient}`}
+                          src={variant.image}
+                          alt={`Image of ${variant.varient}`}
                           style={{
                             width: "50px",
                             height: "50px",
@@ -164,10 +163,9 @@ function ProductVariant() {
                         "No Image"
                       )}
                     </TableCell>
-                    <TableCell>{variant.varient.varient}</TableCell>
-                    <TableCell>{variant.quality.quality}</TableCell>
-                    <TableCell>{variant.size.size}</TableCell>
-                    <TableCell>{variant?.newUnit}</TableCell>
+                    <TableCell>
+                      {`${variant.commodity.commodity} | ${variant.varient}`}{" "}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

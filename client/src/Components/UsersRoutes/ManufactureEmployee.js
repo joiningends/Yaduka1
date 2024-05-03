@@ -23,8 +23,13 @@ import CompletedAreaView from "../CompletedAreaView";
 import CompletedProductView from "../CompletedProductView";
 import DetailsCompeteProduct from "../DetailsCompeteProduct";
 import DetailsCompleteArea from "../DetailsCompleteArea";
-import CompletedRequisition from "../CompletedRequisitin";
 import CompletedRequisitionDetails from "../CompletedRequisitionDetails";
+import InvoicesForM from "../InvoicesForM";
+import ProductVariants from "../ProductVariants";
+import AddProduct from "../AddProduct";
+import Product from "../Product";
+import ProductVariant from "../ProductVariant";
+
 const ManufactureEmployee = () => {
   return (
     <div>
@@ -72,6 +77,7 @@ const ManufactureEmployee = () => {
         />
         <Route path="/OngoingContract" element={<OngoingContract />} />
         <Route path="/Invoice" element={<InvoiceForManufacture />} />
+        <Route path="/Invoices" element={<InvoicesForM />} />
         <Route path="/Employee" element={<ManufectureEmployee />} />
         <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
         <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
@@ -86,6 +92,17 @@ const ManufactureEmployee = () => {
         />
         <Route path="/DetailsProduct/:id" element={<DetailsProduct />} />
         <Route path="/DetailsArea/:id" element={<DetailsArea />} />
+        <Route
+          path="/Product/ProductVariant/:id"
+          element={<ProductVariants />}
+        />
+        <Route path="/Product" element={<Product />} />
+        <Route path="Product/VariantDetails/:id" element={<ProductVariant />} />
+        <Route path="/Product/AddProduct" element={<AddProduct />} />
+        <Route
+          path="/Product/ProductVariant/:id"
+          element={<ProductVariants />}
+        />
       </Routes>
     </div>
   );

@@ -31,6 +31,10 @@ function OngoingByProductForManufecture() {
     navigate(`/DetailsProduct/${id}`);
   };
 
+  const handleInvoiceDetailsClick = () => {
+    navigate(`/Ongoing/InvoiceDetails/${id}`);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -184,7 +188,7 @@ function OngoingByProductForManufecture() {
                     readOnly
                   />
                 </div>
-                {/* <div className="mb-3">
+                <div className="mb-3">
                   <label>Stock Balance</label>
                   <button
                     type="button"
@@ -192,14 +196,29 @@ function OngoingByProductForManufecture() {
                     style={{
                       background: "linear-gradient(263deg, #34b6df, #34d0be)",
                       color: "#fff",
+                      marginLeft: "1rem",
                     }}
-                    onClick={() => handleVariantClick()}
+                    onClick={handleVariantClick}
                   >
                     View
                   </button>
-                </div> */}
+                </div>
               </form>
             </div>
+          </div>
+          <div className="card-footer">
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill ms-2"
+              style={{
+                background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                color: "#fff",
+                marginLeft: "1rem",
+              }}
+              onClick={handleInvoiceDetailsClick}
+            >
+              Invoice Details
+            </button>
           </div>
         </div>
       </div>

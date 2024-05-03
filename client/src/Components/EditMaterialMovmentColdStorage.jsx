@@ -94,7 +94,7 @@ function EditMaterialMovmentColdStorage() {
       console.log("PUT Response:", response.data);
 
       // Navigate to /MaterialMovement on successful PUT request
-      window.location.href = "/MaterialMovement";
+      window.location.href = "/MaterialMovementPending";
     } catch (error) {
       console.error("PUT Error:", error.message);
     }

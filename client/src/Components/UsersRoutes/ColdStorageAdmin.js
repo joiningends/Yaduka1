@@ -56,6 +56,12 @@ import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
 import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
 import EditMaterialMovementColdStorageCompleted from "../EditMaterialMovementColdStorageCompleted";
 import EditCommodity from "../EditCommodity";
+import ProductVariants from "../ProductVariants";
+import InvoicesForColdStorage from "../InvoicesForColdStorage";
+import MaterialMovementColdPending from "../MaterialMovementColdPending";
+import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
+import InvoiceDetails from "../InvoiceDetails";
+
 
 const ColdStorageAdmin = () => {
   return (
@@ -69,6 +75,10 @@ const ColdStorageAdmin = () => {
         <Route path="/Party" element={<Party />} />
         <Route path="/Party/AddParty" element={<AddParty />} />
         <Route path="/Party/EditParty/:phoneNumber" element={<EditParty />} />
+        <Route
+          path="/Product/ProductVariant/:id"
+          element={<ProductVariants />}
+        />
 
         <Route
           path="/Party/AddParty/:phoneNumber"
@@ -100,6 +110,10 @@ const ColdStorageAdmin = () => {
           path="/PackagingType/EditPackagingType/:id"
           element={<EditPackagingType />}
         />
+         <Route
+          path="/Ongoing/InvoiceDetails/:id"
+          element={<InvoiceDetails />}
+        />
         <Route path="/Size" element={<Size />} />
         <Route path="/Size/AddSize" element={<AddSize />} />
         <Route path="/Size/EditSize/:id" element={<EditAddSize />} />
@@ -111,10 +125,7 @@ const ColdStorageAdmin = () => {
         <Route path="/Variant/AddVariant" element={<AddVariant />} />
         <Route path="/Variant/AddVariant/:id" element={<EditAddVariant />} />
         <Route path="/Product" element={<Product />} />
-        <Route
-          path="/Product/ProductVariant/:id"
-          element={<ProductVariant />}
-        />
+        <Route path="Product/VariantDetails/:id" element={<ProductVariant />} />
         <Route path="/Product/AddProduct" element={<AddProduct />} />
         <Route path="/Location" element={<Location />} />
         <Route path="/Location/AddLocation" element={<AddLocationn />} />
@@ -131,13 +142,16 @@ const ColdStorageAdmin = () => {
         <Route path="/Ongoing/DetailsArea/:id" element={<DetailsArea />} />
         <Route path="/Contract" element={<Contract />} />
         <Route path="/Contract/AddContract" element={<AddConctract />} />
-        <Route path="/MaterialMovement" element={<MaterialMovement />} />
+        <Route
+          path="MaterialMovementPending/MaterialMovement"
+          element={<MaterialMovement />}
+        />
         <Route
           path="/MaterialMovement/EditMaterialMovement/:id"
           element={<EditMaterialMovement />}
         />
         <Route
-          path="/CompletedMaterialMovement"
+          path="/MaterialMovementCompleted/CompletedMaterialMovement"
           element={<CompletedMaterialMovementColdStorage />}
         />
         <Route
@@ -170,17 +184,31 @@ const ColdStorageAdmin = () => {
           element={<DetailsCompeteProduct />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route path="/Invoices" element={<InvoicesForColdStorage />} />
         <Route
           path="/InventoryReport"
           element={<InventoryReportForColdStorage />}
         />
         <Route
-          path="/MaterialMovement/EditMaterialMovement/:id/:storageId"
+          path="/MaterialMovementPending/EditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovmentColdStorage />}
         />
         <Route
-          path="/MaterialMovement/CompletedEditMaterialMovement/:id/:storageId"
+          path="/MaterialMovementCompleted/CompletedEditMaterialMovement/:id/:storageId"
           element={<EditMaterialMovementColdStorageCompleted />}
+        />
+        <Route
+          path="/MaterialMovementCompleted/EditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovementColdStorageCompleted />}
+        />
+        
+        <Route
+          path="/MaterialMovementPending"
+          element={<MaterialMovementColdPending />}
+        />
+        <Route
+          path="/MaterialMovementCompleted"
+          element={<MaterialMovementColdCompleted />}
         />
       </Routes>
     </div>

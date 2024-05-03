@@ -27,6 +27,34 @@ import InventoryReport from "../InventoryReport";
 import EditProductDetails from "../EditProductDetails";
 import EditRequisitionDetails from "../EditRequisitionDetails";
 import CompletedRequisitionDetails from "../CompletedRequisitionDetails";
+import AddQuality from "../AddQuality";
+import EditQuality from "../EditQuality";
+import Variant from "../Varient";
+import EditPackagingType from "../EditPackagingType";
+import AddSize from "../AddSize";
+import AddPackagingType from "../AddPackagingType";
+import Party from "../Party";
+import AddParty from "../AddParty";
+import AddPartyBySearch from "../AddPartyBySearch";
+import ComodityType from "../ComodityType";
+import AddCommodity from "../AddCommodity";
+import AddCommodityType from "../AddCommodityType";
+import AddCommodityTypeEdit from "../AddComodityTypeEdit";
+import Commodity from "../Commodity";
+import PackagingType from "../PackagingType";
+
+import Size from "../Size";
+import Quality from "../Quality";
+import EditAddSize from "../EditAddSize";
+import AddVariant from "../AddVarient";
+import EditAddVariant from "../EditAddVariant";
+import AddProduct from "../AddProduct";
+import Product from "../Product";
+import ProductVariant from "../ProductVariant";
+import EditCommodity from "../EditCommodity";
+import InvoiceDetails from "../InvoiceDetails";
+import InvoicesForM from "../InvoicesForM";
+import ProductVariants from "../ProductVariants";
 
 const ManufactureAdmin = () => {
   return (
@@ -71,6 +99,7 @@ const ManufactureAdmin = () => {
         />
         <Route path="/OngoingContract" element={<OngoingContract />} />
         <Route path="/Invoice" element={<InvoiceForManufacture />} />
+        <Route path="/Invoices" element={<InvoicesForM />} />
         <Route path="/Employee" element={<ManufectureEmployee />} />
         <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
         <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
@@ -82,6 +111,10 @@ const ManufactureAdmin = () => {
         <Route
           path="/Ongoing/OngoingByProduct/:id"
           element={<OngoingByProductForManufecture />}
+        />
+        <Route
+          path="/Ongoing/InvoiceDetails/:id"
+          element={<InvoiceDetails />}
         />
         <Route path="/DetailsProduct/:id" element={<DetailsProduct />} />
         <Route path="/DetailsArea/:id" element={<DetailsArea />} />
@@ -97,6 +130,48 @@ const ManufactureAdmin = () => {
         <Route
           path="/Requisition/CompletedRequisition/:id"
           element={<CompletedRequisitionDetails />}
+        />
+        <Route path="/CommodityType" element={<ComodityType />} />
+
+        <Route
+          path="/CommodityType/AddCommodityType"
+          element={<AddCommodityType />}
+        />
+        <Route
+          path="/CommodityType/AddCommodityType/:id"
+          element={<AddCommodityTypeEdit />}
+        />
+        <Route path="/Commodity" element={<Commodity />} />
+        <Route path="/Commodity/AddCommodity" element={<AddCommodity />} />
+        <Route
+          path="/Commodity/EditCommodity/:id"
+          element={<EditCommodity />}
+        />
+        <Route path="/PackagingType" element={<PackagingType />} />
+        <Route
+          path="/PackagingType/AddPackagingType"
+          element={<AddPackagingType />}
+        />
+        <Route
+          path="/PackagingType/EditPackagingType/:id"
+          element={<EditPackagingType />}
+        />
+        <Route path="/Size" element={<Size />} />
+        <Route path="/Size/AddSize" element={<AddSize />} />
+        <Route path="/Size/EditSize/:id" element={<EditAddSize />} />
+        <Route path="/Quality" element={<Quality />} />
+        <Route path="/Quality/AddQuality" element={<AddQuality />} />
+        <Route path="/Quality/EditAddQuality/:id" element={<EditQuality />} />
+
+        <Route path="/Variant" element={<Variant />} />
+        <Route path="/Variant/AddVariant" element={<AddVariant />} />
+        <Route path="/Variant/AddVariant/:id" element={<EditAddVariant />} />
+        <Route path="/Product" element={<Product />} />
+        <Route path="Product/VariantDetails/:id" element={<ProductVariant />} />
+        <Route path="/Product/AddProduct" element={<AddProduct />} />
+        <Route
+          path="/Product/ProductVariant/:id"
+          element={<ProductVariants />}
         />
       </Routes>
     </div>

@@ -149,7 +149,7 @@ function CompletedMaterialMovementColdStorage() {
 
   const handleEdit = () => {
     navigate(
-      `/MaterialMovement/CompletedEditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
+      `/MaterialMovementCompleted/CompletedEditMaterialMovement/${selectedItemId}/${selectedLocation.value}`
     );
   };
 
@@ -280,9 +280,10 @@ function CompletedMaterialMovementColdStorage() {
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th>S No.</th>
+                <th style={{ width: "5rem" }}>S No.</th>
                 <th>Product Name</th>
                 <th>Total Requested Quantity</th>
+                <th>Total Delivered Quantity</th>
               </tr>
             </thead>
             <tbody>
@@ -291,6 +292,7 @@ function CompletedMaterialMovementColdStorage() {
                   <td>{index + 1}</td>
                   <td>{`${product.commodity} || ${product.variant} || ${product.quality} || ${product.size} || ${product.unit}`}</td>
                   <td>{product.qty}</td>
+                  <td>{product.dqty}</td>
                 </tr>
               ))}
             </tbody>

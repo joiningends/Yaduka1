@@ -56,6 +56,9 @@ import EditMaterialMovmentColdStorage from "../EditMaterialMovmentColdStorage";
 import CompletedMaterialMovementColdStorage from "../CompletedMaterialMovementColdStorage";
 import CompletedEditCompletedMaterialMovement from "../CompletedEditCompletedMaterialMovement";
 import InventoryReportForColdStorage from "../InventoryReportForColdStorage";
+import InvoicesForColdStorage from "../InvoicesForColdStorage";
+import MaterialMovementColdPending from "../MaterialMovementColdPending";
+import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
 
 const ColdStorageEmployee = () => {
   return (
@@ -63,7 +66,7 @@ const ColdStorageEmployee = () => {
       <SideBar />
       <Breadcrumb />
       <Routes>
-        <Route path="/Employee" element={<Employee />} />
+        {/* <Route path="/Employee" element={<Employee />} />
         <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
         <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
         <Route path="/Party" element={<Party />} />
@@ -176,9 +179,158 @@ const ColdStorageEmployee = () => {
           element={<CompletedEditCompletedMaterialMovement />}
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route path="/Invoices" element={<InvoicesForColdStorage />} />
         <Route
           path="/InventoryReport"
           element={<InventoryReportForColdStorage />}
+        /> */}
+
+        <Route path="/Employee" element={<Employee />} />
+        <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
+        <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
+        <Route path="/Party" element={<Party />} />
+        <Route path="/Party/AddParty" element={<AddParty />} />
+        <Route path="/Party/EditParty/:phoneNumber" element={<EditParty />} />
+
+        <Route
+          path="/Party/AddParty/:phoneNumber"
+          element={<AddPartyBySearch />}
+        />
+
+        <Route path="/CommodityType" element={<ComodityType />} />
+
+        <Route
+          path="/CommodityType/AddCommodityType"
+          element={<AddCommodityType />}
+        />
+        <Route
+          path="/CommodityType/AddCommodityType/:id"
+          element={<AddCommodityTypeEdit />}
+        />
+        <Route path="/Commodity" element={<Commodity />} />
+        <Route path="/Commodity/AddCommodity" element={<AddCommodity />} />
+
+        <Route
+          path="/Party/AddParty/:phoneNumber"
+          element={<AddPartyBySearch />}
+        />
+
+        <Route path="/CommodityType" element={<ComodityType />} />
+
+        <Route
+          path="/CommodityType/AddCommodityType"
+          element={<AddCommodityType />}
+        />
+        <Route
+          path="/CommodityType/AddCommodityType/:id"
+          element={<AddCommodityTypeEdit />}
+        />
+        <Route path="/Commodity" element={<Commodity />} />
+        <Route path="/Commodity/AddCommodity" element={<AddCommodity />} />
+        <Route path="/PackagingType" element={<PackagingType />} />
+        <Route
+          path="/PackagingType/AddPackagingType"
+          element={<AddPackagingType />}
+        />
+        <Route
+          path="/PackagingType/EditPackagingType/:id"
+          element={<EditPackagingType />}
+        />
+        <Route path="/Size" element={<Size />} />
+        <Route path="/Size/AddSize" element={<AddSize />} />
+        <Route path="/Size/EditSize/:id" element={<EditAddSize />} />
+        <Route path="/Quality" element={<Quality />} />
+        <Route path="/Quality/AddQuality" element={<AddQuality />} />
+        <Route path="/Quality/EditAddQuality/:id" element={<EditQuality />} />
+
+        <Route path="/Variant" element={<Variant />} />
+        <Route path="/Variant/AddVariant" element={<AddVariant />} />
+        <Route path="/Variant/AddVariant/:id" element={<EditAddVariant />} />
+        <Route path="/Product" element={<Product />} />
+        <Route path="Product/VariantDetails/:id" element={<ProductVariant />} />
+        <Route path="/Product/AddProduct" element={<AddProduct />} />
+        <Route path="/Location" element={<Location />} />
+        <Route path="/Location/AddLocation" element={<AddLocationn />} />
+        <Route path="/Ongoing" element={<Ongoing />} />
+        <Route
+          path="/Ongoing/OngoingByProduct/:id"
+          element={<OngoingByProduct />}
+        />
+        <Route path="/Ongoing/OngoingByArea/:id" element={<OngoingByArea />} />
+        <Route
+          path="/Ongoing/DetailsProduct/:id"
+          element={<DetailsProduct />}
+        />
+        <Route path="/Ongoing/DetailsArea/:id" element={<DetailsArea />} />
+        <Route path="/Contract" element={<Contract />} />
+        <Route path="/Contract/AddContract" element={<AddConctract />} />
+        <Route
+          path="MaterialMovementPending/MaterialMovement"
+          element={<MaterialMovement />}
+        />
+        <Route
+          path="/MaterialMovement/EditMaterialMovement/:id"
+          element={<EditMaterialMovement />}
+        />
+        <Route
+          path="/MaterialMovementCompleted/CompletedMaterialMovement"
+          element={<CompletedMaterialMovementColdStorage />}
+        />
+        <Route
+          path="/MaterialMovement/ViewMaterialMovement/:id"
+          element={<ViewCompletedMaterialMovement />}
+        />
+        <Route
+          path="Contract/DraftContractProductType/:id"
+          element={<DraftContractForPrpductType />}
+        />
+        <Route
+          path="Contract/DraftContractAreaType/:id"
+          element={<DraftContractForAreaType />}
+        />
+        <Route path="/CompletedContract" element={<Completed />} />
+        <Route
+          path="CompletedContract/Area/:id"
+          element={<CompletedAreaView />}
+        />
+        <Route
+          path="CompletedContract/Product/:id"
+          element={<CompletedProductView />}
+        />
+        <Route
+          path="CompletedContract/DetailsArea/:id"
+          element={<DetailsCompleteArea />}
+        />
+        <Route
+          path="CompletedContract/DetailsProduct/:id"
+          element={<DetailsCompeteProduct />}
+        />
+        <Route path="/Invoice" element={<InvoiceNew />} />
+        <Route path="/Invoices" element={<InvoicesForColdStorage />} />
+        <Route
+          path="/InventoryReport"
+          element={<InventoryReportForColdStorage />}
+        />
+        <Route
+          path="/MaterialMovementPending/EditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovmentColdStorage />}
+        />
+        <Route
+          path="/MaterialMovementCompleted/CompletedEditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovementColdStorageCompleted />}
+        />
+        <Route
+          path="/MaterialMovementCompleted/EditMaterialMovement/:id/:storageId"
+          element={<EditMaterialMovementColdStorageCompleted />}
+        />
+
+        <Route
+          path="/MaterialMovementPending"
+          element={<MaterialMovementColdPending />}
+        />
+        <Route
+          path="/MaterialMovementCompleted"
+          element={<MaterialMovementColdCompleted />}
         />
       </Routes>
     </div>

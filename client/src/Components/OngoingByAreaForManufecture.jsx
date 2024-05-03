@@ -52,6 +52,10 @@ function OngoingByAreaForManufecture() {
     navigate(`/DetailsArea/${id}`);
   };
 
+  const handleInvoiceDetailsClick = () => {
+    navigate(`/Ongoing/InvoiceDetails/${id}`);
+  };
+
   return (
     <div className="container mt-5">
       <div className="col-md-12 col-lg-12 col-xl-12">
@@ -192,19 +196,42 @@ function OngoingByAreaForManufecture() {
                     readOnly
                   />
                 </div>
-                {/* <div className="mb-3">
-                  <label>Action</label>
-                  <button
-                    type="button"
-                    className="btn btn-danger rounded-pill ms-2"
-                    onClick={cancelContract}
-                    style={{ marginLeft: "1rem" }}
-                  >
-                    Close Contract
-                  </button>
-                </div> */}
+                <button
+                  type="button"
+                  className="btn btn-primary rounded-pill ms-2"
+                  style={{
+                    background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                    color: "#fff",
+                    marginLeft: "1rem",
+                  }}
+                  onClick={handleVariantClick}
+                >
+                  View
+                </button>
               </form>
             </div>
+          </div>
+          <div className="card-footer">
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill ms-2"
+              style={{
+                background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                color: "#fff",
+                marginLeft: "1rem",
+              }}
+              onClick={handleInvoiceDetailsClick}
+            >
+              Invoice Details
+            </button>
+            {/* <button
+              type="button"
+              className="btn btn-danger rounded-pill ms-2"
+              onClick={cancelContract}
+              style={{ marginLeft: "1rem" }}
+            >
+              Close Contract
+            </button> */}
           </div>
         </div>
       </div>

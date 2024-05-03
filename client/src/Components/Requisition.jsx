@@ -38,11 +38,16 @@ function Requisition() {
       return;
     }
 
+    console.log(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`);
     axios
       .get(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`)
       .then(response => {
-        setData(response.data);
-        console.log(response.data);
+        // Sort the data based on createdAt field in descending order
+        const sortedData = response.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setData(sortedData);
+        console.log(sortedData);
       })
       .catch(error => {
         console.error("Error fetching data:", error);
@@ -155,6 +160,9 @@ function Requisition() {
                 <b>S No.</b>
               </TableCell>
               <TableCell>
+                <b>Cold Storage Company Name</b>
+              </TableCell>
+              <TableCell>
                 <b>Requisition Number</b>
               </TableCell>
               <TableCell>
@@ -168,6 +176,7 @@ function Requisition() {
               .map((item, index) => (
                 <TableRow key={item.id}>
                   <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item?.valueofunde?.companyname}</TableCell>
                   <TableCell>{item.slno}</TableCell>
                   <TableCell>
                     <Button

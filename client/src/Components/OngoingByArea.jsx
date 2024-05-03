@@ -53,6 +53,9 @@ function OngoingByArea() {
   const handleVariantClick = () => {
     navigate(`/Ongoing/DetailsArea/${id}`);
   };
+  const handleInvoiceDetailsClick = () => {
+    navigate(`/Ongoing/InvoiceDetails/${id}`);
+  };
 
   return (
     <div className="container mt-5">
@@ -218,6 +221,20 @@ function OngoingByArea() {
                   </button>
                 </div>
               </form>
+              <div className="card-footer">
+                <button
+                  type="button"
+                  className="btn btn-primary rounded-pill ms-2"
+                  style={{
+                    background: "linear-gradient(263deg, #34b6df, #34d0be)",
+                    color: "#fff",
+                    marginLeft: "1rem",
+                  }}
+                  onClick={handleInvoiceDetailsClick}
+                >
+                  Invoice Details
+                </button>
+              </div>
             </div>
           </div>
         </div>

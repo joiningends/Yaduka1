@@ -127,13 +127,13 @@ function CompletedProductView() {
               readOnly
             />
           </div>
-          {/* <button
+          <button
             type="button"
             className="btn btn-primary rounded-pill"
             onClick={handleViewStockClick}
           >
             View Stock
-          </button> */}
+          </button>
         </div>
       </div>
     </div>

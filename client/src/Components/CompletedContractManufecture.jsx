@@ -31,11 +31,15 @@ function CompletedContractManufecture() {
 
   useEffect(() => {
     setLoading(true);
+    console.log(
+      `http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`
+    );
     axios
       .get(`http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`)
       .then(response => {
         setContracts(response.data);
         setLoading(false);
+        console.log(response.data);
       })
       .catch(error => {
         console.error("Error fetching completed contracts:", error);
@@ -127,6 +131,9 @@ function CompletedContractManufecture() {
                     <b>Storage Type</b>
                   </TableCell>
                   <TableCell>
+                    <b>Next Invoice Date</b>
+                  </TableCell>
+                  <TableCell>
                     <b>Action</b>
                   </TableCell>
                 </TableRow>
@@ -135,10 +142,16 @@ function CompletedContractManufecture() {
                 {currentContracts.map((contract, index) => (
                   <TableRow key={contract?.id}>
                     <TableCell>{indexOfFirstContract + index + 1}</TableCell>
-                    <TableCell>{contract?.partyuser?.name}</TableCell>
+                    <TableCell>{contract?.underadmin?.companyname}</TableCell>
                     <TableCell>{contract?.slno}</TableCell>
                     <TableCell>{contract?.location?.storagename}</TableCell>
                     <TableCell>{contract?.storagetype}</TableCell>
+                    <TableCell>
+                      {/* Convert ISO date format to "dd-MM-YYYY" */}
+                      {new Date(contract?.nextinvoicedate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="contained"

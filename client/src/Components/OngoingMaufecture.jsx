@@ -39,11 +39,12 @@ function OngoingMaufecture() {
       .get(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`)
       .then(response => {
         // Sort the contracts based on createdAt field in descending order
-        const sortedContracts = response.data.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
+        const sortedContracts = response.data.contracts.sort((a, b) => {
+          return (
+            new Date(b.contract.createdAt) - new Date(a.contract.createdAt)
+          );
         });
         setContracts(sortedContracts);
-        console.log(sortedContracts);
         setLoading(false);
       })
       .catch(error => {
@@ -56,11 +57,13 @@ function OngoingMaufecture() {
     // Filter contracts based on search term
     const filtered = contracts.filter(
       contract =>
-        contract.storagetype.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contract.partyuser.name
+        contract.contract.storagetype
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        contract.location.storagename
+        contract.contract.partyuser.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        contract.contract.location.storagename
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
     );
@@ -133,7 +136,7 @@ function OngoingMaufecture() {
                     <b>S. No</b>
                   </TableCell>
                   <TableCell>
-                    <b>Party Name</b>
+                    <b>Cold Storage Company Name</b>
                   </TableCell>
                   <TableCell>
                     <b>Contract Name</b>
@@ -145,18 +148,35 @@ function OngoingMaufecture() {
                     <b>Storage Type</b>
                   </TableCell>
                   <TableCell>
+                    <b>Next Invoice Date</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Rental Amount</b>
+                  </TableCell>
+                  <TableCell>
                     <b>Action</b>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {currentContracts.map((contract, index) => (
-                  <TableRow key={contract?.id}>
+                  <TableRow key={contract.contract.id}>
                     <TableCell>{indexOfFirstContract + index + 1}</TableCell>
-                    <TableCell>{contract?.partyuser?.name}</TableCell>
-                    <TableCell>{contract?.slno}</TableCell>
-                    <TableCell>{contract?.location?.storagename}</TableCell>
-                    <TableCell>{contract?.storagetype}</TableCell>
+                    <TableCell>
+                      {contract.contract.underadmin.companyname}
+                    </TableCell>
+                    <TableCell>{contract.contract.slno}</TableCell>
+                    <TableCell>
+                      {contract.contract.location.storagename}
+                    </TableCell>
+                    <TableCell>{contract.contract.storagetype}</TableCell>
+                    <TableCell>
+                      {/* Convert ISO date format to "dd-MM-YYYY" */}
+                      {new Date(
+                        contract.contract.nextinvoicedate
+                      ).toLocaleDateString("en-GB")}
+                    </TableCell>
+                    <TableCell>{contract.nextRentalAmount}</TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
@@ -167,7 +187,10 @@ function OngoingMaufecture() {
                           borderRadius: "8px",
                         }}
                         onClick={() =>
-                          handleViewContract(contract.id, contract.storagetype)
+                          handleViewContract(
+                            contract.contract.id,
+                            contract.contract.storagetype
+                          )
                         }
                       >
                         View

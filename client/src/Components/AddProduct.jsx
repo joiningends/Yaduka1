@@ -17,6 +17,10 @@ function AddProduct() {
     quantifiedBy: "",
     packSize: "",
     unit: "",
+    length: "", // New field: Length
+    width: "", // New field: Width
+    height: "", // New field: Height
+    image: null, // New field: Image
   };
 
   const navigate = useNavigate();
@@ -26,6 +30,7 @@ function AddProduct() {
   const [qualities, setQualities] = useState([]);
   const [packagingTypes, setPackagingTypes] = useState([]);
   const [sizes, setSizes] = useState([]);
+  console.log(sizes);
   const [selectedPackagingType, setSelectedPackagingType] = useState({
     id: "", // Initially empty
     unit: "", // Initially empty
@@ -53,7 +58,6 @@ function AddProduct() {
       try {
         const response = await axios.get("http://3.6.248.144/api/v1/unit/all");
         setPackagingTypes(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching packaging types:", error);
       }
@@ -83,7 +87,7 @@ function AddProduct() {
     if (variantId) {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/quality/${variantId}/qualities`
+          `http://3.6.248.144/api/v1/quality/all`
         );
         setQualities(response.data);
       } catch (error) {
@@ -92,7 +96,7 @@ function AddProduct() {
 
       try {
         const sizeResponse = await axios.get(
-          `http://3.6.248.144/api/v1/size/${variantId}/sizes`
+          `http://3.6.248.144/api/v1/size/all`
         );
         setSizes(sizeResponse.data);
       } catch (error) {
@@ -119,7 +123,6 @@ function AddProduct() {
       // Dynamically generate the Unit field based on selected values
       const unitText = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
       values.unit = unitText;
-      console.log(values.unit);
 
       // Prepare the data to be sent in the POST request
       const postData = {
@@ -131,10 +134,16 @@ function AddProduct() {
         commodityId: values.commodity,
         quantifiedBy: values.quantifiedBy,
         newUnit: values.unit,
+        length: values.length, // New field: Length
+        width: values.width, // New field: Width
+        height: values.height, // New field: Height
       };
-      console.log(postData);
 
       // Making the Axios POST request
+      const formData = new FormData();
+      formData.append("image", values.image);
+      console.log("Image:", values.image);
+
       const response = await axios.post(
         "http://3.6.248.144/api/v1/product/create",
         postData
@@ -150,7 +159,7 @@ function AddProduct() {
       console.log("Response:", response.data);
     } catch (error) {
       // Handle any errors that occurred during the request
-      toast.success("Error while creating product!");
+      toast.error("Error while creating product!");
 
       console.error("Error:", error.message);
     }
@@ -162,7 +171,7 @@ function AddProduct() {
 
   useEffect(() => {
     console.log(initialValues);
-  });
+  }, []);
 
   return (
     <div className="container mt-5">
@@ -269,7 +278,6 @@ function AddProduct() {
 
                         // Update the value of packagingType in the form values
                         setFieldValue("packagingType", e.target.value);
-                        // console.log(e.target.value)
                         console.log(selectedOptions.textContent);
 
                         // Update the selected packaging type for display
@@ -380,6 +388,58 @@ function AddProduct() {
                       "Selected Packaging Type:",
                       selectedPackagingType
                     )}
+                  </div>
+
+                  {/* New Fields */}
+                  <div className="mb-3 row">
+                    <div className="col-md-4">
+                      <label htmlFor="length" className="form-label">
+                        Length
+                      </label>
+                      <Field
+                        type="number"
+                        className="form-control rounded-pill"
+                        id="length"
+                        name="length"
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <label htmlFor="width" className="form-label">
+                        Width
+                      </label>
+                      <Field
+                        type="number"
+                        className="form-control rounded-pill"
+                        id="width"
+                        name="width"
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <label htmlFor="height" className="form-label">
+                        Height
+                      </label>
+                      <Field
+                        type="number"
+                        className="form-control rounded-pill"
+                        id="height"
+                        name="height"
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="image" className="form-label">
+                      Image <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="image"
+                      name="image"
+                      onChange={e => {
+                        setFieldValue("image", e.target.files[0]);
+                      }}
+                      required
+                    />
                   </div>
 
                   <div className="text-center">
