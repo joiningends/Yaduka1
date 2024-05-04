@@ -326,9 +326,14 @@ exports.updateDeliveryQty = async (req, res) => {
 
         // Subtract delivered quantity from contract product quantity
         await ContractProduct.decrement(
-          "qty", // This line is missing the where clause
-          { by: deliveryQty }
-        );
+          
+                    'qty',
+                    {
+                        by: deliveryQty,
+                        where: { id: contractproductid }
+                    }
+                    
+                );
 
         // Update the amount for ContractProduct
         const updatedContractProduct = await ContractProduct.findOne({
