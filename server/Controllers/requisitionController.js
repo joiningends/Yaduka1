@@ -326,9 +326,8 @@ exports.updateDeliveryQty = async (req, res) => {
 
         // Subtract delivered quantity from contract product quantity
         await ContractProduct.decrement(
-          "qty",
-          { by: deliveryQty },
-          { where: { id: contractproductid } }
+          "qty", // This line is missing the where clause
+          { by: deliveryQty }
         );
 
         // Update the amount for ContractProduct
@@ -338,7 +337,7 @@ exports.updateDeliveryQty = async (req, res) => {
         await updatedContractProduct.update({
           amount: updatedContractProduct.qty * updatedContractProduct.rate,
         });
-      } else {
+      }else {
         const updatedRow = await Reproduct.findOne({ where: { id: id } });
 
         updatedReproduct = updatedRow;
