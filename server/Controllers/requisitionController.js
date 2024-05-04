@@ -394,6 +394,7 @@ exports.updateDeliveryQty = async (req, res) => {
   }
 };
 
+
 exports.createRequisition = async (req, res) => {
   try {
     // Extract data from the request body
