@@ -68,6 +68,12 @@ function EditProductDetails() {
     const currentDate = new Date().toISOString().split("T")[0];
     const underValues = selectedAdminId;
 
+    // Read expected delivery date from local storage
+    const expectedDelivery = localStorage.getItem("expectedDateOfDelivery");
+
+    // Remove the date from local storage
+    localStorage.removeItem("expectedDateOfDelivery");
+
     // Filter out contracts with required quantity greater than 0 or changed by the user
     const filteredData = data
       .map(contractArray => {
@@ -84,30 +90,34 @@ function EditProductDetails() {
       })
       .filter(item => item.productdetails.length > 0);
 
-    // Construct request data
+    // Construct request data including expected delivery
     const requestData = {
       date: currentDate,
+      expecteddelivery: expectedDelivery, // Include expected delivery date
       underValues: underValues,
       storageId: selectedLocationId,
       requisitionDetails: filteredData,
     };
 
     console.log(requestData);
+    console.log(`http://3.6.248.144/api/v1/ref/create/${partyId}`);
 
-    try {
-      // Send request to save data
-      await axios.post(
-        `http://3.6.248.144/api/v1/ref/create/${partyId}`,
-        requestData
-      );
-      toast.success("Product Details updated successfully!");
-      setTimeout(() => {
-        window.location.href = "/Requisition";
-      }, 1000);
-    } catch (error) {
-      console.error("Error saving data:", error);
-      toast.error("Error saving data. Please try again.");
-    }
+    // try {
+    //   // Send request to save data
+    //   await axios.post(
+    //     `http://3.6.248.144/api/v1/ref/create/${partyId}`,
+    //     requestData
+    //   );
+    //   // Remove the date from local storage after successful response
+    //   localStorage.removeItem("expectedDateOfDelivery");
+    //   toast.success("Product Details updated successfully!");
+    //   setTimeout(() => {
+    //     window.location.href = "/Requisition";
+    //   }, 1000);
+    // } catch (error) {
+    //   console.error("Error saving data:", error);
+    //   toast.error("Error saving data. Please try again.");
+    // }
   };
 
   const handleCancel = () => {

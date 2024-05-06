@@ -29,6 +29,8 @@ import ProductVariants from "../ProductVariants";
 import AddProduct from "../AddProduct";
 import Product from "../Product";
 import ProductVariant from "../ProductVariant";
+import InvoiceDetails from "../InvoiceDetails";
+
 
 const ManufactureEmployee = () => {
   return (
@@ -102,6 +104,10 @@ const ManufactureEmployee = () => {
         <Route
           path="/Product/ProductVariant/:id"
           element={<ProductVariants />}
+        />
+        <Route
+          path="/Ongoing/InvoiceDetails/:id"
+          element={<InvoiceDetails />}
         />
       </Routes>
     </div>

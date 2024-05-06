@@ -1,14 +1,14 @@
 const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../util/database");
 
-const Requisition = sequelize.define('requisition', {
+const Requisition = sequelize.define("requisition", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
-  slno:{
+  slno: {
     type: DataTypes.STRING,
     allowNull: true,
   },
@@ -20,7 +20,10 @@ const Requisition = sequelize.define('requisition', {
     type: DataTypes.STRING, // You might want to choose a more specific data type based on your requirements
     allowNull: false,
   },
-  
+  expecteddelivery: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 });
 
 module.exports = Requisition;

@@ -166,6 +166,9 @@ function Requisition() {
                 <b>Requisition Number</b>
               </TableCell>
               <TableCell>
+                <b>Expected Delivery Date</b>
+              </TableCell>
+              <TableCell>
                 <b>Action</b>
               </TableCell>
             </TableRow>
@@ -178,6 +181,18 @@ function Requisition() {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{item?.valueofunde?.companyname}</TableCell>
                   <TableCell>{item.slno}</TableCell>
+                  <TableCell>
+                    {item.expecteddelivery
+                      ? new Date(item.expecteddelivery).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )
+                      : "-"}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="contained"

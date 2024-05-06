@@ -40,6 +40,7 @@ function CompletedRequisition() {
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         setData(sortedData);
+        console.log(sortedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -110,6 +111,9 @@ function CompletedRequisition() {
                 <b>Cold Storage Company Name</b>
               </TableCell>
               <TableCell>
+                <b>Expected Delivery Date</b>
+              </TableCell>
+              <TableCell>
                 <b>Action</b>
               </TableCell>
             </TableRow>
@@ -125,6 +129,18 @@ function CompletedRequisition() {
               <TableRow key={item.id}>
                 <TableCell>{item.slno}</TableCell>
                 <TableCell>{item?.valueofunde?.companyname}</TableCell>
+                <TableCell>
+                  {item.expecteddelivery
+                    ? new Date(item.expecteddelivery).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )
+                    : "-"}
+                </TableCell>
 
                 <TableCell>
                   <Button

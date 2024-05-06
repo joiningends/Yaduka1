@@ -326,14 +326,10 @@ exports.updateDeliveryQty = async (req, res) => {
 
         // Subtract delivered quantity from contract product quantity
         await ContractProduct.decrement(
-          
-                    'qty',
-                    {
-                        by: deliveryQty,
-                        where: { id: contractproductid }
-                    }
-                    
-                );
+          "qty",
+          { by: deliveryQty },
+          { where: { id: contractproductid } }
+        );
 
         // Update the amount for ContractProduct
         const updatedContractProduct = await ContractProduct.findOne({
@@ -342,7 +338,7 @@ exports.updateDeliveryQty = async (req, res) => {
         await updatedContractProduct.update({
           amount: updatedContractProduct.qty * updatedContractProduct.rate,
         });
-      }else {
+      } else {
         const updatedRow = await Reproduct.findOne({ where: { id: id } });
 
         updatedReproduct = updatedRow;
@@ -398,7 +394,6 @@ exports.updateDeliveryQty = async (req, res) => {
   }
 };
 
-
 exports.createRequisition = async (req, res) => {
   try {
     // Extract data from the request body
@@ -409,6 +404,9 @@ exports.createRequisition = async (req, res) => {
       expecteddelivery,
       requisitionDetails,
     } = req.body;
+
+    console.log(expecteddelivery);
+    
     const partyId = req.params.partyid;
 
     const user = await userTable.findByPk(partyId);
@@ -433,8 +431,10 @@ exports.createRequisition = async (req, res) => {
       partyid: partyunder,
       underValues: underValues,
       storageId,
-      expecteddelivery,
+      expecteddelivery:expecteddelivery,
     });
+
+    console.log(newRequisition)
 
     const users = await userTable.findByPk(partyunder);
     console.log(users.reqsitioncount);

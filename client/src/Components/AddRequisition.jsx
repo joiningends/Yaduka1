@@ -6,6 +6,8 @@ import { RingLoader } from "react-spinners";
 import Modal from "react-modal";
 import Pagination from "react-js-pagination";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 
 function AddRequisition() {
@@ -34,6 +36,8 @@ function AddRequisition() {
       year: "numeric",
     })
   );
+  const [expectedDate, setExpectedDate] = useState(null);
+  const [adminDisabled, setAdminDisabled] = useState(true);
 
   const navigate = useNavigate();
 
@@ -84,7 +88,6 @@ function AddRequisition() {
         )}`
       );
       setTableData(response.data);
-      console.log(response.data);
       setShowTable(true);
     } catch (error) {
       console.error("Error fetching table data:", error);
@@ -145,7 +148,7 @@ function AddRequisition() {
     window.open(
       `/Requisition/AddRequisition/EditProductDetails/${selectedAdminId}/${selectedLocationId}`,
       "_blank"
-    ); // Navigate to editProductDetails page
+    );
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -182,6 +185,7 @@ function AddRequisition() {
                 <Formik
                   initialValues={{
                     date: currentDate,
+                    expectedDateOfDelivery: "",
                     coldStorageAdmin: "",
                     storageLocation: "",
                     otherField1: "",
@@ -189,123 +193,160 @@ function AddRequisition() {
                   }}
                   onSubmit={handleSubmit}
                 >
-                  <Form>
-                    <div className="mb-3">
-                      <label htmlFor="date" className="form-label">
-                        Date
-                      </label>
-                      <Field
-                        type="text"
-                        className="form-control rounded-pill"
-                        id="date"
-                        name="date"
-                        readOnly
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="coldStorageAdmin" className="form-label">
-                        Cold Storage Admin{" "}
-                        <span className="text-danger">*</span>
-                      </label>
-                      <Field
-                        as="select"
-                        className="form-control rounded-pill"
-                        id="coldStorageAdmin"
-                        name="coldStorageAdmin"
-                        onChange={e => handleAdminChange(e.target.value)}
-                        value={selectedAdminId}
-                      >
-                        <option value="">Select Cold Storage Admin</option>
-                        {coldStorageAdminOptions.map(option => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="coldStorageAdmin"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="storageLocation" className="form-label">
-                        Storage Location <span className="text-danger">*</span>
-                      </label>
-                      <Field
-                        as="select"
-                        className="form-control rounded-pill"
-                        id="storageLocation"
-                        name="storageLocation"
-                        onChange={e => handleLocationChange(e.target.value)}
-                        value={selectedLocationId}
-                        disabled={!selectedAdminId}
-                      >
-                        <option value="">Select Storage Location</option>
-                        {Array.isArray(locationOptions) &&
-                          locationOptions.map(option => (
-                            <option key={option.id} value={option.id}>
-                              {`${option.storagename} - ${option.address}`}
-                            </option>
-                          ))}
-                      </Field>
-
-                      <ErrorMessage
-                        name="storageLocation"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-                    {showTable && (
-                      <div>
-                        <div className="table-responsive">
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Product Name</th>
-                                <th>Total Quantity</th>
-                                <th>Details</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {Array.isArray(currentItems) &&
-                                currentItems.map((item, index) => (
-                                  <tr key={index}>
-                                    <td>{customProductName(item)}</td>
-                                    <td>{item.qty}</td>
-                                    <td>
-                                      <button
-                                        className="btn btn-primary"
-                                        onClick={() => openModal(item)}
-                                      >
-                                        See Details
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className="text-right mt-3">
-                          <button
-                            className="btn btn-primary"
-                            onClick={handleEditDetails}
-                          >
-                            Req. Qty
-                          </button>
-                        </div>
-                        <Pagination
-                          activePage={currentPage}
-                          itemsCountPerPage={itemsPerPage}
-                          totalItemsCount={tableData.length}
-                          pageRangeDisplayed={5}
-                          onChange={handlePageChange}
-                          itemClass="page-item"
-                          linkClass="page-link"
+                  {formik => (
+                    <Form>
+                      <div className="mb-3">
+                        <label htmlFor="date" className="form-label">
+                          Date
+                        </label>
+                        <Field
+                          type="text"
+                          className="form-control rounded-pill"
+                          id="date"
+                          name="date"
+                          readOnly
                         />
                       </div>
-                    )}
-                  </Form>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="expectedDateOfDelivery"
+                          className="form-label"
+                        >
+                          Expected Date of Delivery
+                        </label>
+                        <div>
+                          <DatePicker
+                            selected={expectedDate}
+                            onChange={date => {
+                              setExpectedDate(date);
+                              localStorage.setItem(
+                                "expectedDateOfDelivery",
+                                date.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                })
+                              );
+                              setAdminDisabled(false);
+                            }}
+                            className="form-control rounded-pill"
+                            id="expectedDateOfDelivery"
+                            name="expectedDateOfDelivery"
+                            dateFormat="dd/MM/yyyy"
+                            minDate={new Date()} // Allow only future dates
+                          />
+                        </div>
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="coldStorageAdmin"
+                          className="form-label"
+                        >
+                          Cold Storage Admin{" "}
+                          <span className="text-danger">*</span>
+                        </label>
+                        <Field
+                          as="select"
+                          className="form-control rounded-pill"
+                          id="coldStorageAdmin"
+                          name="coldStorageAdmin"
+                          onChange={e => handleAdminChange(e.target.value)}
+                          value={selectedAdminId}
+                          disabled={adminDisabled}
+                        >
+                          <option value="">Select Cold Storage Admin</option>
+                          {coldStorageAdminOptions.map(option => (
+                            <option key={option.id} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="coldStorageAdmin"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="storageLocation" className="form-label">
+                          Storage Location{" "}
+                          <span className="text-danger">*</span>
+                        </label>
+                        <Field
+                          as="select"
+                          className="form-control rounded-pill"
+                          id="storageLocation"
+                          name="storageLocation"
+                          onChange={e => handleLocationChange(e.target.value)}
+                          value={selectedLocationId}
+                          disabled={!selectedAdminId}
+                        >
+                          <option value="">Select Storage Location</option>
+                          {Array.isArray(locationOptions) &&
+                            locationOptions.map(option => (
+                              <option key={option.id} value={option.id}>
+                                {`${option.storagename} - ${option.address}`}
+                              </option>
+                            ))}
+                        </Field>
+
+                        <ErrorMessage
+                          name="storageLocation"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+                      {showTable && (
+                        <div>
+                          <div className="table-responsive">
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Product Name</th>
+                                  <th>Total Quantity</th>
+                                  <th>Details</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {Array.isArray(currentItems) &&
+                                  currentItems.map((item, index) => (
+                                    <tr key={index}>
+                                      <td>{customProductName(item)}</td>
+                                      <td>{item.qty}</td>
+                                      <td>
+                                        <button
+                                          className="btn btn-primary"
+                                          onClick={() => openModal(item)}
+                                        >
+                                          See Details
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div className="text-right mt-3">
+                            <button
+                              className="btn btn-primary"
+                              onClick={handleEditDetails}
+                            >
+                              Req. Qty
+                            </button>
+                          </div>
+                          <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={itemsPerPage}
+                            totalItemsCount={tableData.length}
+                            pageRangeDisplayed={5}
+                            onChange={handlePageChange}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                          />
+                        </div>
+                      )}
+                    </Form>
+                  )}
                 </Formik>
               </div>
             </div>

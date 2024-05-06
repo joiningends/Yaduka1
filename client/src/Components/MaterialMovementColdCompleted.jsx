@@ -42,6 +42,10 @@ function MaterialMovementColdCompleted() {
           `http://3.6.248.144/api/v1/ref/mat/complete/${userId}`
         );
         const data = response.data;
+
+        // Sort the data based on createdAt field in descending order
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         setInvoicesData(data);
         setTotalPages(Math.ceil(data.length / rowsPerPage));
       } catch (error) {
@@ -156,6 +160,9 @@ function MaterialMovementColdCompleted() {
                 <b>Cold Storage Company Name</b>
               </TableCell>
               <TableCell>
+                <b>Expected Delivery Date</b>
+              </TableCell>
+              <TableCell>
                 <b>Action</b>
               </TableCell>
             </TableRow>
@@ -173,6 +180,18 @@ function MaterialMovementColdCompleted() {
                   })}
                 </TableCell>
                 <TableCell>{invoice.valueofunde.companyname}</TableCell>
+                <TableCell>
+                  {invoice.expecteddelivery
+                    ? new Date(invoice.expecteddelivery).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )
+                    : "-"}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"

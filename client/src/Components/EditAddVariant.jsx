@@ -111,6 +111,9 @@ function EditAddVariant() {
       console.error("Error updating data:", error);
     }
   };
+  const handleViewImage = () => {
+    window.open(variantData.uploadImage, "_blank");
+  };
 
   return (
     <div className="container mt-5">
@@ -195,12 +198,16 @@ function EditAddVariant() {
                       name="uploadImage"
                       accept="image/*"
                       onChange={handleFileChange}
-                      required
                     />
                     {variantData.uploadImage && (
-                      <p className="mt-2">
-                        Selected Image: {variantData.uploadImage.name}
-                      </p>
+                      <button
+                        type="button"
+                        className="btn btn-primary ms-2"
+                        onClick={handleViewImage}
+                        style={{ margin: "1rem" }}
+                      >
+                        View Image
+                      </button>
                     )}
                   </div>
                 </div>

@@ -44,6 +44,7 @@ function MaterialMovementColdPending() {
         const data = response.data;
         setInvoicesData(data);
         setTotalPages(Math.ceil(data.length / rowsPerPage));
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching invoice data:", error);
       }
@@ -157,6 +158,9 @@ function MaterialMovementColdPending() {
                 <b>Cold Storage Company Name</b>
               </TableCell>
               <TableCell>
+                <b>Expected Delivery Date</b>
+              </TableCell>
+              <TableCell>
                 <b>Action</b>
               </TableCell>
             </TableRow>
@@ -174,6 +178,18 @@ function MaterialMovementColdPending() {
                   })}
                 </TableCell>
                 <TableCell>{invoice.valueofunde.companyname}</TableCell>
+                <TableCell>
+                  {invoice.expecteddelivery
+                    ? new Date(invoice.expecteddelivery).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )
+                    : "-"}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"

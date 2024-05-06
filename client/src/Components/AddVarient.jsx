@@ -91,14 +91,10 @@ function AddVariant() {
   };
 
   const handleImportedChange = e => {
-    const importedValue = e.target.value === "true";
-    formik.setFieldValue("isFarmable", importedValue ? "false" : "true");
     formik.setFieldValue("isImported", e.target.value);
   };
 
   const handleFarmableChange = e => {
-    const farmableValue = e.target.value === "true";
-    formik.setFieldValue("isImported", farmableValue ? "false" : "true");
     formik.setFieldValue("isFarmable", e.target.value);
   };
 
@@ -229,7 +225,6 @@ function AddVariant() {
                           value="true"
                           checked={formik.values.isFarmable === "true"}
                           onChange={handleFarmableChange}
-                          disabled={formik.values.isImported === "true"}
                         />
                         <label
                           className="form-check-label"
@@ -247,7 +242,6 @@ function AddVariant() {
                           value="false"
                           checked={formik.values.isFarmable === "false"}
                           onChange={handleFarmableChange}
-                          disabled={formik.values.isImported === "true"}
                         />
                         <label
                           className="form-check-label"
