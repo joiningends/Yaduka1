@@ -112,7 +112,7 @@ function AddCommodityTypeEdit() {
                         marginLeft: "10px",
                       }}
                     >
-                      Edit
+                      Update
                     </button>
                   </div>
                 </Form>

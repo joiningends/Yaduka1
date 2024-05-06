@@ -4,6 +4,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function EditMaterialMovementColdStorageCompleted() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function EditMaterialMovementColdStorageCompleted() {
   const itemsPerPage = 5;
   const tablesPerPage = 2;
   const partyId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -210,10 +212,15 @@ function EditMaterialMovementColdStorageCompleted() {
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <button
             className="btn btn-danger"
-            onClick={() => setDeliveredQuantities({})}
+            onClick={() => {
+              setDeliveredQuantities({});
+              navigate("/MaterialMovementCompleted");
+            }}
+            style={{ marginRight: "1rem" }}
           >
             Cancel
           </button>
+
           <button className="btn btn-primary" onClick={handleSave}>
             Update
           </button>

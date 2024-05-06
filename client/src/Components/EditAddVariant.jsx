@@ -8,7 +8,7 @@ function EditAddVariant() {
   const { id } = useParams();
   const [commodities, setCommodities] = useState([]);
   const [variantData, setVariantData] = useState({
-    variant: "",
+    varient: "",
     commodityId: "",
     cropDuration: "",
     uploadImage: null,
@@ -41,7 +41,7 @@ function EditAddVariant() {
       if (response.ok) {
         const data = await response.json();
         setVariantData({
-          variant: data.varient,
+          varient: data.varient,
           commodityId: data.commodityId.toString(),
           cropDuration: data.cropDuration,
           uploadImage: data.image,
@@ -49,7 +49,7 @@ function EditAddVariant() {
           isFarmable: data.farmable.toString(),
         });
         console.log({
-          variant: data.varient,
+          varient: data.varient,
           commodityId: data.commodityId.toString(),
           cropDuration: data.cropDuration,
           uploadImage: data.image,
@@ -66,6 +66,7 @@ function EditAddVariant() {
 
   const handleChange = e => {
     const { name, value } = e.target;
+    console.log(name, value);
     setVariantData(prevData => ({
       ...prevData,
       [name]: value,
@@ -125,7 +126,7 @@ function EditAddVariant() {
           <div className="card" style={{ borderRadius: "2rem" }}>
             <div className="card-header">
               <h4 className="card-title">
-                Edit Variant: {variantData.variant}
+                Edit Variant: {variantData.varient}
               </h4>
             </div>
             <div className="card-body">
@@ -139,8 +140,8 @@ function EditAddVariant() {
                       type="text"
                       className="form-control rounded-pill"
                       id="variant"
-                      name="variant"
-                      value={variantData.variant}
+                      name="varient"
+                      value={variantData.varient}
                       onChange={handleChange}
                       required
                     />

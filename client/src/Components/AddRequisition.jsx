@@ -88,6 +88,7 @@ function AddRequisition() {
         )}`
       );
       setTableData(response.data);
+      console.log(response.data);
       setShowTable(true);
     } catch (error) {
       console.error("Error fetching table data:", error);
@@ -118,6 +119,7 @@ function AddRequisition() {
         )}`
       );
       setModalData(response.data);
+      console.log(response.data);
       setModalPage(1);
       setModalIsOpen(true);
     } catch (error) {

@@ -58,7 +58,7 @@ const Variant = () => {
   };
 
   const handleEdit = id => {
-    navigate(`/Variant/AddVariant/${id}`);
+    navigate(`/Variant/EditVariant/${id}`);
   };
 
   const handleDelete = id => {

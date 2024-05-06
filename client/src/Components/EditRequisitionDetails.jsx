@@ -4,6 +4,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function EditRequisitionDetails() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function EditRequisitionDetails() {
   const itemsPerPage = 5;
   const tablesPerPage = 2;
   const partyId = localStorage.getItem("id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -215,7 +217,11 @@ function EditRequisitionDetails() {
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <button
             className="btn btn-danger"
-            onClick={() => setRequiredQuantities({})}
+            onClick={() => {
+              setRequiredQuantities({});
+              navigate("/Requisition");
+            }}
+            style={{ marginRight: "1rem" }}
           >
             Cancel
           </button>

@@ -92,7 +92,7 @@ const ColdStorageAdmin = () => {
           element={<AddCommodityType />}
         />
         <Route
-          path="/CommodityType/AddCommodityType/:id"
+          path="/CommodityType/EditCommodityType/:id"
           element={<AddCommodityTypeEdit />}
         />
         <Route path="/Commodity" element={<Commodity />} />
@@ -123,7 +123,7 @@ const ColdStorageAdmin = () => {
 
         <Route path="/Variant" element={<Variant />} />
         <Route path="/Variant/AddVariant" element={<AddVariant />} />
-        <Route path="/Variant/AddVariant/:id" element={<EditAddVariant />} />
+        <Route path="/Variant/EditVariant/:id" element={<EditAddVariant />} />
         <Route path="/Product" element={<Product />} />
         <Route path="Product/VariantDetails/:id" element={<ProductVariant />} />
         <Route path="/Product/AddProduct" element={<AddProduct />} />

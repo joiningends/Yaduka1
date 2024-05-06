@@ -282,7 +282,7 @@ function CompletedRequisition() {
               },
             }}
           >
-            Edit
+            View
           </Button>
           <Button
             onClick={handleCloseDialog}

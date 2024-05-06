@@ -76,7 +76,7 @@ const CommodityType = () => {
   };
 
   const handleEditCommodityType = id => {
-    navigate(`/CommodityType/AddCommodityType/${id}`);
+    navigate(`/CommodityType/EditCommodityType/${id}`);
   };
 
   const handleChange = (event, value) => {

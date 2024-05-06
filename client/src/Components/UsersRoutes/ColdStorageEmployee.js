@@ -60,6 +60,8 @@ import InvoicesForColdStorage from "../InvoicesForColdStorage";
 import MaterialMovementColdPending from "../MaterialMovementColdPending";
 import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
 import InvoiceDetails from "../InvoiceDetails";
+import ProductVariants from "../ProductVariants";
+
 
 const ColdStorageEmployee = () => {
   return (
@@ -186,6 +188,10 @@ const ColdStorageEmployee = () => {
           element={<InventoryReportForColdStorage />}
         /> */}
 
+        <Route
+          path="/Product/ProductVariant/:id"
+          element={<ProductVariants />}
+        />
         <Route path="/Employee" element={<Employee />} />
         <Route path="/Employee/AddEmployee" element={<AddEmployee />} />
         <Route path="/Employee/EditEmployee/:id" element={<EditEmployee />} />
@@ -237,7 +243,7 @@ const ColdStorageEmployee = () => {
           path="/PackagingType/EditPackagingType/:id"
           element={<EditPackagingType />}
         />
-         <Route
+        <Route
           path="/Ongoing/InvoiceDetails/:id"
           element={<InvoiceDetails />}
         />
