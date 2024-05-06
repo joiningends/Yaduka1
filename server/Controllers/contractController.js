@@ -2305,9 +2305,10 @@ exports.extractproduct = async (req, res) => {
       partyunder = partyid;
     } else if (party.userTypeId === 8) {
       // If user type ID is 5, set under to the user's under value
-      partyunder = user.under;
+      partyunder = party.under;
     }
 
+    console.log(partyunder)
     const contractIds = await Contract.findAll({
       where: {
         under,

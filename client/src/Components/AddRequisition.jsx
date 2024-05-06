@@ -82,11 +82,17 @@ function AddRequisition() {
     setShowTable(false);
     setLoadingTableData(true);
     try {
+      console.log(
+        `http://3.6.248.144/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+          "id"
+        )}`
+      );
       const response = await axios.get(
         `http://3.6.248.144/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
           "id"
         )}`
       );
+
       setTableData(response.data);
       console.log(response.data);
       setShowTable(true);
