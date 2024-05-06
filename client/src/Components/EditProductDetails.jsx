@@ -32,6 +32,7 @@ function EditProductDetails() {
         );
 
         setData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -102,22 +103,22 @@ function EditProductDetails() {
     console.log(requestData);
     console.log(`http://3.6.248.144/api/v1/ref/create/${partyId}`);
 
-    // try {
-    //   // Send request to save data
-    //   await axios.post(
-    //     `http://3.6.248.144/api/v1/ref/create/${partyId}`,
-    //     requestData
-    //   );
-    //   // Remove the date from local storage after successful response
-    //   localStorage.removeItem("expectedDateOfDelivery");
-    //   toast.success("Product Details updated successfully!");
-    //   setTimeout(() => {
-    //     window.location.href = "/Requisition";
-    //   }, 1000);
-    // } catch (error) {
-    //   console.error("Error saving data:", error);
-    //   toast.error("Error saving data. Please try again.");
-    // }
+    try {
+      // Send request to save data
+      await axios.post(
+        `http://3.6.248.144/api/v1/ref/create/${partyId}`,
+        requestData
+      );
+      // Remove the date from local storage after successful response
+      localStorage.removeItem("expectedDateOfDelivery");
+      toast.success("Product Details updated successfully!");
+      setTimeout(() => {
+        window.location.href = "/Requisition";
+      }, 1000);
+    } catch (error) {
+      console.error("Error saving data:", error);
+      toast.error("Error saving data. Please try again.");
+    }
   };
 
   const handleCancel = () => {

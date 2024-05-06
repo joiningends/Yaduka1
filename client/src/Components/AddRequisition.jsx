@@ -226,15 +226,26 @@ function AddRequisition() {
                           <DatePicker
                             selected={expectedDate}
                             onChange={date => {
-                              setExpectedDate(date);
+                              const formattedDate = date
+                                .toLocaleDateString("en-GB", {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                })
+                                .split("/")
+                                .reverse()
+                                .join("-");
+
+                              // Save formatted date to localStorage
                               localStorage.setItem(
                                 "expectedDateOfDelivery",
-                                date.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "2-digit",
-                                  year: "numeric",
-                                })
+                                formattedDate
                               );
+
+                              // Set expectedDate state
+                              setExpectedDate(date);
+
+                              // Enable admin button
                               setAdminDisabled(false);
                             }}
                             className="form-control rounded-pill"

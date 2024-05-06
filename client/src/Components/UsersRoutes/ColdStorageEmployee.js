@@ -62,7 +62,6 @@ import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
 import InvoiceDetails from "../InvoiceDetails";
 import ProductVariants from "../ProductVariants";
 
-
 const ColdStorageEmployee = () => {
   return (
     <div>
@@ -318,6 +317,7 @@ const ColdStorageEmployee = () => {
         />
         <Route path="/Invoice" element={<InvoiceNew />} />
         <Route path="/Invoices" element={<InvoicesForColdStorage />} />
+        <Route path="/Invoices/Invoice" element={<InvoiceNew />} />
         <Route
           path="/InventoryReport"
           element={<InventoryReportForColdStorage />}

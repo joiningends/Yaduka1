@@ -401,6 +401,7 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="length"
                         name="length"
+                        required // Added required attribute
                       />
                     </div>
                     <div className="col-md-4">
@@ -412,6 +413,7 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="width"
                         name="width"
+                        required // Added required attribute
                       />
                     </div>
                     <div className="col-md-4">
@@ -423,6 +425,7 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="height"
                         name="height"
+                        required // Added required attribute
                       />
                     </div>
                   </div>

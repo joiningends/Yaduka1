@@ -30,6 +30,8 @@ import AddProduct from "../AddProduct";
 import Product from "../Product";
 import ProductVariant from "../ProductVariant";
 import InvoiceDetails from "../InvoiceDetails";
+import EditProductDetails from "../EditProductDetails";
+import EditRequisitionDetails from "../EditRequisitionDetails";
 
 
 const ManufactureEmployee = () => {
@@ -108,6 +110,14 @@ const ManufactureEmployee = () => {
         <Route
           path="/Ongoing/InvoiceDetails/:id"
           element={<InvoiceDetails />}
+        />
+        <Route
+          path="Requisition/AddRequisition/EditProductDetails/:selectedAdminId/:selectedLocationId"
+          element={<EditProductDetails />}
+        />
+        <Route
+          path="/Requisition/EditRequisition/:id/:storageId"
+          element={<EditRequisitionDetails />}
         />
       </Routes>
     </div>

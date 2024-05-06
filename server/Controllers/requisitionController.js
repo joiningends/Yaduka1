@@ -286,113 +286,108 @@ exports.getRequisitionIdcompleted = async (req, res) => {
   }
 };
 exports.updateDeliveryQty = async (req, res) => {
-  try {
-    const deliveryDataArray = req.body; // Assuming the array of data is in the request body
-    let success = true;
-    let updatedReproduct = null; // Initialize to null
-
-    // Loop through the array and update each record
-    for (const deliveryData of deliveryDataArray) {
-      const { id, deliveryQty } = deliveryData;
-
-      const existingReproduct = await Reproduct.findOne({
-        where: { id },
-      });
-
-      if (existingReproduct.Status === 1) {
-        await Reproduct.update(
-          {
-            deliveryQty: deliveryQty,
-            previousqty: deliveryQty,
-            Status: 2,
-          },
-          { where: { id: id } }
-        );
-
-        // Manually fetch the updated row
-        const updatedRow = await Reproduct.findOne({ where: { id: id } });
-
-        // Check if the update was successful
-        if (!updatedRow) {
-          success = false;
-          break;
-        }
-
-        // Set the value of updatedReproduct for the last successful update
-        updatedReproduct = updatedRow;
-
-        // Assuming 'contractproductid' is a column name in your Reproduct table
-        const { contractproductid } = updatedReproduct;
-
-        // Subtract delivered quantity from contract product quantity
-        await ContractProduct.decrement(
-          "qty",
-          { by: deliveryQty },
-          { where: { id: contractproductid } }
-        );
-
-        // Update the amount for ContractProduct
-        const updatedContractProduct = await ContractProduct.findOne({
-          where: { id: contractproductid },
-        });
-        await updatedContractProduct.update({
-          amount: updatedContractProduct.qty * updatedContractProduct.rate,
-        });
-      } else {
-        const updatedRow = await Reproduct.findOne({ where: { id: id } });
-
-        updatedReproduct = updatedRow;
-
-        const { contractproductid } = updatedReproduct;
-
-        const updatedReproduc = await ContractProduct.findOne({
-          where: { id: contractproductid },
-        });
-        const newQty =
-          updatedReproduc.qty - (deliveryQty - existingReproduct.previousqty);
-
-        await ContractProduct.update(
-          { qty: newQty },
-          { where: { id: contractproductid } }
-        );
-
-        await ContractProduct.update(
-          { amount: newQty * updatedReproduc.rate },
-          { where: { id: contractproductid } }
-        );
-
-        await Reproduct.update(
-          {
-            deliveryQty: deliveryQty,
-            previousqty: deliveryQty,
-          },
-          { where: { id: id } }
-        );
+      try {
+          const deliveryDataArray = req.body; // Assuming the array of data is in the request body
+          let success = true;
+          let updatedReproduct = null; // Initialize to null
+  
+          // Loop through the array and update each record
+          for (const deliveryData of deliveryDataArray) {
+              const { id, deliveryQty } = deliveryData;
+  
+              const existingReproduct = await Reproduct.findOne({
+                  where: { id }
+              });
+  
+              if (existingReproduct.Status === 1) {
+                  await Reproduct.update(
+                      {
+                          deliveryQty: deliveryQty,
+                          previousqty: deliveryQty,
+                          Status: 2
+                      },
+                      { where: { id: id } }
+                  );
+  
+                  // Manually fetch the updated row
+                  const updatedRow = await Reproduct.findOne({ where: { id: id } });
+  
+                  // Check if the update was successful
+                  if (!updatedRow) {
+                      success = false;
+                      break;
+                  }
+  
+                  // Set the value of updatedReproduct for the last successful update
+                  updatedReproduct = updatedRow;
+  
+                  // Assuming 'contractproductid' is a column name in your Reproduct table
+                  const { contractproductid } = updatedReproduct;
+  
+                  // Subtract delivered quantity from contract product quantity
+                  await ContractProduct.decrement(
+                    'qty',
+                    { by: deliveryQty, where: { id: contractproductid } }
+                );
+  
+                  // Update the amount for ContractProduct
+                  const updatedContractProduct = await ContractProduct.findOne({ where: { id: contractproductid } });
+                  await updatedContractProduct.update({
+                      amount: updatedContractProduct.qty * updatedContractProduct.rate
+                  });
+                
+              } else {
+                  const updatedRow = await Reproduct.findOne({ where: { id: id } });
+  
+                  updatedReproduct = updatedRow;
+  
+                  const { contractproductid } = updatedReproduct;
+  
+                  const updatedReproduc = await ContractProduct.findOne({ where: { id: contractproductid } });
+                  const newQty = updatedReproduc.qty - (deliveryQty - existingReproduct.previousqty);
+  
+                  await ContractProduct.update(
+                      { qty: newQty },
+                      { where: { id: contractproductid } }
+                  );
+  
+                  await ContractProduct.update(
+                      { amount: newQty * updatedReproduc.rate },
+                      { where: { id: contractproductid } }
+                  );
+  
+                  await Reproduct.update(
+                      {
+                          deliveryQty: deliveryQty,
+                          previousqty: deliveryQty
+                      },
+                      { where: { id: id } }
+                  );
+              }
+          }
+  
+          // If all updates were successful, update the status to 'Completed' for corresponding requisitionId
+          if (updatedReproduct !== null) {
+              const { requationId } = updatedReproduct;
+  
+              await Requisition.update(
+                  { status: 'Completed' },
+                  {
+                      where: {
+                          id: requationId
+                      }
+                  }
+              );
+  
+              res.json({ message: 'Delivery quantities updated successfully' });
+          } else {
+              res.status(500).json({ error: 'Failed to update delivery quantities' });
+          }
+      } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Internal Server Error' });
       }
-    }
-
-    // If all updates were successful, update the status to 'Completed' for corresponding requisitionId
-    if (updatedReproduct !== null) {
-      const { requationId } = updatedReproduct;
-
-      await Requisition.update(
-        { status: "Completed" },
-        {
-          where: {
-            id: requationId,
-          },
-        }
-      );
-
-      res.json({ message: "Delivery quantities updated successfully" });
-    } else {
-      res.status(500).json({ error: "Failed to update delivery quantities" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+  };
 
 exports.createRequisition = async (req, res) => {
   try {
