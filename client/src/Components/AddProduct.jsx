@@ -144,9 +144,14 @@ function AddProduct() {
       formData.append("image", values.image);
       console.log("Image:", values.image);
 
+      // Append other form data to the formData object
+      for (const key in postData) {
+        formData.append(key, postData[key]);
+      }
+
       const response = await axios.post(
         "http://3.6.248.144/api/v1/product/create",
-        postData
+        formData
       );
 
       // Handle the response as needed
@@ -164,6 +169,7 @@ function AddProduct() {
       console.error("Error:", error.message);
     }
   };
+
 
   const handleCancel = () => {
     navigate("/Product"); // Update the route as needed
