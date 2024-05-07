@@ -32,7 +32,7 @@ function InventoryReport() {
       setLoadingAdminOptions(true);
       try {
         const response = await axios.get(
-          "http://3.6.248.144/api/v1/users/adminall/coldstorage"
+          "http://localhost:5001/api/v1/users/adminall/coldstorage"
         );
         setColdStorageAdminOptions(response.data);
       } catch (error) {
@@ -52,7 +52,7 @@ function InventoryReport() {
     setLoadingLocationOptions(true);
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/location/${selectedAdminId}`
+        `http://localhost:5001/api/v1/location/${selectedAdminId}`
       );
       setLocationOptions(response.data);
     } catch (error) {
@@ -69,7 +69,7 @@ function InventoryReport() {
     setLoadingTableData(true);
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+        `http://localhost:5001/api/v1/contracts/tabledata/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
           "id"
         )}`
       );
@@ -97,7 +97,7 @@ function InventoryReport() {
     setLoadingModalData(true);
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+        `http://localhost:5001/api/v1/contracts/tabledata/inventory/pop/${
           product.productName
         }/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
           "id"

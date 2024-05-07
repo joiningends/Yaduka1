@@ -24,7 +24,7 @@ function Password() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://3.6.248.144/api/v1/users/${number}/getf/by/id/user`
+          `http://localhost:5001/api/v1/users/${number}/getf/by/id/user`
         );
 
         if (response.ok) {
@@ -56,7 +56,7 @@ function Password() {
       };
 
       const response = await axios.post(
-        "http://3.6.248.144/api/v1/users/login/for/all",
+        "http://localhost:5001/api/v1/users/login/for/all",
         requestBody,
         {
           headers: {

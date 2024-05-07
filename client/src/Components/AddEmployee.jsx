@@ -33,7 +33,7 @@ const AddEmployee = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/users/getbyid/${userId}`
+          `http://localhost:5001/api/v1/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
       } catch (error) {
@@ -56,7 +56,7 @@ const AddEmployee = () => {
 
     try {
       const response = await axios.post(
-        `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}`,
+        `http://localhost:5001/api/v1/users/${userTypeId}/${userId}`,
         postData
       );
       console.log("Server Response:", response.data);

@@ -104,8 +104,11 @@ const updateVarient = async (req, res) => {
     if (updateVarients) {
       let image = updateVarients.image;
       if (req.file) {
-        image = req.file.filename;
+        const fileName = req.file.key; // Use the key provided by S3 instead of filename
+        const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
+        image = `${basePath}${fileName}`;
       }
+      console.log(req.file);
       await updateVarients.update({
         varient: varient,
         commodityId: commodityId,

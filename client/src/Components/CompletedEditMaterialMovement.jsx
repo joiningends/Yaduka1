@@ -26,7 +26,7 @@ function CompletedEditMaterialMovement() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/complete/${userId}`
+          `http://localhost:5001/api/v1/ref/complete/${userId}`
         );
         setData(response.data);
         console.log(response.data);

@@ -16,7 +16,7 @@ function Otp() {
       const mobileNumber = Number(number);
 
       const response = await fetch(
-        "http://3.6.248.144/api/v1/users/login/for/all/verify",
+        "http://localhost:5001/api/v1/users/login/for/all/verify",
         {
           method: "POST",
           headers: {
@@ -43,7 +43,7 @@ function Otp() {
       const mobileNumber = Number(number);
 
       const response = await fetch(
-        "http://3.6.248.144/api/v1/users/login/for/all/send",
+        "http://localhost:5001/api/v1/users/login/for/all/send",
         {
           method: "POST",
           headers: {

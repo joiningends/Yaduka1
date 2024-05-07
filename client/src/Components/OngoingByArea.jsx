@@ -11,11 +11,11 @@ function OngoingByArea() {
 
   console.log(contractData);
   const userId = localStorage.getItem("id");
-  console.log(`http://3.6.248.144/api/v1/contracts/onging/${userId}/${id}`);
+  console.log(`http://localhost:5001/api/v1/contracts/onging/${userId}/${id}`);
 
   useEffect(() => {
     axios
-      .get(`http://3.6.248.144/api/v1/contracts/onging/${userId}/${id}`)
+      .get(`http://localhost:5001/api/v1/contracts/onging/${userId}/${id}`)
       .then(response => {
         setContractData(response.data);
         setLoading(false);
@@ -28,7 +28,7 @@ function OngoingByArea() {
 
   const cancelContract = async () => {
     try {
-      await axios.put(`http://3.6.248.144/api/v1/contracts/${id}/status`, {
+      await axios.put(`http://localhost:5001/api/v1/contracts/${id}/status`, {
         status: "Closed",
       });
       navigate("/Ongoing");

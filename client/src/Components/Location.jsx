@@ -29,7 +29,7 @@ const Location = () => {
 
   useEffect(() => {
     axios
-      .get(`http://3.6.248.144/api/v1/location/${userId}`)
+      .get(`http://localhost:5001/api/v1/location/${userId}`)
       .then(response => {
         // Sort the locations array based on createdAt time
         const sortedLocations = response.data.sort((a, b) => {
@@ -76,7 +76,7 @@ const Location = () => {
 
   const handleDelete = id => {
     axios
-      .delete(`http://3.6.248.144/api/v1/location/${id}`)
+      .delete(`http://localhost:5001/api/v1/location/${id}`)
       .then(() => {
         setLocations(prevLocations =>
           prevLocations.filter(location => location.id !== id)

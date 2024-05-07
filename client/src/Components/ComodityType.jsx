@@ -28,7 +28,7 @@ const CommodityType = () => {
 
   useEffect(() => {
     axios
-      .get("http://3.6.248.144/api/v1/commoditytype/all")
+      .get("http://localhost:5001/api/v1/commoditytype/all")
       .then(response => {
         // Sort the data based on createdAt time from new to old
         const sortedData = response.data.sort(
@@ -55,12 +55,12 @@ const CommodityType = () => {
 
   const handleDeleteCommodityType = id => {
     axios
-      .delete(`http://3.6.248.144/api/v1/commodityType/delete/${id}`)
+      .delete(`http://localhost:5001/api/v1/commodityType/delete/${id}`)
       .then(response => {
         console.log(`Commodity type with ID ${id} has been deleted.`);
         toast.success("Commodity type deleted successfully!");
         axios
-          .get("http://3.6.248.144/api/v1/commoditytype/all")
+          .get("http://localhost:5001/api/v1/commoditytype/all")
           .then(response => {
             setRows(response.data);
             window.location.reload();

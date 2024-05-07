@@ -23,18 +23,20 @@ function DraftContractForProductType() {
   console.log(storageSpaces);
   const navigate = useNavigate();
 
+  console.log(storageSpaces)
+
   const userId = localStorage.getItem("id");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
+          `http://localhost:5001/api/v1/contracts/${userId}/draft/${id}`
         );
         setContractData(response.data);
         setLocation(response.data.location.id);
         const productResponse = await axios.get(
-          "http://3.6.248.144/api/v1/product/all"
+          "http://localhost:5001/api/v1/product/all"
         );
         setProductOptions(productResponse.data);
       } catch (error) {
@@ -49,7 +51,7 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const spaceResponse = await axios.get(
-          `http://3.6.248.144/api/v1/location/space/${location}`
+          `http://localhost:5001/api/v1/location/space/${location}`
         );
         setSpaceOptions(spaceResponse.data);
       } catch (error) {
@@ -100,7 +102,7 @@ function DraftContractForProductType() {
   };
 
   const handleSpaceChange = event => {
-    setSelectedSpaceIds(event.target.value);
+    setSelectedSpaceIds([event.target.value]);
   };
 
   const handleQuantityChange = e => {
@@ -144,7 +146,7 @@ function DraftContractForProductType() {
     try {
       console.log(transformedData);
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}/product`,
+        `http://localhost:5001/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 
@@ -301,36 +303,24 @@ function DraftContractForProductType() {
                     />
                   </div>
                   <div className="mb-3">
-                    <FormControl fullWidth>
-                      <Typography variant="body1" fontWeight="100">
-                        Storage Space
-                      </Typography>
-                      <Select
-                        labelId="space-label"
-                        id="space"
-                        multiple
-                        value={selectedSpaceIds}
-                        onChange={handleSpaceChange}
-                        renderValue={selected =>
-                          selected
-                            .map(
-                              id =>
-                                spaceOptions.find(space => space.id === id)
-                                  .space
-                            )
-                            .join(", ")
-                        }
-                        sx={{
-                          marginTop: "10px", // Add margin top to prevent overlap with the border
-                        }}
-                      >
-                        {spaceOptions.map(space => (
-                          <MenuItem key={space.id} value={space.id}>
-                            {space.space}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <label htmlFor="space" className="form-label">
+                      Storage Space
+                    </label>
+                    <select
+                      className="form-control rounded-pill"
+                      id="space"
+                      value={selectedSpaceIds[0] || ""}
+                      onChange={handleSpaceChange}
+                    >
+                      <option value="" disabled>
+                        Select Storage Space
+                      </option>
+                      {spaceOptions.map(space => (
+                        <option key={space.id} value={space.id}>
+                          {space.space}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="quantity" className="form-label">
@@ -431,10 +421,10 @@ function DraftContractForProductType() {
                               {space.storagespace.map((spaceId, index) => (
                                 <span key={index}>
                                   {
-                                    spaceOptions.find(s => s.id === spaceId)
+                                    spaceOptions.find(s => s.id == spaceId)
                                       ?.space
                                   }
-                                  {index !== space.storagespace.length - 1 &&
+                                  {index != space.storagespace.length - 1 &&
                                     ", "}
                                 </span>
                               ))}

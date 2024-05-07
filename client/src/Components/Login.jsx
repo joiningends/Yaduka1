@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import cloudImage from "./cloudLogo.svg";
 import leftImage from "./Assets/draw2Image.svg";
+import yadukaLogo from "./Assets/yadukaLogoImage.png"
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -14,7 +15,7 @@ function Login() {
     try {
       const mobileNumber = Number(phoneNumber);
       const response = await fetch(
-        "http://3.6.248.144/api/v1/users/login/for/all/send",
+        "http://localhost:5001/api/v1/users/login/for/all/send",
         {
           method: "POST",
           headers: {
@@ -83,8 +84,8 @@ function Login() {
             <div className="d-flex flex-column ms-5">
               <div className="text-center">
                 <img
-                  src={cloudImage}
-                  style={{ width: "185px" }}
+                  src={yadukaLogo }
+                  style={{ width: "40vh" }}
                   alt="Cloud Logo"
                 />
                 <Typography className="mt-2 mb-3 pb-2" variant="h5">

@@ -31,7 +31,7 @@ function MaterialMovement() {
     setIsLoading(true);
     const id = localStorage.getItem("id");
     axios
-      .get(`http://3.6.248.144/api/v1/ref/${id}`)
+      .get(`http://localhost:5001/api/v1/ref/${id}`)
       .then(response => {
         const options = response.data.map(location => ({
           value: location.id,
@@ -51,7 +51,7 @@ function MaterialMovement() {
     setIsLoading(true);
     axios
       .get(
-        `http://3.6.248.144/api/v1/ref/manufactureid/${localStorage.getItem(
+        `http://localhost:5001/api/v1/ref/manufactureid/${localStorage.getItem(
           "id"
         )}/${selectedOption.value}`
       )
@@ -101,7 +101,7 @@ function MaterialMovement() {
     setSubmitting(true);
     axios
       .post(
-        `http://3.6.248.144/api/v1/ref/requstion/${localStorage.getItem(
+        `http://localhost:5001/api/v1/ref/requstion/${localStorage.getItem(
           "id"
         )}/${selectedLocation.value}`,
         {
@@ -136,7 +136,7 @@ function MaterialMovement() {
 
   const handleDetailsClick = item => {
     axios
-      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .get(`http://localhost:5001/api/v1/ref/getById/${item.id}`)
       .then(response => {
         setModalData(response.data);
         setSelectedItemId(item.id);

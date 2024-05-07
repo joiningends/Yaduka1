@@ -29,7 +29,7 @@ function Size() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://3.6.248.144/api/v1/size/all")
+      .get("http://localhost:5001/api/v1/size/all")
       .then(response => {
         // Sort the data based on the createdAt time
         const sortedData = response.data.sort((a, b) => {
@@ -65,7 +65,7 @@ function Size() {
 
   const handleDelete = id => {
     axios
-      .delete(`http://3.6.248.144/api/v1/size/delete/${id}`)
+      .delete(`http://localhost:5001/api/v1/size/delete/${id}`)
       .then(() => {
         setData(data.filter(item => item.id !== id));
         toast.success("Size deleted successfully");

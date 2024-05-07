@@ -30,7 +30,7 @@ function InvoicesForM() {
     const fetchInvoicesData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/inv/${userId}`
+          `http://localhost:5001/api/v1/contracts/inv/${userId}`
         );
         const invoices = response.data.invoices;
         setInvoicesData(invoices);
@@ -44,7 +44,7 @@ function InvoicesForM() {
 
   const handleViewClick = async invoiceName => {
     try {
-      const pdfUrl = `http://3.6.248.144/api/v1/contracts/view/${invoiceName}.pdf`;
+      const pdfUrl = `http://localhost:5001/api/v1/contracts/view/${invoiceName}.pdf`;
 
       console.log(invoiceName);
       const openInNewTab = url => {

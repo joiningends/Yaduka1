@@ -21,7 +21,7 @@ function EditMaterialMovmentColdStorage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/tabledata/${id}`
+          `http://localhost:5001/api/v1/ref/tabledata/${id}`
         );
         setData(response.data);
       } catch (error) {
@@ -89,7 +89,7 @@ function EditMaterialMovmentColdStorage() {
 
       // Uncomment the following lines to send the PUT request
       const response = await axios.put(
-        "http://3.6.248.144/api/v1/ref",
+        "http://localhost:5001/api/v1/ref",
         deliveryData
       );
 

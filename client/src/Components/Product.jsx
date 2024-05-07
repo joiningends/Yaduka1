@@ -13,7 +13,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get("http://3.6.248.144/api/v1/commodity/all1")
+      .get("http://localhost:5001/api/v1/commodity/all1")
       .then(response => {
         console.log(response.data);
         setCommodities(response.data);

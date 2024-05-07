@@ -11,7 +11,7 @@ function DetailsCompeteProduct() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/closed/Product/${id}`
+          `http://localhost:5001/api/v1/contracts/closed/Product/${id}`
         );
         setProductDetails(response.data);
       } catch (error) {

@@ -23,6 +23,7 @@ import {
 } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
+import logoImage from "../Components/Assets/yadukaLogoImage.png";
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -282,7 +283,11 @@ const SideBar = () => {
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-md">
         <div className="container-fluid p-2">
           <Link to="/" className="navbar-brand text-primary mr-0">
-            Company Logo
+            <img
+              src={logoImage}
+              alt="Company Logo"
+              style={{ maxHeight: "70px" }}
+            />
           </Link>
           <div className="form-inline ml-auto">
             <div className="btn btn-primary" onClick={toggleSidebar}>
@@ -296,7 +301,7 @@ const SideBar = () => {
       </nav>
       <div className={`sidebar ${isOpen ? "active" : ""}`}>
         <div className="sd-header">
-          <h4 className="mb-0">Yaduka</h4>
+          <h4 className="mb-0">Keep It Cool</h4>
           <div className="btn btn-primary" onClick={toggleSidebar}>
             <FaBars />
           </div>

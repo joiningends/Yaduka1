@@ -15,7 +15,7 @@ function OngoingByProductForManufecture() {
 
   useEffect(() => {
     axios
-      .get(`http://3.6.248.144/api/v1/contracts/manufacture/${id}`)
+      .get(`http://localhost:5001/api/v1/contracts/manufacture/${id}`)
       .then(response => {
         setContractData(response.data);
         console.log(response.data);

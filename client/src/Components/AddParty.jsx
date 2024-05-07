@@ -22,14 +22,14 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/users/getbyid/${userId}`
+          `http://localhost:5001/api/v1/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
 
         if (partyId) {
           // Fetch party details if in edit mode
           const partyResponse = await axios.get(
-            `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party/${partyId}`
+            `http://localhost:5001/api/v1/users/${userTypeId}/${userId}/party/${partyId}`
           );
           setFormData(partyResponse.data);
         }
@@ -97,14 +97,14 @@ function AddParty() {
       if (partyId) {
         // If in edit mode, update party details
         await axios.put(
-          `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party/${partyId}`,
+          `http://localhost:5001/api/v1/users/${userTypeId}/${userId}/party/${partyId}`,
           postData
         );
         toast.success("Party details updated successfully!");
       } else {
         // If in add mode, add new party
         await axios.post(
-          `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party`,
+          `http://localhost:5001/api/v1/users/${userTypeId}/${userId}/party`,
           postData
         );
         toast.success("Party added successfully!");

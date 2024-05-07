@@ -22,7 +22,7 @@ function EditMaterialMovement() {
     const fetchMaterialData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/getById/${id}`
+          `http://localhost:5001/api/v1/ref/getById/${id}`
         );
         setMaterialData(response.data);
         console.log(response.data);
@@ -149,7 +149,7 @@ function EditMaterialMovement() {
       console.log(deliveryData);
 
       const response = await axios.put(
-        "http://3.6.248.144/api/v1/ref",
+        "http://localhost:5001/api/v1/ref",
         deliveryData
       );
 

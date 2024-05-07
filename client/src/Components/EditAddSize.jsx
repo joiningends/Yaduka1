@@ -20,7 +20,7 @@ function EditAddSize() {
 
   useEffect(() => {
     axios
-      .get("http://3.6.248.144/api/v1/varient/all")
+      .get("http://localhost:5001/api/v1/varient/all")
       .then(response => {
         setVariants(response.data);
       })
@@ -29,7 +29,7 @@ function EditAddSize() {
       });
 
     axios
-      .get(`http://3.6.248.144/api/v1/size/${id}`)
+      .get(`http://localhost:5001/api/v1/size/${id}`)
       .then(response => {
         const sizeData = response.data;
         setInitialValues(sizeData);
@@ -48,7 +48,7 @@ function EditAddSize() {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/size/update/${id}`,
+        `http://localhost:5001/api/v1/size/update/${id}`,
         {
           size: values.size,
           varientId: values.variant,

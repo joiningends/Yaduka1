@@ -4,14 +4,13 @@ import { ClipLoader } from "react-spinners";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "react-select";
 
 function DraftContractForAreaType() {
   const [draftContract, setDraftContract] = useState(null);
   const [loading, setLoading] = useState(true);
   const [storageId, setStorageId] = useState(null);
   const [storageSpaces, setStorageSpaces] = useState([]);
-  const [selectedSpaceIds, setSelectedSpaceIds] = useState([]);
+  const [selectedSpaceId, setSelectedSpaceId] = useState(null); // Changed to single selection
   const [inQty, setInQty] = useState(1);
   const [rate, setRate] = useState(0);
   const [selectedStorageSpaces, setSelectedStorageSpaces] = useState([]);
@@ -24,7 +23,7 @@ function DraftContractForAreaType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
+          `http://localhost:5001/api/v1/contracts/${userId}/draft/${id}`
         );
         setDraftContract(response.data);
         setStorageId(response.data.storageId);
@@ -42,7 +41,7 @@ function DraftContractForAreaType() {
     const fetchStorageSpaces = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/location/space/${storageId}`
+          `http://localhost:5001/api/v1/location/space/${storageId}`
         );
         setStorageSpaces(response.data);
       } catch (error) {
@@ -56,17 +55,17 @@ function DraftContractForAreaType() {
   }, [storageId]);
 
   const handleAddSpace = () => {
-    if (selectedSpaceIds.length > 0 && rate >= 0) {
+    if (selectedSpaceId && rate >= 0) { // Check if selectedSpaceId is not null
       setSelectedStorageSpaces([
         ...selectedStorageSpaces,
         {
-          storagespace: selectedSpaceIds.map(space => space.value),
+          storagespace: selectedSpaceId,
           qty: inQty,
           rate: rate,
           amount: inQty * rate,
         },
       ]);
-      setSelectedSpaceIds([]);
+      setSelectedSpaceId(null); // Reset selectedSpaceId
       setInQty(1);
       setRate(0);
     }
@@ -79,7 +78,7 @@ function DraftContractForAreaType() {
   };
 
   const handleClearData = () => {
-    setSelectedSpaceIds([]);
+    setSelectedSpaceId(null);
     setRate(0);
   };
 
@@ -90,7 +89,7 @@ function DraftContractForAreaType() {
       };
 
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
+        `http://localhost:5001/api/v1/contracts/draft/${id}/${userId}`,
         dataToSend
       );
 
@@ -116,6 +115,7 @@ function DraftContractForAreaType() {
               <ClipLoader loading={loading} size={150} />
             ) : (
               <>
+                {/* Render storage location field */}
                 <div className="mb-3">
                   <label htmlFor="storageName" className="form-label">
                     Storage Name:
@@ -128,6 +128,8 @@ function DraftContractForAreaType() {
                     readOnly
                   />
                 </div>
+                {/* End of storage location field */}
+
                 <div className="mb-3">
                   <label htmlFor="party" className="form-label">
                     Party:
@@ -217,22 +219,27 @@ function DraftContractForAreaType() {
                   </div>
                 )}
 
+                {/* Render storage space selection */}
                 <div className="mb-3">
                   <label htmlFor="selectedSpace" className="form-label">
                     Storage Space <span className="text-danger">*</span>
                   </label>
-                  <Select
-                    isMulti
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    options={storageSpaces.map(space => ({
-                      value: space.id,
-                      label: space.space,
-                    }))}
-                    onChange={setSelectedSpaceIds}
-                    value={selectedSpaceIds}
-                  />
+                  <select
+                    className="form-control rounded-pill"
+                    id="selectedSpace"
+                    value={selectedSpaceId}
+                    onChange={(e) => setSelectedSpaceId(e.target.value)}
+                  >
+                    <option value="">Select a storage space</option>
+                    {storageSpaces.map((space) => (
+                      <option key={space.id} value={space.id}>
+                        {space.space}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+                {/* End of storage space selection */}
+
                 <div className="mb-3">
                   <label htmlFor="inQty" className="form-label">
                     In Qty <span className="text-danger">*</span>
@@ -257,7 +264,7 @@ function DraftContractForAreaType() {
                     name="rate"
                     value={rate}
                     min="0"
-                    onChange={e => setRate(e.target.value)}
+                    onChange={(e) => setRate(e.target.value)}
                     required
                   />
                 </div>
@@ -310,16 +317,7 @@ function DraftContractForAreaType() {
                       <tbody>
                         {selectedStorageSpaces.map((space, index) => (
                           <tr key={index}>
-                            <td>
-                              {space.storagespace.map((id, idx) => (
-                                <span key={idx}>
-                                  {storageSpaces.find(s => s.id === id)
-                                    ?.space || id}
-                                  {idx !== space.storagespace.length - 1 &&
-                                    ", "}
-                                </span>
-                              ))}
-                            </td>
+                            <td>{storageSpaces.find((s) => s.id == space.storagespace)?.space}</td>
                             <td>{space.qty}</td>
                             <td>{space.rate}</td>
                             <td>{space.amount}</td>

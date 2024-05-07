@@ -30,7 +30,7 @@ function CompletedMaterialMovementColdStorage() {
     setIsLoading(true);
     const id = localStorage.getItem("id");
     axios
-      .get(`http://3.6.248.144/api/v1/ref/material/completed/${id}`)
+      .get(`http://localhost:5001/api/v1/ref/material/completed/${id}`)
       .then(response => {
         const options = response.data.map(location => ({
           value: location.id,
@@ -50,7 +50,7 @@ function CompletedMaterialMovementColdStorage() {
     setIsLoading(true);
     axios
       .get(
-        `http://3.6.248.144/api/v1/ref/manufactureid/complete/${localStorage.getItem(
+        `http://localhost:5001/api/v1/ref/manufactureid/complete/${localStorage.getItem(
           "id"
         )}/${selectedOption.value}`
       )
@@ -100,7 +100,7 @@ function CompletedMaterialMovementColdStorage() {
     setSubmitting(true);
     axios
       .post(
-        `http://3.6.248.144/api/v1/ref/requstion/complete/${localStorage.getItem(
+        `http://localhost:5001/api/v1/ref/requstion/complete/${localStorage.getItem(
           "id"
         )}/${selectedLocation.value}`,
         {
@@ -131,7 +131,7 @@ function CompletedMaterialMovementColdStorage() {
 
   const handleDetailsClick = item => {
     axios
-      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .get(`http://localhost:5001/api/v1/ref/getById/${item.id}`)
       .then(response => {
         setModalData(response.data);
         setSelectedItemId(item.id);

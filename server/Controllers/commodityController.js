@@ -34,31 +34,28 @@ const allcommodity1 = async (req, res) => {
     });
     if (!data) {
       res.status(404).json({ message: "Not found.." });
-    }
-    else {
+    } else {
       let i = data.length;
       let j = 0;
       let itemAdded = [];
 
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
-        
-        Product.findOne({ where: { commodityId: element.id } })
-        .then(pro => {
-          if(!pro) {
+
+        Product.findOne({ where: { commodityId: element.id } }).then(pro => {
+          if (!pro) {
             j++;
-            if(i==j) {
+            if (i == j) {
               res.status(200).json(itemAdded);
             }
-          }
-          else {
+          } else {
             itemAdded.push(element);
             j++;
-            if(i==j) {
+            if (i == j) {
               res.status(200).json(itemAdded);
             }
           }
-        })
+        });
       }
     }
   } catch (error) {
@@ -74,12 +71,11 @@ const createCommodity = async (req, res) => {
   try {
     let image = null;
     if (req.file) {
-      const fileName= req.file.filename;
-      console.log(req.file);
-      const basePath = `${req.protocol}://${req.get('host')}/public/uplds/`;
-      
-      image = `${basePath}${fileName}`
+      const fileName = req.file.key; // Use the key provided by S3 instead of filename
+      const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
+      image = `${basePath}${fileName}`;
     }
+    console.log(req.file);
     const newCommodity = await Commodity.create({
       commodity: commodity,
       image: image,
@@ -127,14 +123,18 @@ const updateCommodity = async (req, res) => {
     if (commodityInstance) {
       let image = commodityInstance.image;
       if (req.file) {
-        image = req.file.filename;
+        const fileName = req.file.key; // Use the key provided by S3 instead of filename
+        const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
+        image = `${basePath}${fileName}`;
       }
+      console.log(req.file);
 
       await commodityInstance.update({
         commodity: commodity,
         commodityTypeId: commodityTypeId,
         image: image,
-        isActive: isActive !== undefined ? isActive : commodityInstance.isActive,
+        isActive:
+          isActive !== undefined ? isActive : commodityInstance.isActive,
       });
 
       res.json(commodityInstance);
@@ -147,7 +147,6 @@ const updateCommodity = async (req, res) => {
 };
 
 module.exports = updateCommodity;
-
 
 // delete commodityType
 
@@ -176,7 +175,7 @@ const downloadFiles = (req, res) => {
   const fileName = req.params.name;
   const path = __basedir + "/wwwroot/commodity/";
 
-  res.download(path + fileName, (err) => {
+  res.download(path + fileName, err => {
     if (err) {
       res.status(500).send({
         message: "File can not be downloaded: " + err,
@@ -184,8 +183,6 @@ const downloadFiles = (req, res) => {
     }
   });
 };
-
-
 
 module.exports = {
   createCommodity,

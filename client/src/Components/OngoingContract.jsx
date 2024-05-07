@@ -31,9 +31,11 @@ function OngoingContract() {
 
   useEffect(() => {
     setLoading(true);
-    console.log(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`);
+    console.log(
+      `http://localhost:5001/api/v1/contracts/get/allongoing/${userId}`
+    );
     axios
-      .get(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`)
+      .get(`http://localhost:5001/api/v1/contracts/get/allongoing/${userId}`)
       .then(response => {
         // Sort the contracts based on createdAt field in descending order
         const sortedContracts = response.data.sort((a, b) => {

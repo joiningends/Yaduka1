@@ -33,7 +33,7 @@ function Contract() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/${userId}/draft`
+          `http://localhost:5001/api/v1/contracts/${userId}/draft`
         );
 
         // Sort the data based on createdAt time in descending order

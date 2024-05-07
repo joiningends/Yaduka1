@@ -39,7 +39,7 @@ function MaterialMovementColdCompleted() {
     const fetchInvoicesData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/mat/complete/${userId}`
+          `http://localhost:5001/api/v1/ref/mat/complete/${userId}`
         );
         const data = response.data;
 
@@ -59,7 +59,7 @@ function MaterialMovementColdCompleted() {
   const handleViewClick = async item => {
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/ref/getById/${item.id}`
+        `http://localhost:5001/api/v1/ref/getById/${item.id}`
       );
       setModalData(response.data);
       setSelectedItemId(item.id);
