@@ -30,6 +30,7 @@ function AddProduct() {
   const [qualities, setQualities] = useState([]);
   const [packagingTypes, setPackagingTypes] = useState([]);
   const [sizes, setSizes] = useState([]);
+  console.log(sizes);
   const [selectedPackagingType, setSelectedPackagingType] = useState({
     id: "", // Initially empty
     unit: "", // Initially empty
@@ -117,64 +118,50 @@ function AddProduct() {
     console.log("Selected Packaging Type:", selectedPackagingType);
   }, [selectedPackagingType]);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async values => {
     try {
-      if (!values.image) {
-        toast.error("Please select an image.");
-        return;
-      }
+      // Dynamically generate the Unit field based on selected values
+      const unitText = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
+      values.unit = unitText;
 
-      // Calculate newUnit based on the formula
-      const newUnit = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
-      console.log(newUnit);
-      console.log(values);
+      // Prepare the data to be sent in the POST request
+      const postData = {
+        packSize: values.packSize,
+        varientId: values.variant,
+        qualityId: values.quality,
+        sizeId: values.size,
+        unitId: selectedPackagingType.id, // Assuming unitId is the correct field name
+        commodityId: values.commodity,
+        quantifiedBy: values.quantifiedBy,
+        newUnit: values.unit,
+        length: values.length != "" ? values.length : 0, // New field: Length
+        width: values.width != "" ? values.width : 0, // New field: Width
+        height: values.height != "" ? values.height : 0, // New field: Height
+      };
+
+      // Making the Axios POST request
       const formData = new FormData();
-      console.log("commodityId", values.commodity);
-      console.log("variantId", values.variant);
-      console.log("qualityId", values.quality);
-      console.log("sizeId", values.size);
-      console.log("packSize", values.packSize);
-      console.log("quantifiedBy", values.quantifiedBy);
-      console.log("unitId", selectedPackagingType.id);
-      console.log("length", values.length !== "" ? values.length : null);
-      console.log("width", values.width !== "" ? values.width : null);
-      console.log("height", values.height !== "" ? values.height : null);
-      console.log("newUnit", newUnit);
-      console.log("image", values.image);
-
-      formData.append("commodityId", values.commodity);
-      formData.append("variantId", values.variant);
-      formData.append("qualityId", values.quality);
-      formData.append("sizeId", values.size);
-      formData.append("packSize", values.packSize);
-      formData.append("quantifiedBy", values.quantifiedBy);
-      formData.append("unitId", selectedPackagingType.id);
-      formData.append("length", values.length !== "" ? values.length : null);
-      formData.append("width", values.width !== "" ? values.width : null);
-      formData.append("height", values.height !== "" ? values.height : null);
-      formData.append("newUnit", newUnit);
       formData.append("image", values.image);
+      console.log("Image:", values.image);
 
-      // const response = await axios.post(
-      //   "http://3.6.248.144/api/v1/product/create",
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
+      const response = await axios.post(
+        "http://3.6.248.144/api/v1/product/create",
+        postData
+      );
 
-      // toast.success("Product Created Successfully ");
-      // setTimeout(() => {
-      //   navigate("/Product");
-      // }, 2000);
-      // console.log("Response:", response.data);
+      // Handle the response as needed
+      toast.success("Product Created Successfully ");
+
+      // Set a timeout to navigate after showing the toast message
+      setTimeout(() => {
+        navigate("/Product");
+      }, 2000); // 2000 milliseconds (2 seconds)
+      console.log("Response:", response.data);
     } catch (error) {
+      // Handle any errors that occurred during the request
       toast.error("Error while creating product!");
+
       console.error("Error:", error.message);
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -198,7 +185,7 @@ function AddProduct() {
           </div>
           <div className="card-body">
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-              {({ values, setFieldValue, isSubmitting }) => (
+              {({ values, setFieldValue }) => (
                 <Form>
                   <div className="mb-3 row">
                     <div className="col-md-6">
@@ -470,9 +457,8 @@ function AddProduct() {
                         background: "linear-gradient(263deg, #34b6df, #34d0be)",
                         marginLeft: "10px",
                       }}
-                      disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Submitting..." : "Submit"}
+                      Submit
                     </button>
                   </div>
                 </Form>

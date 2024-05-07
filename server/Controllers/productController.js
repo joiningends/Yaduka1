@@ -89,7 +89,21 @@ const createProduct = async (req, res) => {
     height,
     width,
   } = req.body;
-  console.log(req.body);
+  console.log(req.body.unitId);
+  console.log(req.body.newUnit);
+  console.log(
+      commodityId,
+      variantId,
+      qualityId,
+      sizeId,
+      packagingType,
+      packSize,
+      quantifiedBy,
+      unit,
+      length,
+      height,
+      width,
+    )
 
   try {
     let image = null;
