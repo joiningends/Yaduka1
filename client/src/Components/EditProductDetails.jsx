@@ -21,12 +21,12 @@ function EditProductDetails() {
     const fetchData = async () => {
       try {
         console.log(
-          `http://localhost:5001/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+          `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
             "id"
           )}`
         );
         const response = await axios.get(
-          `http://localhost:5001/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
+          `http://3.6.248.144/api/v1/contracts/details/button/${selectedAdminId}/${selectedLocationId}/${localStorage.getItem(
             "id"
           )}`
         );
@@ -101,12 +101,12 @@ function EditProductDetails() {
     };
 
     console.log(requestData);
-    console.log(`http://localhost:5001/api/v1/ref/create/${partyId}`);
+    console.log(`http://3.6.248.144/api/v1/ref/create/${partyId}`);
 
     try {
       // Send request to save data
       await axios.post(
-        `http://localhost:5001/api/v1/ref/create/${partyId}`,
+        `http://3.6.248.144/api/v1/ref/create/${partyId}`,
         requestData
       );
       // Remove the date from local storage after successful response

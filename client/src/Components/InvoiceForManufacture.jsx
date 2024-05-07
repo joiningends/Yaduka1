@@ -27,7 +27,7 @@ function InvoiceForManufacture() {
   const fetchStorageLocationOptions = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/v1/contracts/invoices/manufacture/location/${userId}`
+        `http://3.6.248.144/api/v1/contracts/invoices/manufacture/location/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -48,7 +48,7 @@ function InvoiceForManufacture() {
   const fetchContractOptions = async storageId => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/v1/contracts/invoice/storags/${userId}/${storageId}`
+        `http://3.6.248.144/api/v1/contracts/invoice/storags/${userId}/${storageId}`
       );
 
       if (response.ok) {
@@ -76,10 +76,10 @@ function InvoiceForManufacture() {
   const fetchInvoiceDetails = async contractId => {
     try {
       console.log(
-        `http://localhost:5001/api/v1/contracts/invoices/all/${contractId}`
+        `http://3.6.248.144/api/v1/contracts/invoices/all/${contractId}`
       );
       const response = await fetch(
-        `http://localhost:5001/api/v1/contracts/invoices/all/${contractId}`
+        `http://3.6.248.144/api/v1/contracts/invoices/all/${contractId}`
       );
 
       if (response.ok) {
@@ -128,7 +128,7 @@ function InvoiceForManufacture() {
 
   const handleViewClick = async invoiceName => {
     try {
-      const pdfUrl = `http://localhost:5001/api/v1/contracts/view/${invoiceName}.pdf`;
+      const pdfUrl = `http://3.6.248.144/api/v1/contracts/view/${invoiceName}.pdf`;
 
       console.log(invoiceName);
       const openInNewTab = url => {

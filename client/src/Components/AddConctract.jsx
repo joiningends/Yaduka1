@@ -38,7 +38,7 @@ function AddContract() {
     const fetchStorageOptions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/location/${userId}`
+          `http://3.6.248.144/api/v1/location/${userId}`
         );
         setStorageOptions(response.data);
       } catch (error) {
@@ -49,7 +49,7 @@ function AddContract() {
     const fetchPartyOptions = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5001/api/v1/users/all/party/all"
+          "http://3.6.248.144/api/v1/users/all/party/all"
         );
         setPartyOptions(response.data);
       } catch (error) {
@@ -59,9 +59,7 @@ function AddContract() {
 
     const fetchGstRates = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/gstrates"
-        );
+        const response = await axios.get("http://3.6.248.144/api/v1/gstrates");
         setGstRates(response.data);
       } catch (error) {
         console.error("Error fetching GST rates:", error);
@@ -70,9 +68,7 @@ function AddContract() {
 
     const fetchGstTypes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/gsttypes"
-        );
+        const response = await axios.get("http://3.6.248.144/api/v1/gsttypes");
         setGstTypes(response.data);
       } catch (error) {
         console.error("Error fetching GST types:", error);
@@ -122,7 +118,7 @@ function AddContract() {
       console.log(dataToSend);
 
       const response = await axios.post(
-        `http://localhost:5001/api/v1/contracts/${userId}`,
+        `http://3.6.248.144/api/v1/contracts/${userId}`,
         dataToSend
       );
 

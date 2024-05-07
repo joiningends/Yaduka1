@@ -29,7 +29,7 @@ function EditCommodity() {
     const fetchCommodity = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/commodity/${id}`
+          `http://3.6.248.144/api/v1/commodity/${id}`
         );
         const { commodity, commodityTypeId, image } = response.data;
         setCommodityData({
@@ -49,7 +49,7 @@ function EditCommodity() {
     const fetchCommodityTypes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5001/api/v1/commoditytype/all"
+          "http://3.6.248.144/api/v1/commoditytype/all"
         );
         setCommodityTypes(response.data);
       } catch (error) {
@@ -69,7 +69,7 @@ function EditCommodity() {
       formData.append("image", values.image);
 
       const response = await axios.put(
-        `http://localhost:5001/api/v1/commodity/update/${id}`,
+        `http://3.6.248.144/api/v1/commodity/update/${id}`,
         formData,
         {
           headers: {

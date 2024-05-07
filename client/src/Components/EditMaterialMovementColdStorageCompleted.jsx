@@ -21,7 +21,7 @@ function EditMaterialMovementColdStorageCompleted() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/ref/tabledata/${id}`
+          `http://3.6.248.144/api/v1/ref/tabledata/${id}`
         );
         setData(response.data);
       } catch (error) {
@@ -65,7 +65,7 @@ function EditMaterialMovementColdStorageCompleted() {
       );
 
       const response = await axios.put(
-        "http://localhost:5001/api/v1/ref",
+        "http://3.6.248.144/api/v1/ref",
         deliveryData
       );
 

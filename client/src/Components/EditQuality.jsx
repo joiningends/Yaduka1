@@ -20,7 +20,7 @@ function EditQuality() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/varient/all")
+      .get("http://3.6.248.144/api/v1/varient/all")
       .then(response => {
         setVariants(response.data);
       })
@@ -30,7 +30,7 @@ function EditQuality() {
 
     if (id) {
       axios
-        .get(`http://localhost:5001/api/v1/quality/${id}`)
+        .get(`http://3.6.248.144/api/v1/quality/${id}`)
         .then(response => {
           const qualityData = response.data;
           setInitialValues(qualityData);
@@ -50,7 +50,7 @@ function EditQuality() {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:5001/api/v1/quality/update/${id}`,
+        `http://3.6.248.144/api/v1/quality/update/${id}`,
         {
           quality: values.quality,
           varientId: values.variantId,

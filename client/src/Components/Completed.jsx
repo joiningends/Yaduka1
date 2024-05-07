@@ -32,7 +32,7 @@ function Completed() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5001/api/v1/contracts/clod/closed/${userId}`)
+      .get(`http://3.6.248.144/api/v1/contracts/clod/closed/${userId}`)
       .then(response => {
         // Sort the data based on createdAt time in descending order
         const sortedContracts = response.data.sort((a, b) => {

@@ -23,9 +23,7 @@ function AddQuality() {
   const fetchVariants = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:5001/api/v1/varient/all"
-      );
+      const response = await axios.get("http://3.6.248.144/api/v1/varient/all");
       setVariants(response.data);
       setLoading(false);
     } catch (error) {
@@ -39,7 +37,7 @@ function AddQuality() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5001/api/v1/quality/create",
+        "http://3.6.248.144/api/v1/quality/create",
         {
           quality: values.quality,
           varientId: values.variantId,

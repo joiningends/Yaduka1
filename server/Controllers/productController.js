@@ -75,18 +75,19 @@ const allProduct1 = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const {
-    packSize,
-    varientId,
+    commodityId,
+    variantId,
     qualityId,
     sizeId,
-    unitId,
-    commodityId,
+    packagingType,
+    packSize,
     quantifiedBy,
-    newUnit,
+    unit,
     length,
     height,
     width,
   } = req.body;
+  console.log(req.body)
 
   try {
     let image = null;
@@ -95,26 +96,30 @@ const createProduct = async (req, res) => {
       const basePath = `https://yasukaimages.s3.ap-south-1.amazonaws.com/`; // Base URL of your S3 bucket
       image = `${basePath}${fileName}`;
     }
+
+    // Create the product with the received data
     const newProduct = await Product.create({
-      packSize: packSize,
-      varientId: varientId,
-      qualityId: qualityId,
-      sizeId: sizeId,
-      unitId: unitId,
-      commodityId: commodityId,
-      quantifiedBy: quantifiedBy,
-      newUnit: newUnit,
-      length: length,
-      height: height,
-      width: width,
-      image: image,
+      commodityId,
+      variantId,
+      qualityId,
+      sizeId,
+      packagingType,
+      packSize,
+      quantifiedBy,
+      unit,
+      length,
+      height,
+      width,
+      image,
     });
 
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json(error);
+    console.error("Error creating product:", error);
+    res.status(500).json({ message: "Error creating product", error });
   }
 };
+
 
 //get single product
 

@@ -8,10 +8,10 @@ function DetailsCompleteArea() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(`http://localhost:5001/api/v1/contracts/closed/Area/${id}`);
+      console.log(`http://3.6.248.144/api/v1/contracts/closed/Area/${id}`);
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/contracts/closed/Area/${id}`
+          `http://3.6.248.144/api/v1/contracts/closed/Area/${id}`
         );
         setCompleteAreaDetails(response.data);
         console.log(response.data);

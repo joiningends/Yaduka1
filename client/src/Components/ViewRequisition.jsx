@@ -23,7 +23,7 @@ function ViewRequisition() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/ref/getById/${id}`
+          `http://3.6.248.144/api/v1/ref/getById/${id}`
         );
         setRequisitionData(response.data);
       } catch (error) {

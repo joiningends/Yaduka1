@@ -65,7 +65,7 @@ const SetPasswordPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5001/api/v1/users/${id}/password`,
+        `http://3.6.248.144/api/v1/users/${id}/password`,
         {
           method: "PUT",
           headers: {

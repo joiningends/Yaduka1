@@ -34,11 +34,9 @@ function OngoingMaufecture() {
     setLoading(true);
 
     // Fetch ongoing contracts for a specific user
-    console.log(
-      `http://localhost:5001/api/v1/contracts/get/allongoing/${userId}`
-    );
+    console.log(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`);
     axios
-      .get(`http://localhost:5001/api/v1/contracts/get/allongoing/${userId}`)
+      .get(`http://3.6.248.144/api/v1/contracts/get/allongoing/${userId}`)
       .then(response => {
         // Sort the contracts based on createdAt field in descending order
         const sortedContracts = response.data.contracts.sort((a, b) => {

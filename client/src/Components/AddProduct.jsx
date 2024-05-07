@@ -30,7 +30,6 @@ function AddProduct() {
   const [qualities, setQualities] = useState([]);
   const [packagingTypes, setPackagingTypes] = useState([]);
   const [sizes, setSizes] = useState([]);
-  console.log(sizes);
   const [selectedPackagingType, setSelectedPackagingType] = useState({
     id: "", // Initially empty
     unit: "", // Initially empty
@@ -46,7 +45,7 @@ function AddProduct() {
     const fetchCommodities = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5001/api/v1/commodity/all"
+          "http://3.6.248.144/api/v1/commodity/all"
         );
         setCommodities(response.data);
       } catch (error) {
@@ -56,9 +55,7 @@ function AddProduct() {
 
     const fetchPackagingTypes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/v1/unit/all"
-        );
+        const response = await axios.get("http://3.6.248.144/api/v1/unit/all");
         setPackagingTypes(response.data);
       } catch (error) {
         console.error("Error fetching packaging types:", error);
@@ -73,7 +70,7 @@ function AddProduct() {
     if (commodityId) {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/varient/commodity/${commodityId}`
+          `http://3.6.248.144/api/v1/varient/commodity/${commodityId}`
         );
         setVariants(response.data);
       } catch (error) {
@@ -89,7 +86,7 @@ function AddProduct() {
     if (variantId) {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/quality/all`
+          `http://3.6.248.144/api/v1/quality/all`
         );
         setQualities(response.data);
       } catch (error) {
@@ -98,7 +95,7 @@ function AddProduct() {
 
       try {
         const sizeResponse = await axios.get(
-          `http://localhost:5001/api/v1/size/all`
+          `http://3.6.248.144/api/v1/size/all`
         );
         setSizes(sizeResponse.data);
       } catch (error) {
@@ -120,50 +117,55 @@ function AddProduct() {
     console.log("Selected Packaging Type:", selectedPackagingType);
   }, [selectedPackagingType]);
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // Dynamically generate the Unit field based on selected values
-      const unitText = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
-      values.unit = unitText;
+      if (!values.image) {
+        toast.error("Please select an image.");
+        return;
+      }
 
-      // Prepare the data to be sent in the POST request
-      const postData = {
-        packSize: values.packSize,
-        varientId: values.variant,
-        qualityId: values.quality,
-        sizeId: values.size,
-        unitId: selectedPackagingType.id, // Assuming unitId is the correct field name
-        commodityId: values.commodity,
-        quantifiedBy: values.quantifiedBy,
-        newUnit: values.unit,
-        length: values.length, // New field: Length
-        width: values.width, // New field: Width
-        height: values.height, // New field: Height
-      };
-
-      // Making the Axios POST request
       const formData = new FormData();
+      formData.append("commodityId", values.commodity);
+      formData.append("variantId", values.variant);
+      formData.append("qualityId", values.quality);
+      formData.append("sizeId", values.size);
+      formData.append("packagingType", values.packagingType);
+      formData.append("packSize", values.packSize);
+      formData.append("quantifiedBy", values.quantifiedBy);
+      formData.append("unit", values.unit);
       formData.append("image", values.image);
-      console.log("Image:", values.image);
+
+      // Append length, width, and height if they are not empty
+      if (values.length) {
+        formData.append("length", values.length);
+      }
+      if (values.width) {
+        formData.append("width", values.width);
+      }
+      if (values.height) {
+        formData.append("height", values.height);
+      }
 
       const response = await axios.post(
-        "http://localhost:5001/api/v1/product/create",
-        postData
+        "http://3.6.248.144/api/v1/product/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
-      // Handle the response as needed
       toast.success("Product Created Successfully ");
-
-      // Set a timeout to navigate after showing the toast message
       setTimeout(() => {
         navigate("/Product");
-      }, 2000); // 2000 milliseconds (2 seconds)
+      }, 2000);
       console.log("Response:", response.data);
     } catch (error) {
-      // Handle any errors that occurred during the request
       toast.error("Error while creating product!");
-
       console.error("Error:", error.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -187,7 +189,7 @@ function AddProduct() {
           </div>
           <div className="card-body">
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-              {({ values, setFieldValue }) => (
+              {({ values, setFieldValue, isSubmitting }) => (
                 <Form>
                   <div className="mb-3 row">
                     <div className="col-md-6">
@@ -403,7 +405,6 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="length"
                         name="length"
-                        required // Added required attribute
                       />
                     </div>
                     <div className="col-md-4">
@@ -415,7 +416,6 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="width"
                         name="width"
-                        required // Added required attribute
                       />
                     </div>
                     <div className="col-md-4">
@@ -427,7 +427,6 @@ function AddProduct() {
                         className="form-control rounded-pill"
                         id="height"
                         name="height"
-                        required // Added required attribute
                       />
                     </div>
                   </div>
@@ -462,8 +461,9 @@ function AddProduct() {
                         background: "linear-gradient(263deg, #34b6df, #34d0be)",
                         marginLeft: "10px",
                       }}
+                      disabled={isSubmitting}
                     >
-                      Submit
+                      {isSubmitting ? "Submitting..." : "Submit"}
                     </button>
                   </div>
                 </Form>

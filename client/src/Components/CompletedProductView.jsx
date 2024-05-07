@@ -11,7 +11,7 @@ function CompletedProductView() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5001/api/v1/contracts/closed/Product/${id}`)
+      .get(`http://3.6.248.144/api/v1/contracts/closed/Product/${id}`)
       .then(response => {
         setContractData(response.data);
         setLoading(false);

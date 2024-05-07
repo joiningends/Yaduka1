@@ -28,7 +28,7 @@ function AddCommodity() {
     const fetchCommodityTypes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5001/api/v1/commoditytype/all"
+          "http://3.6.248.144/api/v1/commoditytype/all"
         );
         setCommodityTypes(response.data);
       } catch (error) {
@@ -50,7 +50,7 @@ function AddCommodity() {
       console.log(values);
 
       const response = await axios.post(
-        "http://localhost:5001/api/v1/commodity/create",
+        "http://3.6.248.144/api/v1/commodity/create",
         formData,
         {
           headers: {

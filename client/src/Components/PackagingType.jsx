@@ -28,7 +28,7 @@ function PackagingType() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5001/api/v1/unit/all")
+      .get("http://3.6.248.144/api/v1/unit/all")
       .then(response => {
         // Sort the data based on createdAt time
         const sortedData = response.data.sort((a, b) => {
@@ -57,7 +57,7 @@ function PackagingType() {
   const handleDeletePackagingType = id => {
     setLoading(true);
     axios
-      .delete(`http://localhost:5001/api/v1/unit/delete/${id}`)
+      .delete(`http://3.6.248.144/api/v1/unit/delete/${id}`)
       .then(response => {
         const updatedPackagingTypes = packagingTypes.filter(
           item => item.id !== id

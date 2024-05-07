@@ -39,7 +39,7 @@ function MaterialMovementColdPending() {
     const fetchInvoicesData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/ref/mat/pending/${userId}`
+          `http://3.6.248.144/api/v1/ref/mat/pending/${userId}`
         );
         const data = response.data;
         setInvoicesData(data);
@@ -56,7 +56,7 @@ function MaterialMovementColdPending() {
   const handleViewClick = async item => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/api/v1/ref/getById/${item.id}`
+        `http://3.6.248.144/api/v1/ref/getById/${item.id}`
       );
       setModalData(response.data);
       setSelectedItemId(item.id);

@@ -23,7 +23,7 @@ function DraftContractForAreaType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/contracts/${userId}/draft/${id}`
+          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
         );
         setDraftContract(response.data);
         setStorageId(response.data.storageId);
@@ -41,7 +41,7 @@ function DraftContractForAreaType() {
     const fetchStorageSpaces = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/location/space/${storageId}`
+          `http://3.6.248.144/api/v1/location/space/${storageId}`
         );
         setStorageSpaces(response.data);
       } catch (error) {
@@ -55,7 +55,8 @@ function DraftContractForAreaType() {
   }, [storageId]);
 
   const handleAddSpace = () => {
-    if (selectedSpaceId && rate >= 0) { // Check if selectedSpaceId is not null
+    if (selectedSpaceId && rate >= 0) {
+      // Check if selectedSpaceId is not null
       setSelectedStorageSpaces([
         ...selectedStorageSpaces,
         {
@@ -89,7 +90,7 @@ function DraftContractForAreaType() {
       };
 
       const response = await axios.put(
-        `http://localhost:5001/api/v1/contracts/draft/${id}/${userId}`,
+        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
         dataToSend
       );
 
@@ -228,10 +229,10 @@ function DraftContractForAreaType() {
                     className="form-control rounded-pill"
                     id="selectedSpace"
                     value={selectedSpaceId}
-                    onChange={(e) => setSelectedSpaceId(e.target.value)}
+                    onChange={e => setSelectedSpaceId(e.target.value)}
                   >
                     <option value="">Select a storage space</option>
-                    {storageSpaces.map((space) => (
+                    {storageSpaces.map(space => (
                       <option key={space.id} value={space.id}>
                         {space.space}
                       </option>
@@ -264,7 +265,7 @@ function DraftContractForAreaType() {
                     name="rate"
                     value={rate}
                     min="0"
-                    onChange={(e) => setRate(e.target.value)}
+                    onChange={e => setRate(e.target.value)}
                     required
                   />
                 </div>
@@ -317,7 +318,13 @@ function DraftContractForAreaType() {
                       <tbody>
                         {selectedStorageSpaces.map((space, index) => (
                           <tr key={index}>
-                            <td>{storageSpaces.find((s) => s.id == space.storagespace)?.space}</td>
+                            <td>
+                              {
+                                storageSpaces.find(
+                                  s => s.id == space.storagespace
+                                )?.space
+                              }
+                            </td>
                             <td>{space.qty}</td>
                             <td>{space.rate}</td>
                             <td>{space.amount}</td>

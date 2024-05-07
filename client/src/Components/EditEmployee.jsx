@@ -50,7 +50,7 @@ const EditEmployee = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5001/api/v1/users/${id}/update`,
+        `http://3.6.248.144/api/v1/users/${id}/update`,
         {
           name: trimmedValues.name,
           mobileNumber: trimmedValues.phoneNumber,
@@ -86,7 +86,7 @@ const EditEmployee = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5001/api/v1/users/employee/${id}`
+          `http://3.6.248.144/api/v1/users/employee/${id}`
         );
 
         const mappedData = {

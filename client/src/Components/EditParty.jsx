@@ -25,7 +25,7 @@ function EditParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/users/getbyid/${userId}`
+          `http://3.6.248.144/api/v1/users/getbyid/${userId}`
         );
         const userTypeId = response.data.userTypeId;
         setFormData(prevData => ({ ...prevData, userTypeId }));
@@ -41,7 +41,7 @@ function EditParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/users/edit/${phoneNumber}`
+          `http://3.6.248.144/api/v1/users/edit/${phoneNumber}`
         );
         const partyData = response.data[0];
         const updatedFormData = {
@@ -100,7 +100,7 @@ function EditParty() {
       console.log(updatedValues);
 
       await axios.put(
-        `http://localhost:5001/api/v1/users/${partyId}/update`,
+        `http://3.6.248.144/api/v1/users/${partyId}/update`,
         updatedValues
       );
 

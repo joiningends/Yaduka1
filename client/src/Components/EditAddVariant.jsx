@@ -23,9 +23,7 @@ function EditAddVariant() {
 
   const fetchCommodities = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5001/api/v1/commodity/all"
-      );
+      const response = await fetch("http://3.6.248.144/api/v1/commodity/all");
       if (response.ok) {
         const data = await response.json();
         setCommodities(data);
@@ -39,9 +37,7 @@ function EditAddVariant() {
 
   const fetchVariantData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5001/api/v1/varient/${id}`
-      );
+      const response = await fetch(`http://3.6.248.144/api/v1/varient/${id}`);
       if (response.ok) {
         const data = await response.json();
         setVariantData({
@@ -94,7 +90,7 @@ function EditAddVariant() {
     try {
       console.log(JSON.stringify(variantData));
       const response = await fetch(
-        `http://localhost:5001/api/v1/varient/update/${id}`,
+        `http://3.6.248.144/api/v1/varient/update/${id}`,
         {
           method: "PUT",
           headers: {

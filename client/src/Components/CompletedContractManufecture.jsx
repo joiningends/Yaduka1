@@ -32,12 +32,10 @@ function CompletedContractManufecture() {
   useEffect(() => {
     setLoading(true);
     console.log(
-      `http://localhost:5001/api/v1/contracts/manufactures/closed/${userId}`
+      `http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`
     );
     axios
-      .get(
-        `http://localhost:5001/api/v1/contracts/manufactures/closed/${userId}`
-      )
+      .get(`http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`)
       .then(response => {
         setContracts(response.data);
         setLoading(false);

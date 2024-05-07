@@ -33,7 +33,7 @@ function ManufectureEmployee() {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/api/v1/users/get/${userId}`
+        `http://3.6.248.144/api/v1/users/get/${userId}`
       );
       const sortedData = response.data.sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
@@ -73,7 +73,7 @@ function ManufectureEmployee() {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://localhost:5001/api/v1/users/${id}`);
+      await axios.delete(`http://3.6.248.144/api/v1/users/${id}`);
       setIsDeleted(true); // Trigger reload and show success message
     } catch (error) {
       console.error("Error deleting user:", error);

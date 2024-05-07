@@ -24,9 +24,7 @@ function AddVariant() {
 
   const fetchCommodities = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5001/api/v1/commodity/all"
-      );
+      const response = await fetch("http://3.6.248.144/api/v1/commodity/all");
       if (response.ok) {
         const data = await response.json();
         setCommodities(data);
@@ -59,14 +57,12 @@ function AddVariant() {
       formData.append("cropDuration", cropDuration);
       formData.append("isImported", convertedIsImported);
       formData.append("farmable", convertedIsFarmable);
+      console.log(formData);
 
-      const response = await fetch(
-        "http://localhost:5001/api/v1/varient/create",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("http://3.6.248.144/api/v1/varient/create", {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         toast.success("Variant submitted successfully!");

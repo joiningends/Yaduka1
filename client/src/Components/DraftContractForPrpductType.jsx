@@ -23,7 +23,7 @@ function DraftContractForProductType() {
   console.log(storageSpaces);
   const navigate = useNavigate();
 
-  console.log(storageSpaces)
+  console.log(storageSpaces);
 
   const userId = localStorage.getItem("id");
 
@@ -31,12 +31,12 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/v1/contracts/${userId}/draft/${id}`
+          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
         );
         setContractData(response.data);
         setLocation(response.data.location.id);
         const productResponse = await axios.get(
-          "http://localhost:5001/api/v1/product/all"
+          "http://3.6.248.144/api/v1/product/all"
         );
         setProductOptions(productResponse.data);
       } catch (error) {
@@ -51,7 +51,7 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const spaceResponse = await axios.get(
-          `http://localhost:5001/api/v1/location/space/${location}`
+          `http://3.6.248.144/api/v1/location/space/${location}`
         );
         setSpaceOptions(spaceResponse.data);
       } catch (error) {
@@ -146,7 +146,7 @@ function DraftContractForProductType() {
     try {
       console.log(transformedData);
       const response = await axios.put(
-        `http://localhost:5001/api/v1/contracts/draft/${id}/${userId}/product`,
+        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 

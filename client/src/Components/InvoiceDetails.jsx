@@ -30,7 +30,7 @@ const InvoiceDetails = () => {
   const fetchInvoiceData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/api/v1/contracts/invoices/all/${id}`
+        `http://3.6.248.144/api/v1/contracts/invoices/all/${id}`
       );
       console.log(response.data.invoiceDetails);
       setInvoiceData(response.data.invoiceDetails);
@@ -62,7 +62,7 @@ const InvoiceDetails = () => {
 
   const handleViewClick = async invoiceName => {
     try {
-      const pdfUrl = `http://localhost:5001/api/v1/contracts/view/${invoiceName}.pdf`;
+      const pdfUrl = `http://3.6.248.144/api/v1/contracts/view/${invoiceName}.pdf`;
 
       const openInNewTab = url => {
         if (typeof window !== "undefined") {
