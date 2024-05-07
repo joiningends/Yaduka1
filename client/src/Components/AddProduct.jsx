@@ -124,27 +124,23 @@ function AddProduct() {
         return;
       }
 
+      // Calculate newUnit based on the formula
+      const newUnit = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
+      console.log(newUnit);
+      console.log(values);
       const formData = new FormData();
       formData.append("commodityId", values.commodity);
       formData.append("variantId", values.variant);
       formData.append("qualityId", values.quality);
       formData.append("sizeId", values.size);
-      formData.append("packagingType", values.packagingType);
       formData.append("packSize", values.packSize);
       formData.append("quantifiedBy", values.quantifiedBy);
-      formData.append("unit", values.unit);
+      formData.append("unitId", selectedPackagingType.id);
+      formData.append("length", values.length !== "" ? values.length : null);
+      formData.append("width", values.width !== "" ? values.width : null);
+      formData.append("height", values.height !== "" ? values.height : null);
+      formData.append("newUnit", newUnit);
       formData.append("image", values.image);
-
-      // Append length, width, and height if they are not empty
-      if (values.length) {
-        formData.append("length", values.length);
-      }
-      if (values.width) {
-        formData.append("width", values.width);
-      }
-      if (values.height) {
-        formData.append("height", values.height);
-      }
 
       const response = await axios.post(
         "http://3.6.248.144/api/v1/product/create",

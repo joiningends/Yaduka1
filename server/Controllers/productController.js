@@ -40,6 +40,7 @@ const allProduct = async (req, res) => {
 
 const allProduct1 = async (req, res) => {
   const commodityId = req.params.commodityId;
+  console.log(commodityId);
   try {
     const data = await Product.findAll({
       where: { commodityId: commodityId },
@@ -54,6 +55,7 @@ const allProduct1 = async (req, res) => {
         },
       ],
     });
+    console.log(data);
 
     if (!data || data.length === 0) {
       res.status(404).json({ message: "Not found.." });
@@ -87,7 +89,7 @@ const createProduct = async (req, res) => {
     height,
     width,
   } = req.body;
-  console.log(req.body)
+  console.log(req.body);
 
   try {
     let image = null;
@@ -119,7 +121,6 @@ const createProduct = async (req, res) => {
     res.status(500).json({ message: "Error creating product", error });
   }
 };
-
 
 //get single product
 
