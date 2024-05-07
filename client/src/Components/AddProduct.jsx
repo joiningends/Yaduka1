@@ -129,6 +129,19 @@ function AddProduct() {
       console.log(newUnit);
       console.log(values);
       const formData = new FormData();
+      console.log("commodityId", values.commodity);
+      console.log("variantId", values.variant);
+      console.log("qualityId", values.quality);
+      console.log("sizeId", values.size);
+      console.log("packSize", values.packSize);
+      console.log("quantifiedBy", values.quantifiedBy);
+      console.log("unitId", selectedPackagingType.id);
+      console.log("length", values.length !== "" ? values.length : null);
+      console.log("width", values.width !== "" ? values.width : null);
+      console.log("height", values.height !== "" ? values.height : null);
+      console.log("newUnit", newUnit);
+      console.log("image", values.image);
+
       formData.append("commodityId", values.commodity);
       formData.append("variantId", values.variant);
       formData.append("qualityId", values.quality);
@@ -142,21 +155,21 @@ function AddProduct() {
       formData.append("newUnit", newUnit);
       formData.append("image", values.image);
 
-      const response = await axios.post(
-        "http://3.6.248.144/api/v1/product/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   "http://3.6.248.144/api/v1/product/create",
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
-      toast.success("Product Created Successfully ");
-      setTimeout(() => {
-        navigate("/Product");
-      }, 2000);
-      console.log("Response:", response.data);
+      // toast.success("Product Created Successfully ");
+      // setTimeout(() => {
+      //   navigate("/Product");
+      // }, 2000);
+      // console.log("Response:", response.data);
     } catch (error) {
       toast.error("Error while creating product!");
       console.error("Error:", error.message);
