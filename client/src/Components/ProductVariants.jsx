@@ -152,7 +152,7 @@ function ProductVariants() {
                     <TableCell>
                       {variant.varient.image ? (
                         <img
-                          src={variant.varient.image}
+                          src={variant.image}
                           alt={`Image of ${variant.varient.varient}`}
                           style={{
                             width: "50px",
