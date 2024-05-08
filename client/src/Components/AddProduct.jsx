@@ -122,8 +122,8 @@ function AddProduct() {
     try {
       // Dynamically generate the Unit field based on selected values
       const unitText = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
-      values.unit = unitText;
 
+      console.log(values);
       // Prepare the data to be sent in the POST request
       const postData = {
         packSize: values.packSize,
@@ -133,13 +133,15 @@ function AddProduct() {
         unitId: selectedPackagingType.id, // Assuming unitId is the correct field name
         commodityId: values.commodity,
         quantifiedBy: values.quantifiedBy,
+        // newUnit: unitText,
         newUnit: values.unit,
         length: values.length != "" ? values.length : 0, // New field: Length
         width: values.width != "" ? values.width : 0, // New field: Width
         height: values.height != "" ? values.height : 0, // New field: Height
       };
 
-      // Making the Axios POST request
+      console.log(postData);
+
       const formData = new FormData();
       formData.append("image", values.image);
       console.log("Image:", values.image);
