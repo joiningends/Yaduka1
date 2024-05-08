@@ -89,7 +89,7 @@ const createProduct = async (req, res) => {
     height,
     width,
     newUnit,
-    unit
+    unit,
   } = req.body;
 
   try {

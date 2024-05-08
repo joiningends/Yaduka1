@@ -130,11 +130,11 @@ function AddProduct() {
         varientId: values.variant,
         qualityId: values.quality,
         sizeId: values.size,
-        unitId: selectedPackagingType.id, // Assuming unitId is the correct field name
         commodityId: values.commodity,
         quantifiedBy: values.quantifiedBy,
-        // newUnit: unitText,
-        newUnit: values.unit,
+        newUnit: unitText,
+        unitId: selectedPackagingType.id,
+        // newUnit: values.unit,
         length: values.length != "" ? values.length : 0, // New field: Length
         width: values.width != "" ? values.width : 0, // New field: Width
         height: values.height != "" ? values.height : 0, // New field: Height
