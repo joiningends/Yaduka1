@@ -91,33 +91,6 @@ const createProduct = async (req, res) => {
     newUnit,
   } = req.body;
 
-  packSize,
-    varientId,
-    qualityId,
-    sizeId,
-    unitId,
-    commodityId,
-    quantifiedBy,
-    newUnit,
-    length,
-    height,
-    width,
-    console.log(req.body.unitId);
-  console.log(req.body.newUnit);
-  console.log(
-    commodityId,
-    variantId,
-    qualityId,
-    sizeId,
-    packagingType,
-    packSize,
-    quantifiedBy,
-    unit,
-    length,
-    height,
-    width
-  );
-
   try {
     let image = null;
     if (req.file) {

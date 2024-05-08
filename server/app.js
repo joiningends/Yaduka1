@@ -105,7 +105,6 @@ product.belongsTo(varient);
 product.belongsTo(quality);
 product.belongsTo(size);
 product.belongsTo(unit);
-
 product.belongsTo(commodity);
 // In UserUnder model
 UserUnder.belongsTo(userTable, { foreignKey: "partyid", as: "party" });
