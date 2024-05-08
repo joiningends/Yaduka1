@@ -89,7 +89,6 @@ const createProduct = async (req, res) => {
     height,
     width,
     newUnit,
-    unit,
   } = req.body;
 
   try {
@@ -115,7 +114,6 @@ const createProduct = async (req, res) => {
       height,
       width,
       image,
-      unit
     });
 
     res.status(201).json(newProduct);
