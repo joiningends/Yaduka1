@@ -14,26 +14,26 @@ const varient = sequelize.define("varient", {
   isImported: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
-    allowNull:true
+    allowNull: true,
   },
   image: {
     type: Sequelize.STRING,
-    allowNull:true
+    allowNull: true,
   },
   cropDuration: {
     type: Sequelize.STRING,
-    allowNull:true
+    allowNull: true,
   },
   farmable: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
-    allowNull:true
+    allowNull: true,
   },
   isActive: {
     type: Sequelize.BOOLEAN,
     defaultValue: true,
-    allowNull:false
-  }
+    allowNull: false,
+  },
 });
 
 module.exports = varient;

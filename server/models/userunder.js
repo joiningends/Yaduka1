@@ -8,12 +8,6 @@ const UserUnder = sequelize.define("UserUnder", {
     autoIncrement: true,
     allowNull: false,
   },
- 
-  
 });
 
-
-
-
-
-  module.exports =UserUnder;
+module.exports = UserUnder;

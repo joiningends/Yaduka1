@@ -38,8 +38,8 @@ router.get("/all", productController.allProduct);
 router.get("/all1/:commodityId", productController.allProduct1);
 
 // create product data
-// router.post("/create", upload.single("image"), productController.createProduct);
-router.post("/create",  productController.createProduct);
+router.post("/create", upload.single("image"), productController.createProduct);
+// router.post("/create",  productController.createProduct);
 
 // single product data
 router.get("/:id", productController.singleProduct);

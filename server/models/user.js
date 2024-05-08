@@ -7,10 +7,9 @@ const userTable = sequelize.define("userTable", {
     autoIncrement: true,
     allowNull: false,
   },
-  uid:{
+  uid: {
     type: DataTypes.STRING,
-    
-   
+
     allowNull: true,
   },
   name: {
@@ -57,65 +56,65 @@ const userTable = sequelize.define("userTable", {
     defaultValue: true,
     allowNull: true,
   },
-  
-  userTypeId:{
+
+  userTypeId: {
     type: DataTypes.INTEGER,
     defaultValue: false,
     allowNull: true,
-  }, 
+  },
   pwdverify: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: true,
   },
-  
-  divisionId:{
+
+  divisionId: {
     type: DataTypes.INTEGER,
-    
+
     allowNull: true,
   },
-    roleId:{
-      type: DataTypes.INTEGER,
-    
-      allowNull: true,
-    },
-    
-    kycId:{
-      type: DataTypes.INTEGER,
-     
-      allowNull: true,
-    },
-    bankId:{
-      type: DataTypes.INTEGER,
-      
-      allowNull: true,
-    },
-    under: {
-      type: DataTypes.INTEGER,
-     
-      allowNull: true,
-    },
-    
-    companyname: {
-      type: DataTypes.STRING,
-      
-      allowNull: true,
-    },
-    otp:{
-      type: DataTypes.STRING,
-     
-      allowNull: true,
-    },
-    reqsitioncount:{
-      type: DataTypes.INTEGER,
-     
-      allowNull: true,
-    },
-    contractcount:{
-      type: DataTypes.INTEGER,
-      
-      allowNull: true,
-    }
+  roleId: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
+
+  kycId: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
+  bankId: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
+  under: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
+
+  companyname: {
+    type: DataTypes.STRING,
+
+    allowNull: true,
+  },
+  otp: {
+    type: DataTypes.STRING,
+
+    allowNull: true,
+  },
+  reqsitioncount: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
+  contractcount: {
+    type: DataTypes.INTEGER,
+
+    allowNull: true,
+  },
 });
 
 module.exports = userTable;
