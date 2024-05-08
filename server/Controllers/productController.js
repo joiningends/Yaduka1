@@ -78,6 +78,34 @@ const allProduct1 = async (req, res) => {
 const createProduct = async (req, res) => {
   const {
     commodityId,
+    varientId,
+    qualityId,
+    sizeId,
+    packagingType,
+    packSize,
+    quantifiedBy,
+    unitId,
+    length,
+    height,
+    width,
+    newUnit,
+  } = req.body;
+
+  packSize,
+    varientId,
+    qualityId,
+    sizeId,
+    unitId,
+    commodityId,
+    quantifiedBy,
+    newUnit,
+    length,
+    height,
+    width,
+    console.log(req.body.unitId);
+  console.log(req.body.newUnit);
+  console.log(
+    commodityId,
     variantId,
     qualityId,
     sizeId,
@@ -87,23 +115,8 @@ const createProduct = async (req, res) => {
     unit,
     length,
     height,
-    width,
-  } = req.body;
-  console.log(req.body.unitId);
-  console.log(req.body.newUnit);
-  console.log(
-      commodityId,
-      variantId,
-      qualityId,
-      sizeId,
-      packagingType,
-      packSize,
-      quantifiedBy,
-      unit,
-      length,
-      height,
-      width,
-    )
+    width
+  );
 
   try {
     let image = null;
@@ -116,13 +129,14 @@ const createProduct = async (req, res) => {
     // Create the product with the received data
     const newProduct = await Product.create({
       commodityId,
-      variantId,
+      varientId,
       qualityId,
       sizeId,
       packagingType,
       packSize,
       quantifiedBy,
-      unit,
+      unitId,
+      newUnit,
       length,
       height,
       width,
