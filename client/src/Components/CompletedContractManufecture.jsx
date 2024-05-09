@@ -32,10 +32,12 @@ function CompletedContractManufecture() {
   useEffect(() => {
     setLoading(true);
     console.log(
-      `http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`
+      `https://www.keepitcool.app/api/v1/contracts/manufactures/closed/${userId}`
     );
     axios
-      .get(`http://3.6.248.144/api/v1/contracts/manufactures/closed/${userId}`)
+      .get(
+        `https://www.keepitcool.app/api/v1/contracts/manufactures/closed/${userId}`
+      )
       .then(response => {
         setContracts(response.data);
         setLoading(false);

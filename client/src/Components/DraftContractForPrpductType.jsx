@@ -31,12 +31,12 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
+          `https://www.keepitcool.app/api/v1/contracts/${userId}/draft/${id}`
         );
         setContractData(response.data);
         setLocation(response.data.location.id);
         const productResponse = await axios.get(
-          "http://3.6.248.144/api/v1/product/all"
+          "https://www.keepitcool.app/api/v1/product/all"
         );
         setProductOptions(productResponse.data);
       } catch (error) {
@@ -51,7 +51,7 @@ function DraftContractForProductType() {
     const fetchData = async () => {
       try {
         const spaceResponse = await axios.get(
-          `http://3.6.248.144/api/v1/location/space/${location}`
+          `https://www.keepitcool.app/api/v1/location/space/${location}`
         );
         setSpaceOptions(spaceResponse.data);
       } catch (error) {
@@ -146,7 +146,7 @@ function DraftContractForProductType() {
     try {
       console.log(transformedData);
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}/product`,
+        `https://www.keepitcool.app/api/v1/contracts/draft/${id}/${userId}/product`,
         transformedData
       );
 

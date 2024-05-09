@@ -65,7 +65,7 @@ const SetPasswordPage = () => {
 
     try {
       const response = await fetch(
-        `http://3.6.248.144/api/v1/users/${id}/password`,
+        `https://www.keepitcool.app/api/v1/users/${id}/password`,
         {
           method: "PUT",
           headers: {

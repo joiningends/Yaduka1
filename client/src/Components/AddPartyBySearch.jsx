@@ -25,7 +25,7 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/users/getbyid/${userId}`
+          `https://www.keepitcool.app/api/v1/users/getbyid/${userId}`
         );
         setTypeId(response.data.userTypeId);
       } catch (error) {
@@ -41,7 +41,7 @@ function AddParty() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/users/party/${phoneNumber}`
+          `https://www.keepitcool.app/api/v1/users/party/${phoneNumber}`
         );
         const { record } = response.data;
         console.log(response.data);
@@ -111,7 +111,7 @@ function AddParty() {
       console.log(postData);
 
       await axios.post(
-        `http://3.6.248.144/api/v1/users/${userTypeId}/${userId}/party`,
+        `https://www.keepitcool.app/api/v1/users/${userTypeId}/${userId}/party`,
         postData
       );
 

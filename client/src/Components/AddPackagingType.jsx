@@ -24,7 +24,7 @@ function AddPackagingType() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://3.6.248.144/api/v1/unit/create",
+        "https://www.keepitcool.app/api/v1/unit/create",
         {
           unit: values.packagingType,
         }

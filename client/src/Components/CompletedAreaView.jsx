@@ -10,7 +10,7 @@ function CompletedAreaView() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/closed/Area/${id}`
+          `https://www.keepitcool.app/api/v1/contracts/closed/Area/${id}`
         );
         console.log(response.data);
         setCompletedContractData(response.data);

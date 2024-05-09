@@ -31,7 +31,7 @@ const Employee = () => {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/users/${userId}`
+        `https://www.keepitcool.app/api/v1/users/${userId}`
       );
       // Sort the response data based on createdAt time in descending order
       const sortedData = response.data.sort(
@@ -70,7 +70,7 @@ const Employee = () => {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://3.6.248.144/api/v1/users/${id}`);
+      await axios.delete(`https://www.keepitcool.app/api/v1/users/${id}`);
       setIsDeleted(true); // Trigger reload and show success message
     } catch (error) {
       console.error("Error deleting user:", error);

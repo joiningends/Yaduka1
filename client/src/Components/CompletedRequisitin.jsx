@@ -34,7 +34,7 @@ function CompletedRequisition() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/completed/${userId}`
+          `https://www.keepitcool.app/api/v1/ref/completed/${userId}`
         );
         const sortedData = response.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -57,7 +57,7 @@ function CompletedRequisition() {
     setOpenDialog(true);
 
     axios
-      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .get(`https://www.keepitcool.app/api/v1/ref/getById/${item.id}`)
       .then(response => {
         setDetailsData(response.data);
       })

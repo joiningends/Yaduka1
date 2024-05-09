@@ -23,7 +23,7 @@ function ViewCompletedMaterialMovement() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/getById/${id}`
+          `https://www.keepitcool.app/api/v1/ref/getById/${id}`
         );
         setRequisitionData(response.data);
       } catch (error) {

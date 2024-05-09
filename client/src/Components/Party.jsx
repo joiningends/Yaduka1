@@ -34,7 +34,7 @@ function Party() {
   useEffect(() => {
     const userId = localStorage.getItem("id");
     axios
-      .get(`http://3.6.248.144/api/v1/users/getparty/${userId}`)
+      .get(`https://www.keepitcool.app/api/v1/users/getparty/${userId}`)
       .then(response => {
         // Sort the data based on createdAt time, newest to oldest
         const sortedData = response.data.sort(
@@ -96,7 +96,7 @@ function Party() {
     console.log(`Deleting party with ID: ${id}`);
 
     axios
-      .delete(`http://3.6.248.144/api/v1/users/${id}`)
+      .delete(`https://www.keepitcool.app/api/v1/users/${id}`)
       .then(response => {
         console.log("Party deleted successfully:", response.data);
 
@@ -119,7 +119,7 @@ function Party() {
 
   const handleSearchClick = () => {
     axios
-      .get(`http://3.6.248.144/api/v1/users/party/${phoneNumberInput}`)
+      .get(`https://www.keepitcool.app/api/v1/users/party/${phoneNumberInput}`)
       .then(response => {
         console.log(response);
         if (response.data.record !== null && response.data) {

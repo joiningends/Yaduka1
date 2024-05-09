@@ -46,7 +46,7 @@ function AddProduct() {
     const fetchCommodities = async () => {
       try {
         const response = await axios.get(
-          "http://3.6.248.144/api/v1/commodity/all"
+          "https://www.keepitcool.app/api/v1/commodity/all"
         );
         setCommodities(response.data);
       } catch (error) {
@@ -56,7 +56,9 @@ function AddProduct() {
 
     const fetchPackagingTypes = async () => {
       try {
-        const response = await axios.get("http://3.6.248.144/api/v1/unit/all");
+        const response = await axios.get(
+          "https://www.keepitcool.app/api/v1/unit/all"
+        );
         setPackagingTypes(response.data);
       } catch (error) {
         console.error("Error fetching packaging types:", error);
@@ -71,7 +73,7 @@ function AddProduct() {
     if (commodityId) {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/varient/commodity/${commodityId}`
+          `https://www.keepitcool.app/api/v1/varient/commodity/${commodityId}`
         );
         setVariants(response.data);
       } catch (error) {
@@ -87,7 +89,7 @@ function AddProduct() {
     if (variantId) {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/quality/all`
+          `https://www.keepitcool.app/api/v1/quality/all`
         );
         setQualities(response.data);
       } catch (error) {
@@ -96,7 +98,7 @@ function AddProduct() {
 
       try {
         const sizeResponse = await axios.get(
-          `http://3.6.248.144/api/v1/size/all`
+          `https://www.keepitcool.app/api/v1/size/all`
         );
         setSizes(sizeResponse.data);
       } catch (error) {
@@ -152,7 +154,7 @@ function AddProduct() {
       }
 
       const response = await axios.post(
-        "http://3.6.248.144/api/v1/product/create",
+        "https://www.keepitcool.app/api/v1/product/create",
         formData
       );
 

@@ -31,7 +31,7 @@ const Variant = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://3.6.248.144/api/v1/varient/all")
+      .get("https://www.keepitcool.app/api/v1/varient/all")
       .then(response => {
         // Sort the data based on createdAt time, newest to oldest
         const sortedData = response.data.sort(
@@ -64,7 +64,7 @@ const Variant = () => {
   const handleDelete = id => {
     setLoading(true);
     axios
-      .delete(`http://3.6.248.144/api/v1/varient/delete/${id}`)
+      .delete(`https://www.keepitcool.app/api/v1/varient/delete/${id}`)
       .then(response => {
         console.log(`Variant with ID ${id} deleted successfully`);
         toast.success("Variant deleted successfully!");

@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import cloudImage from "./cloudLogo.svg";
-import leftImage from "./Assets/draw2Image.svg";
+import yadukaLogo from "./Assets/yadukaLogoImage.png";
+import leftImage from "./Assets/18760.jpg";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ function Password() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://3.6.248.144/api/v1/users/${number}/getf/by/id/user`
+          `https://www.keepitcool.app/api/v1/users/${number}/getf/by/id/user`
         );
 
         if (response.ok) {
@@ -56,7 +56,7 @@ function Password() {
       };
 
       const response = await axios.post(
-        "http://3.6.248.144/api/v1/users/login/for/all",
+        "https://www.keepitcool.app/api/v1/users/login/for/all",
         requestBody,
         {
           headers: {
@@ -135,7 +135,10 @@ function Password() {
               <div className="text-center">
                 <img
                   src={leftImage}
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    mixBlendMode: "multiply", // applying mix-blend-mode directly in the style attribute
+                  }}
                   alt="Left Image"
                 />
               </div>
@@ -146,7 +149,7 @@ function Password() {
             <div className="d-flex flex-column ms-5">
               <div className="text-center">
                 <img
-                  src={cloudImage}
+                  src={yadukaLogo}
                   style={{ width: "185px" }}
                   alt="Cloud Logo"
                 />

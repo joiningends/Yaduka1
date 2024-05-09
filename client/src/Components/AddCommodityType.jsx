@@ -18,7 +18,7 @@ function AddCommodityType() {
       setLoading(true);
 
       const response = await fetch(
-        "http://3.6.248.144/api/v1/commodityType/create",
+        "https://www.keepitcool.app/api/v1/commodityType/create",
         {
           method: "POST",
           headers: {

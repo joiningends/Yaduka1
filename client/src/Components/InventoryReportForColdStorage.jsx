@@ -49,7 +49,11 @@ function InventoryReportForColdStorage() {
   // Fetch locations function
   const fetchLocations = () => {
     axios
-      .get(`http://3.6.248.144/api/v1/location/${localStorage.getItem("id")}`)
+      .get(
+        `https://www.keepitcool.app/api/v1/location/${localStorage.getItem(
+          "id"
+        )}`
+      )
       .then(response => {
         const locations = response.data.map(location => ({
           value: location.id,
@@ -92,7 +96,7 @@ function InventoryReportForColdStorage() {
     setIsLoading(true);
     axios
       .get(
-        `http://3.6.248.144/api/v1/contracts/manufacture/id/${localStorage.getItem(
+        `https://www.keepitcool.app/api/v1/contracts/manufacture/id/${localStorage.getItem(
           "id"
         )}/${locationId}`
       )
@@ -134,7 +138,7 @@ function InventoryReportForColdStorage() {
 
     axios
       .post(
-        `http://3.6.248.144/api/v1/contracts/material/${localStorage.getItem(
+        `https://www.keepitcool.app/api/v1/contracts/material/${localStorage.getItem(
           "id"
         )}/${selectedLocation.value}`,
         requestData
@@ -169,12 +173,12 @@ function InventoryReportForColdStorage() {
     };
     try {
       const response = await axios.get(
-        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+        `https://www.keepitcool.app/api/v1/contracts/tabledata/inventory/pop/${
           product.Productid
         }/${localStorage.getItem("id")}/${selectedLocation.value}/${partyId}`
       );
       console.log(
-        `http://3.6.248.144/api/v1/contracts/tabledata/inventory/pop/${
+        `https://www.keepitcool.app/api/v1/contracts/tabledata/inventory/pop/${
           product.productName
         }/${localStorage.getItem("id")}/${selectedLocation.value}/${partyId}`
       );

@@ -19,7 +19,7 @@ function CompletedRequisitionDetails() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/ref/tabledata/${id}`
+          `https://www.keepitcool.app/api/v1/ref/tabledata/${id}`
         );
         console.log(response.data);
         setData(response.data);

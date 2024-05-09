@@ -26,7 +26,7 @@ function InvoiceNew() {
   const fetchPartyOptions = async () => {
     try {
       const response = await fetch(
-        `http://3.6.248.144/api/v1/users/invoice/${userId}`
+        `https://www.keepitcool.app/api/v1/users/invoice/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +45,7 @@ function InvoiceNew() {
   const fetchStorageLocationOptions = async partyId => {
     try {
       const response = await fetch(
-        `http://3.6.248.144/api/v1/contracts/invoice/${partyId}/${userId}`
+        `https://www.keepitcool.app/api/v1/contracts/invoice/${partyId}/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -64,7 +64,7 @@ function InvoiceNew() {
   const fetchContractOptions = async (partyId, storageId) => {
     try {
       const response = await fetch(
-        `http://3.6.248.144/api/v1/contracts/invoice/storags/${partyId}/${storageId}`
+        `https://www.keepitcool.app/api/v1/contracts/invoice/storags/${partyId}/${storageId}`
       );
 
       if (response.ok) {
@@ -89,7 +89,7 @@ function InvoiceNew() {
   const fetchInvoiceDetails = async contractId => {
     try {
       const response = await fetch(
-        `http://3.6.248.144/api/v1/contracts/invoices/all/${contractId}`
+        `https://www.keepitcool.app/api/v1/contracts/invoices/all/${contractId}`
       );
 
       if (response.ok) {
@@ -139,8 +139,8 @@ function InvoiceNew() {
 
   const handleViewClick = async invoiceName => {
     try {
-      const pdfUrl = `http://3.6.248.144/api/v1/contracts/view/${invoiceName}.pdf`;
-      const inUrl = `http://3.6.248.144/api/v1/contracts/in/${invoiceName}.pdf`;
+      const pdfUrl = `https://www.keepitcool.app/api/v1/contracts/view/${invoiceName}.pdf`;
+      const inUrl = `https://www.keepitcool.app/api/v1/contracts/in/${invoiceName}.pdf`;
 
       const openInNewTab = url => {
         if (typeof window !== "undefined") {

@@ -32,7 +32,7 @@ function Ongoing() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://3.6.248.144/api/v1/contracts/${userId}/ongoinf`)
+      .get(`https://www.keepitcool.app/api/v1/contracts/${userId}/ongoinf`)
       .then(response => {
         // Sort the data based on createdAt time
         const sortedContracts = response.data.sort(

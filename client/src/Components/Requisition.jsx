@@ -38,9 +38,11 @@ function Requisition() {
       return;
     }
 
-    console.log(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`);
+    console.log(
+      `https://www.keepitcool.app/api/v1/ref/getByPartyId/${partyId}`
+    );
     axios
-      .get(`http://3.6.248.144/api/v1/ref/getByPartyId/${partyId}`)
+      .get(`https://www.keepitcool.app/api/v1/ref/getByPartyId/${partyId}`)
       .then(response => {
         // Sort the data based on createdAt field in descending order
         const sortedData = response.data.sort(
@@ -65,10 +67,10 @@ function Requisition() {
   const handleView = item => {
     setSelectedItem(item);
     setOpenDialog(true);
-    console.log(`http://3.6.248.144/api/v1/ref/getById/${item.id}`);
+    console.log(`https://www.keepitcool.app/api/v1/ref/getById/${item.id}`);
 
     axios
-      .get(`http://3.6.248.144/api/v1/ref/getById/${item.id}`)
+      .get(`https://www.keepitcool.app/api/v1/ref/getById/${item.id}`)
       .then(response => {
         setDetailsData(response.data);
       })

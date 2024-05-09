@@ -26,7 +26,7 @@ const Commodity = () => {
 
   useEffect(() => {
     axios
-      .get("http://3.6.248.144/api/v1/commodity/all")
+      .get("https://www.keepitcool.app/api/v1/commodity/all")
       .then(response => {
         // Sort the data based on createdAt time
         const sortedData = response.data.sort(
@@ -61,7 +61,7 @@ const Commodity = () => {
 
   const handleDelete = id => {
     axios
-      .delete(`http://3.6.248.144/api/v1/commodity/delete/${id}`)
+      .delete(`https://www.keepitcool.app/api/v1/commodity/delete/${id}`)
       .then(response => {
         toast.success("Commodity deleted successfully");
         setTimeout(() => {

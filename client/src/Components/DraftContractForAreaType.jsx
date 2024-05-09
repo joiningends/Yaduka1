@@ -23,7 +23,7 @@ function DraftContractForAreaType() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/contracts/${userId}/draft/${id}`
+          `https://www.keepitcool.app/api/v1/contracts/${userId}/draft/${id}`
         );
         setDraftContract(response.data);
         setStorageId(response.data.storageId);
@@ -41,7 +41,7 @@ function DraftContractForAreaType() {
     const fetchStorageSpaces = async () => {
       try {
         const response = await axios.get(
-          `http://3.6.248.144/api/v1/location/space/${storageId}`
+          `https://www.keepitcool.app/api/v1/location/space/${storageId}`
         );
         setStorageSpaces(response.data);
       } catch (error) {
@@ -90,7 +90,7 @@ function DraftContractForAreaType() {
       };
 
       const response = await axios.put(
-        `http://3.6.248.144/api/v1/contracts/draft/${id}/${userId}`,
+        `https://www.keepitcool.app/api/v1/contracts/draft/${id}/${userId}`,
         dataToSend
       );
 

@@ -19,7 +19,7 @@ function AddSize() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://3.6.248.144/api/v1/size/create",
+        "https://www.keepitcool.app/api/v1/size/create",
         {
           size: values.size,
           varientId: values.variant,
@@ -47,7 +47,7 @@ function AddSize() {
 
   useEffect(() => {
     axios
-      .get("http://3.6.248.144/api/v1/varient/all")
+      .get("https://www.keepitcool.app/api/v1/varient/all")
       .then(response => {
         setVariants(response.data);
       })

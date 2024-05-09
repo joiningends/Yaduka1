@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import cloudImage from "./cloudLogo.svg";
-import leftImage from "./Assets/draw2Image.svg";
+import leftImage from "./Assets/18760.jpg";
 import yadukaLogo from "./Assets/yadukaLogoImage.png";
 
 function Login() {
@@ -15,7 +15,7 @@ function Login() {
     try {
       const mobileNumber = Number(phoneNumber);
       const response = await fetch(
-        "http://3.6.248.144/api/v1/users/login/for/all/send",
+        "https://www.keepitcool.app/api/v1/users/login/for/all/send",
         {
           method: "POST",
           headers: {
@@ -73,7 +73,10 @@ function Login() {
               <div className="text-center">
                 <img
                   src={leftImage}
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    mixBlendMode: "multiply", // applying mix-blend-mode directly in the style attribute
+                  }}
                   alt="Left Image"
                 />
               </div>
