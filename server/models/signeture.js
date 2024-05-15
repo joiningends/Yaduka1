@@ -1,15 +1,17 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../util/database");
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const Signature = sequelize.define("Signature", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  image: {
-    type: DataTypes.STRING, // Assuming you'll store the image as a URL or file path
-    allowNull: false,
-  }
+const signatureSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String, // Assuming you'll store the image as a URL or file path
+        required: true
+    }
 });
+
+const Signature = mongoose.model('Signature', signatureSchema);
 
 module.exports = Signature;

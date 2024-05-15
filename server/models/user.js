@@ -1,120 +1,152 @@
-const { DataTypes, Sequelize } = require("sequelize");
-const sequelize = require("../util/database");
-const userTable = sequelize.define("userTable", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
-  uid: {
-    type: DataTypes.STRING,
+const mongoose = require("mongoose");
 
-    allowNull: true,
-  },
+const userSchema = new mongoose.Schema({
   name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
   },
-  mobileNumber: {
-    type: DataTypes.BIGINT,
-    primaryKey: true,
-    allowNull: false,
+
+  age: {
+    type: Number,
+  },
+  mobile: {
+    type: Number,
+    unique: true,
+  },
+  gender: {
+    type: String,
   },
   email: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  passwords: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  address: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  picture: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: true,
-  },
-  terminate: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: true,
-  },
-  isActive: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-    allowNull: true,
+    type: String,
+    required: true,
+    unique: true,
   },
 
-  userTypeId: {
-    type: DataTypes.INTEGER,
-    defaultValue: false,
-    allowNull: true,
-  },
-  pwdverify: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-    allowNull: true,
+  passwordHash: {
+    type: String,
   },
 
-  divisionId: {
-    type: DataTypes.INTEGER,
-
-    allowNull: true,
-  },
-  roleId: {
-    type: DataTypes.INTEGER,
-
-    allowNull: true,
+  host: {
+    type: Number,
   },
 
-  kycId: {
-    type: DataTypes.INTEGER,
-
-    allowNull: true,
+  registeredAt: {
+    type: Date,
+    default: Date.now,
   },
-  bankId: {
-    type: DataTypes.INTEGER,
-
-    allowNull: true,
+  lastlogin: {
+    type: Date,
+    default: Date.now,
   },
-  under: {
-    type: DataTypes.INTEGER,
+  intro: {
+    type: String,
+  },
+  profile: {
+    type: String,
+  },
+  assessmentScore: {
+    type: Number,
+  },
+  therapist: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Therapist",
+  },
+  socioeconomic: {
+    type: mongoose.Schema.Types.Mixed,
+  },
+  chief: [
+    {
+      type: mongoose.Schema.Types.Mixed,
+    },
+  ],
 
-    allowNull: true,
+  illness: [
+    {
+      type: mongoose.Schema.Types.Mixed,
+    },
+  ],
+  casesummery: {
+    type: String,
   },
 
-  companyname: {
-    type: DataTypes.STRING,
-
-    allowNull: true,
+  Sessionnumber: {
+    type: Number,
   },
-  otp: {
-    type: DataTypes.STRING,
 
-    allowNull: true,
+  date: {
+    type: Date,
+    default: Date.now,
   },
-  reqsitioncount: {
-    type: DataTypes.INTEGER,
+  time: {
+    type: String,
 
-    allowNull: true,
+    default: () =>
+      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   },
-  contractcount: {
-    type: DataTypes.INTEGER,
 
-    allowNull: true,
+  credits: {
+    type: Number,
+    default: 0,
+  },
+
+  groupid: {
+    type: String,
+  },
+  empid: {
+    type: String,
+  },
+  types: {
+    type: String,
+  },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
+  firstsession: {
+    type: String,
+    default: "pending",
+  },
+  desises: {
+    type: String,
+  },
+  mediceneyoutake: {
+    type: String,
+  },
+  priceHistory: [],
+  isVerified: {
+    type: Boolean,
+  },
+  verificationToken: {
+    type: String,
+  },
+  israting: {
+    type: Boolean,
+    default: false,
+  },
+  lasttherapist: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  lasttherapistname: {
+    type: String,
   },
 });
 
-module.exports = userTable;
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  // Check if the email is already used by a therapist
+  const therapistWithSameEmail = await mongoose.models.Therapist.findOne({
+    email: user.email,
+  });
+
+  if (therapistWithSameEmail) {
+    const error = new Error("Email must be unique across therapists and users");
+    return next(error);
+  }
+
+  // Continue with the save operation
+  next();
+});
+
+exports.User = mongoose.model("User", userSchema);

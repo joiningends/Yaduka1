@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: white;
+}
+
+
+.pages {
+  color: #316685;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+iframe#webpack-dev-server-client-overlay{display:none!important}
