@@ -1,31 +1,36 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controller/userController');
+const userController = require("../Controllers/usercontroller");
 
-router.get('/', userController.getUsers);
-router.get('/:id', userController.getUserById);
-router.get('/group/:groupid', userController.getUsersByGroup);
+//router.get('/', userController.getUsers);
 
+router.post("/:usertypeid/:admin", userController.createUser);
+router.post("/:usertypeid/:admin/party", userController.create);
+router.get("/:id", userController.getUsersUnderId);
+router.get("/:userId/allparty/forall", userController.getparty);
+router.post("/:usertypeid", userController.createColdstorageadmin);
+router.get("/employee/:id", userController.getemployeeby);
+router.put("/:id/update", userController.updateemployee);
+router.delete("/:id", userController.deleteEmployee);
+router.get("/party/:mobileNumber", userController.searchByMobileNumber);
+router.get("/", userController.getUsersByUserType);
+router.get("/all/:id", userController.getPartiesByUserIds);
+router.get("/all/party/all", userController.getAllPartiesAndUsers);
+router.post("/login/for/all", userController.loginUser);
 
-router.post('/register', userController. registernormalUser);
-router.get('/verify/:verificationToken', userController.verify);
+router.post("/login/for/all/send", userController.sendotp);
+router.post("/login/for/all/verify", userController.verifyOtp);
 
-router.put('/:id', userController.updateUser);
-router.post('/login', userController.loginUser);
+router.put("/:id/password", userController.setPassword);
+router.get("/:mobileNumber/getf/by/id/user", userController.getUserById);
 
-router.post('/register/:generatedGroupId', userController.registerUser);
+router.get("/getbyid/:id", userController.userById);
+router.get("/getparty/:id", userController.getUsersparty);
 
-router.delete('/:id', userController.deleteUser);
-router.get('/get/count', userController.getUserCount);
-router.put('/:id/sess', userController.updateUserByTherapist);
+router.get("/invoice/:id", userController.getUsersWithType4);
+router.get("/edit/:id", userController.getUserByIda);
 
-router.get('/status/:appointmentId', userController.updateStatusBasedOnData);
-router.get('/:id/ended/:appointmentId', userController.updateStatusBasedOnDataendthesession);
-router.put('/:id/types', userController.updateUserTypes);
-router.post('/forgot-password',userController.forgotPassword);
+router.get("/get/:id", userController.getUsersUnderIdmanufacture);
+router.get("/adminall/coldstorage", userController.allCloudStorageAdmin);
 
-router.post('/reset-password', userController.resetPassword);
-router.put('/:userId/profile', userController.updateUserProfile);
-router.delete('/', userController.deleteAllTherapists);
-router.delete('/:id/cancel', userController.updateUserIsRating);
 module.exports = router;
