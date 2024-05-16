@@ -73,7 +73,6 @@ function AddParty() {
       if (
         !trimmedFormData.name ||
         !trimmedFormData.phoneNumber ||
-        !trimmedFormData.email ||
         !trimmedFormData.companyName ||
         !trimmedFormData.companyAddress ||
         trimmedFormData.name === "" ||

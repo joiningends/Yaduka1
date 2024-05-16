@@ -76,7 +76,6 @@ function EditParty() {
       // Check if any required field is empty or contains only whitespace
       if (
         !trimmedFormData.name ||
-        !trimmedFormData.email ||
         !trimmedFormData.companyName ||
         !trimmedFormData.companyAddress ||
         trimmedFormData.name === "" ||

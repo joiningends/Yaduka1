@@ -61,6 +61,7 @@ import MaterialMovementColdPending from "../MaterialMovementColdPending";
 import MaterialMovementColdCompleted from "../MaterialMovementColdCompleted";
 import InvoiceDetails from "../InvoiceDetails";
 import ProductVariants from "../ProductVariants";
+import EditLocation from "../EditLocation";
 
 const ColdStorageEmployee = () => {
   return (
@@ -261,6 +262,7 @@ const ColdStorageEmployee = () => {
         <Route path="/Product/AddProduct" element={<AddProduct />} />
         <Route path="/Location" element={<Location />} />
         <Route path="/Location/AddLocation" element={<AddLocationn />} />
+        <Route path="/Location/EditLocation/:id" element={<EditLocation />} />
         <Route path="/Ongoing" element={<Ongoing />} />
         <Route
           path="/Ongoing/OngoingByProduct/:id"

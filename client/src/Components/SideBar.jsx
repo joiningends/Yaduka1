@@ -215,6 +215,11 @@ const SideBar = () => {
               },
             ],
           },
+          {
+            name: "Inventory Report",
+            icon: <FaFileInvoice />,
+            path: "/InventoryReport",
+          },
         ]);
         break;
       default:

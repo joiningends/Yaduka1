@@ -35,11 +35,9 @@ const EditEmployee = () => {
     // Check if any required field is empty or contains only whitespace
     if (
       !trimmedValues.name ||
-      !trimmedValues.email ||
       !trimmedValues.companyName ||
       !trimmedValues.companyAddress ||
       trimmedValues.name === "" ||
-      trimmedValues.email === "" ||
       trimmedValues.companyName === "" ||
       trimmedValues.companyAddress === ""
     ) {
@@ -167,14 +165,13 @@ const EditEmployee = () => {
                       <div className="row mb-3">
                         <div className="col-md-6">
                           <label htmlFor="email" className="form-label">
-                            Email <span className="text-danger">*</span>
+                            Email 
                           </label>
                           <Field
                             type="text"
                             className="form-control rounded-pill"
                             id="email"
                             name="email"
-                            required
                           />
                         </div>
                         <div className="col-md-6">

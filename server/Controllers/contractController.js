@@ -3253,7 +3253,7 @@ exports.getAllInvoicesByManufacture = async (req, res) => {
           include: [
             {
               model: userTable,
-              as: "partyus",
+              as: "underadmin",
               attributes: ["id", "companyname"], // Specify the attributes to retrieve
             },
           ],
