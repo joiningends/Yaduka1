@@ -49,7 +49,7 @@ function AddParty() {
   };
 
   const validateEmail = value => {
-    if (value === "")return;
+    if (value === "") return;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(value)
       ? undefined

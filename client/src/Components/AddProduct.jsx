@@ -223,11 +223,14 @@ function AddProduct() {
         quantifiedBy: values.quantifiedBy,
         newUnit: unitText,
         unitId: selectedPackagingType.id,
+        packagingType: selectedPackagingType.unit,
         // newUnit: values.unit,
         length: values.length != "" ? values.length : 0, // New field: Length
         width: values.width != "" ? values.width : 0, // New field: Width
         height: values.height != "" ? values.height : 0, // New field: Height
       };
+
+      // packagingType
 
       console.log(postData);
 

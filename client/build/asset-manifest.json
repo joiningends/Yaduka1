@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.9446ebcd.css",
-    "main.js": "/static/js/main.9bad4bee.js",
+    "main.js": "/static/js/main.756b01a3.js",
     "static/media/18760.jpg": "/static/media/18760.ce88008cc057dfac0cd1.jpg",
     "static/media/yadukaLogoImage.png": "/static/media/yadukaLogoImage.42b317bbd617e50d70e4.png",
     "static/media/cloudLogo.svg": "/static/media/cloudLogo.e40b35f86edab34c0e20a6fb76f6dac1.svg",
     "index.html": "/index.html",
     "main.9446ebcd.css.map": "/static/css/main.9446ebcd.css.map",
-    "main.9bad4bee.js.map": "/static/js/main.9bad4bee.js.map"
+    "main.756b01a3.js.map": "/static/js/main.756b01a3.js.map"
   },
   "entrypoints": [
     "static/css/main.9446ebcd.css",
-    "static/js/main.9bad4bee.js"
+    "static/js/main.756b01a3.js"
   ]
 }

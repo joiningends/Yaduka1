@@ -165,7 +165,7 @@ const EditEmployee = () => {
                       <div className="row mb-3">
                         <div className="col-md-6">
                           <label htmlFor="email" className="form-label">
-                            Email 
+                            Email
                           </label>
                           <Field
                             type="text"
