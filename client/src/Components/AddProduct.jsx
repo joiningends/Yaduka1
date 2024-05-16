@@ -35,7 +35,7 @@ function AddProduct() {
     id: "", // Initially empty
     unit: "", // Initially empty
   });
-  console.log();
+  console.log(qualities);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSize, setNewSize] = useState("");
@@ -217,7 +217,7 @@ function AddProduct() {
       const postData = {
         packSize: values.packSize,
         varientId: values.variant,
-        qualityId: values.quality,
+        qualityId: values.newQuality,
         sizeId: values.size,
         commodityId: values.commodity,
         quantifiedBy: values.quantifiedBy,
@@ -232,11 +232,11 @@ function AddProduct() {
 
       // packagingType
 
-      console.log(postData);
+      // console.log(postData);
 
       const formData = new FormData();
       formData.append("image", values.image);
-      console.log("Image:", values.image);
+      // console.log("Image:", values.image);
 
       // Append other form data to the formData object
       for (const key in postData) {
@@ -380,6 +380,7 @@ function AddProduct() {
                           </option>
                         ))}
                       </Field>
+
                       <button
                         type="button"
                         className="btn btn-primary rounded-pill"
