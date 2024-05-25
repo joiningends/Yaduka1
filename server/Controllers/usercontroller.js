@@ -261,49 +261,55 @@ exports.searchByMobileNumber = async (req, res) => {
 
   try {
     // Search in the "party" model by mobile number
-    const party = await Party.findOne({
+  
+
+    const userRecord = await userTable.findOne({
       where: {
         mobileNumber: mobileNumberToSearch,
+        userTypeId: 4,
       },
     });
-
-    let modifiedParty = null;
-
-    if (party) {
-      // Transform the party object
-      modifiedParty = {
-        id: party.id,
-        companyname: party.businessName,
-        brandMarka: party.brandMarka,
-        image: party.image,
-        notes: party.notes,
-        contactPerson: party.contactPerson,
-        mobileNumber: party.mobileNumber,
-        address: party.address,
-        slNo: party.slNo,
-        isBlacklist: party.isBlacklist,
-        isActive: party.isActive,
-        createdAt: party.createdAt,
-        updatedAt: party.updatedAt,
-        name: party.contactPerson, // Assuming you want 'name' to be the same as 'contactPerson'
-      };
-    }
-
-    if (party) {
-      // If a party with the specified mobile number is found
-      res.json({ record: modifiedParty, type: "party" });
-    } else {
-      // If no party with the specified mobile number is found, check in "userTable"
-      const userRecord = await userTable.findOne({
+    
+    
+    if (userRecord) {
+      // If a user with the specified mobile number and userTypeId 4 is found
+      res.json({ record: userRecord, type: "user" });
+    }else {
+      
+      const party = await Party.findOne({
         where: {
           mobileNumber: mobileNumberToSearch,
-          userTypeId: 4,
         },
       });
+  
+      let modifiedParty = null;
+  
+      if (party) {
+        // Transform the party object
+        modifiedParty = {
+          id: party.id,
+          companyname: party.businessName,
+          brandMarka: party.brandMarka,
+          image: party.image,
+          notes: party.notes,
+          contactPerson: party.contactPerson,
+          mobileNumber: party.mobileNumber,
+          address: party.address,
+          slNo: party.slNo,
+          isBlacklist: party.isBlacklist,
+          isActive: party.isActive,
+          createdAt: party.createdAt,
+          updatedAt: party.updatedAt,
+          name: party.contactPerson, // Assuming you want 'name' to be the same as 'contactPerson'
+        };
+      }
+      
+      
+      
 
-      if (userRecord) {
-        // If a user with the specified mobile number and userTypeId 4 is found
-        res.json({ record: userRecord, type: "user" });
+      if (party) {
+        // If a party with the specified mobile number is found
+        res.json({ record: modifiedParty, type: "party" });
       } else {
         // If no records are found
         res.json({ record: null, type: null });

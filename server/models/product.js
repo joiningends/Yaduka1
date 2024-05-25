@@ -9,7 +9,7 @@ const product = sequelize.define("product", {
     primaryKey: true,
   },
   packSize: {
-    type: Sequelize.STRING,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   length: {
