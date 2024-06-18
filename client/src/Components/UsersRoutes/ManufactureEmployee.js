@@ -32,7 +32,7 @@ import ProductVariant from "../ProductVariant";
 import InvoiceDetails from "../InvoiceDetails";
 import EditProductDetails from "../EditProductDetails";
 import EditRequisitionDetails from "../EditRequisitionDetails";
-
+import InventoryReport from "../InventoryReport";
 
 const ManufactureEmployee = () => {
   return (
@@ -119,6 +119,8 @@ const ManufactureEmployee = () => {
           path="/Requisition/EditRequisition/:id/:storageId"
           element={<EditRequisitionDetails />}
         />
+        <Route path="/InventoryReport" element={<InventoryReport />} />
+        <Route path="/Invoices/Invoice" element={<InvoiceForManufacture />} />
       </Routes>
     </div>
   );

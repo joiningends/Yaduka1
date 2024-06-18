@@ -14,6 +14,7 @@ function AddParty() {
     isTerminate: false,
   });
   const [userTypeId, setTypeId] = useState(null);
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
   const { partyId } = useParams();
@@ -43,9 +44,7 @@ function AddParty() {
 
   const validatePhoneNumber = value => {
     const phoneNumberPattern = /^\d{10}$/;
-    return phoneNumberPattern.test(value)
-      ? undefined
-      : "Please enter a valid 10-digit phone number.";
+    return phoneNumberPattern.test(value);
   };
 
   const validateEmail = value => {
@@ -68,7 +67,6 @@ function AddParty() {
         companyAddress: formData.companyAddress.trim(),
       };
 
-      console.log(trimmedFormData);
       // Check if any required field is empty or contains only whitespace
       if (
         !trimmedFormData.name ||
@@ -121,6 +119,7 @@ function AddParty() {
   const handlePhoneNumberChange = e => {
     const inputValue = e.target.value.replace(/\D/g, "");
     setFormData({ ...formData, phoneNumber: inputValue });
+    setIsPhoneNumberValid(validatePhoneNumber(inputValue));
   };
 
   const handleCancel = e => {
@@ -171,9 +170,11 @@ function AddParty() {
                       onChange={handlePhoneNumberChange}
                       required
                     />
-                    <div className="text-danger">
-                      {validatePhoneNumber(formData.phoneNumber)}
-                    </div>
+                    {!isPhoneNumberValid && (
+                      <div className="text-danger">
+                        Please enter a valid 10-digit phone number.
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
@@ -295,6 +296,7 @@ function AddParty() {
                         marginLeft: "10px",
                       }}
                       onClick={handleSubmit}
+                      disabled={!isPhoneNumberValid}
                     >
                       {partyId ? "Update" : "Add"}
                     </button>

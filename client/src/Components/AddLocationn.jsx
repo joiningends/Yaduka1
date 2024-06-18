@@ -400,8 +400,9 @@ function AddLocationn() {
                       marginLeft: "10px",
                     }}
                     disabled={
-                      spaceDetails.length === 0 &&
-                      initialValues.spaceDetails.length === 0
+                      loading ||
+                      (spaceDetails.length === 0 &&
+                        initialValues.spaceDetails.length === 0)
                     }
                   >
                     Submit

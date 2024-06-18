@@ -209,6 +209,7 @@ function AddProduct() {
 
   const handleSubmit = async values => {
     try {
+      setLoading(true);
       // Dynamically generate the Unit field based on selected values
       const unitText = `${values.packSize} ${values.quantifiedBy} ${selectedPackagingType.unit}`;
 
@@ -252,15 +253,14 @@ function AddProduct() {
       toast.success("Product Created Successfully ");
 
       // Set a timeout to navigate after showing the toast message
-      setTimeout(() => {
-        navigate("/Product");
-      }, 2000); // 2000 milliseconds (2 seconds)
-      console.log("Response:", response.data);
+      navigate("/Product");
     } catch (error) {
       // Handle any errors that occurred during the request
       toast.error("Error while creating product!");
 
       console.error("Error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -711,6 +711,7 @@ function AddProduct() {
                         background: "linear-gradient(263deg, #34b6df, #34d0be)",
                         marginLeft: "10px",
                       }}
+                      disabled={loading}
                     >
                       Submit
                     </button>

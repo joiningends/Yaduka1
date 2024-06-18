@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 function EditProductDetails() {
+  const [loading, setLoading] = useState(false);
   const { selectedAdminId, selectedLocationId } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentTablePage, setCurrentTablePage] = useState(1);
@@ -69,6 +70,8 @@ function EditProductDetails() {
     const currentDate = new Date().toISOString().split("T")[0];
     const underValues = selectedAdminId;
 
+    setLoading(true);
+
     // Read expected delivery date from local storage
     const expectedDelivery = localStorage.getItem("expectedDateOfDelivery");
 
@@ -99,9 +102,6 @@ function EditProductDetails() {
       storageId: selectedLocationId,
       requisitionDetails: filteredData,
     };
-
-    console.log(requestData);
-    console.log(`https://www.keepitcool.app/api/v1/ref/create/${partyId}`);
 
     try {
       // Send request to save data
@@ -257,7 +257,11 @@ function EditProductDetails() {
           >
             Cancel
           </button>
-          <button className="btn btn-primary" onClick={handleSave}>
+          <button
+            className="btn btn-primary"
+            onClick={handleSave}
+            disabled={loading}
+          >
             Update
           </button>
         </div>

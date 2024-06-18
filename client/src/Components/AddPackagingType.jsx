@@ -32,13 +32,11 @@ function AddPackagingType() {
 
       console.log("API Response:", response.data);
       toast.success("Packaging Type added successfully!");
-      setLoading(false);
-      setTimeout(() => {
-        navigate("/PackagingType");
-      }, 3000); // Redirect to '/packagingtype' after 3 seconds (adjust as needed)
+      navigate("/PackagingType");
     } catch (error) {
       console.error("Error adding packaging type:", error);
       toast.error("Failed to add Packaging Type");
+    } finally {
       setLoading(false);
     }
   };
@@ -97,6 +95,7 @@ function AddPackagingType() {
                             "linear-gradient(263deg, #34b6df, #34d0be)",
                           marginLeft: "10px",
                         }}
+                        disabled={loading} // Disable the button when loading
                       >
                         {loading ? (
                           <Spinner

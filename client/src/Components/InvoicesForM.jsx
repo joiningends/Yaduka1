@@ -76,11 +76,13 @@ function InvoicesForM() {
   };
 
   const currentInvoices = invoicesData
-    .filter(
-      invoice =>
-        invoice.name.toLowerCase().includes(search.toLowerCase()) ||
-        invoice.slno.toLowerCase().includes(search.toLowerCase())
-    )
+    .filter(invoice => {
+      const searchTerm = search.toLowerCase();
+      return (
+        invoice.name.toLowerCase().includes(searchTerm) ||
+        (invoice.inv && invoice.inv.slno.toLowerCase().includes(searchTerm))
+      );
+    })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
     .slice((page - 1) * rowsPerPage, page * rowsPerPage);
 

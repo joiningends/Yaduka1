@@ -29,15 +29,11 @@ function InvoicesForColdStorage() {
   useEffect(() => {
     const fetchInvoicesData = async () => {
       try {
-        console.log(
-          `https://www.keepitcool.app/api/v1/contracts/inv/cold/${userId}`
-        );
         const response = await axios.get(
           `https://www.keepitcool.app/api/v1/contracts/inv/cold/${userId}`
         );
         const invoices = response.data.invoices;
         setInvoicesData(invoices);
-        console.log(invoices);
       } catch (error) {
         console.error("Error fetching invoice data:", error);
       }
@@ -49,27 +45,18 @@ function InvoicesForColdStorage() {
   const handleViewClick = async invoiceName => {
     try {
       const pdfUrl = `https://www.keepitcool.app/api/v1/contracts/view/${invoiceName}.pdf`;
-
-      console.log(invoiceName);
       const openInNewTab = url => {
-        if (typeof window !== "undefined") {
-          const newWindow = window.open();
-          newWindow.location.href = url;
-        } else {
-          console.error("Window object is not defined.");
-          toast.error("Failed to open in a new tab.");
-        }
+        const newWindow = window.open();
+        newWindow.location.href = url;
       };
 
       const pdfResponse = await fetch(pdfUrl);
       if (pdfResponse.ok) {
         openInNewTab(pdfUrl);
       } else {
-        console.error("Error fetching PDF:", pdfResponse.statusText);
         toast.error("Failed to view PDF.");
       }
     } catch (error) {
-      console.error("Error viewing invoice:", error);
       toast.error("Failed to view invoice.");
     }
   };
@@ -82,9 +69,9 @@ function InvoicesForColdStorage() {
     .filter(
       invoice =>
         invoice.name.toLowerCase().includes(search.toLowerCase()) ||
-        invoice.slno.toLowerCase().includes(search.toLowerCase())
+        invoice.inv.slno.toLowerCase().includes(search.toLowerCase())
     )
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
   return (
