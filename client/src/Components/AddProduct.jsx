@@ -15,7 +15,7 @@ function AddProduct() {
     quality: "",
     packagingType: "",
     size: "",
-    quantifiedBy: "",
+    quantifiedBy: "kg",
     packSize: "",
     unit: "",
     length: "", // New field: Length

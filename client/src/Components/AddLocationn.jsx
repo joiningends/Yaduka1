@@ -104,6 +104,19 @@ function AddLocationn() {
 
   const handleAddSpaceDetails = async () => {
     if (
+      !(
+        currentSpaceDetail.space &&
+        currentSpaceDetail.spaceType &&
+        currentSpaceDetail.under &&
+        currentSpaceDetail.length &&
+        currentSpaceDetail.breadth &&
+        currentSpaceDetail.height &&
+        currentSpaceDetail.rentable
+      )
+    ) {
+      toast.error("Fill all of the fields");
+    }
+    if (
       currentSpaceDetail.space &&
       currentSpaceDetail.spaceType &&
       currentSpaceDetail.under &&

@@ -92,4 +92,5 @@ router.get("/test/the/url", contractController.test);
 router.get("/inv/:id", contractController.getAllInvoicesByManufacture);
 
 router.get("/inv/cold/:id", contractController.getAllInvoicesBycoldstorage);
+router.get("/trigger", contractController.trigger);
 module.exports = router;

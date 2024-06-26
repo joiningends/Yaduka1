@@ -47,6 +47,9 @@ function InvoiceForManufacture() {
 
   const fetchContractOptions = async storageId => {
     try {
+      console.log(
+        `https://www.keepitcool.app/api/v1/contracts/invoice/storags/${userId}/${storageId}`
+      );
       const response = await fetch(
         `https://www.keepitcool.app/api/v1/contracts/invoice/storags/${userId}/${storageId}`
       );

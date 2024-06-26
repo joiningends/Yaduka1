@@ -1546,9 +1546,20 @@ function generateInvoice(doc, tableData, invoiceDetails) {
   generateFooters(doc, tableData, invoiceDetails);
 }
 
+
 const Address = require("../models/address");
 const BankDetails = require("../models/bankdetails");
 const Signature = require("../models/signeture");
+
+
+
+
+
+
+
+
+
+
 
 const generatePDF = async (userId, existingContract, tableData) => {
   try {
@@ -1688,6 +1699,10 @@ const generatePDF = async (userId, existingContract, tableData) => {
     throw error;
   }
 };
+
+
+
+    
 const formatDate = dateString => {
   const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, "0");
@@ -1895,158 +1910,131 @@ const { Op } = require("sequelize");
 const varient = require("../models/varient");
 const Requisition = require("../models/requisition");
 
+
+async function generateInvoices() {
+  try {
+    const today = new Date();
+
+    const contracts = await Contract.findAll({
+      where: {
+        status: {
+          [Op.not]: 'Closed',
+          [Op.eq]: 'Ongoing',
+        },
+      },
+    });
+
+    await Promise.all(contracts.map(processContract));
+
+    console.log('Invoice generation completed.');
+  } catch (error) {
+    console.error('Error generating invoices:', error);
+  }
+}
+
+async function processContract(contract) {
+  try {
+    let { nextinvoicedate, renewaldays, storagetype, under: userId, id: contractId } = contract;
+
+    let nextInvoiceDate = new Date(nextinvoicedate);
+    const today = new Date();
+
+    if (nextInvoiceDate.toDateString() !== today.toDateString()) return;
+
+    let storages;
+    if (storagetype === 'Area') {
+      storages = await fetchAreaStorages(contractId);
+    } else {
+      storages = await fetchProductStorages(contractId);
+    }
+
+    const tableData = formatTableData(storages, storagetype);
+    const pdfFilePath = await generatePDF(userId, contractId, tableData);
+
+    // Update the next invoice date
+    const renewalDays = parseInt(renewaldays, 10);
+    nextInvoiceDate.setDate(today.getDate() + renewalDays);
+    contract.nextinvoicedate = nextInvoiceDate.toISOString();
+    await contract.save();
+  } catch (error) {
+    console.error(`Error processing contract ${contract.id}:`, error);
+  }
+}
+
+async function fetchAreaStorages(contractId) {
+  const contractSpaces = await ContractSpace.findAll({ where: { contractId } });
+  return Promise.all(
+    contractSpaces.map(async (space) => {
+      const storagespaces = await StoragespaceArea.findAll({
+        where: { contractspace: space.id },
+        include: [
+          { model: SpaceDetails, as: 'AreaSpaceDetails' },
+          { model: ContractSpace, as: 'contractspac' },
+        ],
+      });
+      return {
+        contractspac: storagespaces[0].contractspac,
+        AreaSpaceDetails: storagespaces.map((space) => space.AreaSpaceDetails),
+      };
+    })
+  );
+}
+
+async function fetchProductStorages(contractId) {
+  const contractProducts = await ContractProduct.findAll({ where: { contractId } });
+  return Promise.all(
+    contractProducts.map(async (product) => {
+      const storagespaces = await Storagespace.findAll({
+        where: { contractproduct: product.id },
+        include: [
+          { model: ContractProduct, as: 'contractp' },
+          { model: SpaceDetails, as: 'productSpaceDetails' },
+        ],
+      });
+      return {
+        contractp: storagespaces[0].contractp,
+        productSpaceDetails: storagespaces.map((space) => space.productSpaceDetails),
+      };
+    })
+  );
+}
+
+function formatTableData(storages, storagetype) {
+  return storages.map((storage) => ({
+    storagespace: Array.isArray(storage[storagetype === 'Area' ? 'AreaSpaceDetails' : 'productSpaceDetails'])
+      ? storage[storagetype === 'Area' ? 'AreaSpaceDetails' : 'productSpaceDetails']
+          .map((detail) => detail.space)
+          .join(', ')
+      : storage[storagetype === 'Area' ? 'AreaSpaceDetails' : 'productSpaceDetails'].space,
+    qty: storage.contractspac ? storage.contractspac.qty : storage.contractp.qty,
+    rate: storage.contractspac ? storage.contractspac.rate : storage.contractp.rate,
+    amount: storage.contractspac ? storage.contractspac.amount : storage.contractp.amount,
+  }));
+}
+
+
+
 cron.schedule(
   "0 0 * * *",
-  async () => {
-    try {
-      const today = new Date();
-
-      const contracts = await Contract.findAll({
-        where: {
-          status: {
-            [Op.not]: "Closed",
-            [Op.eq]: "Ongoing",
-          },
-        },
-      });
-
-      await Promise.all(
-        contracts.map(async contract => {
-          if (contract.storagetype === "Area") {
-            let { nextinvoicedate, renewaldays } = contract;
-
-            // Parse the nextinvoicedate string into a Date object
-            let nextInvoiceDate = new Date(nextinvoicedate);
-
-            if (nextInvoiceDate.toDateString() === today.toDateString()) {
-              const userId = contract.under;
-
-              const contractProducts = await ContractSpace.findAll({
-                where: { contractId: contract.id },
-              });
-
-              const storages = await Promise.all(
-                contractProducts.map(async store => {
-                  const storagespaces = await StoragespaceArea.findAll({
-                    where: { contractspace: store.id },
-                    include: [
-                      {
-                        model: SpaceDetails,
-                        as: "AreaSpaceDetails",
-                      },
-                      {
-                        model: ContractSpace,
-                        as: "contractspac",
-                      },
-                    ],
-                  });
-                  return {
-                    contractspac: storagespaces[0].contractspac,
-                    AreaSpaceDetails: storagespaces.map(
-                      space => space.AreaSpaceDetails
-                    ),
-                  };
-                })
-              );
-
-              const tableData = storages.map(product => ({
-                storagespace: Array.isArray(product.AreaSpaceDetails)
-                  ? product.AreaSpaceDetails.map(detail => detail.space).join(
-                      ", "
-                    )
-                  : product.AreaSpaceDetails.space,
-                qty: product.contractspac.qty,
-                rate: product.contractspac.rate,
-                amount: product.contractspac.amount,
-              }));
-
-              const pdfFilePath = await generatePDF(
-                userId,
-                contract.id,
-                tableData
-              );
-
-              const renewalDays = parseInt(contract.renewaldays, 10);
-              const contractStartDate = new Date(today);
-
-              const nextInvoiceDate = new Date(contractStartDate);
-              nextInvoiceDate.setDate(
-                contractStartDate.getDate() + renewalDays
-              );
-
-              (contract.nextinvoicedate = nextInvoiceDate.toISOString()),
-                console.log(nextInvoiceDate);
-              await contract.save();
-            }
-          } else {
-            const contractProducts = await ContractProduct.findAll({
-              where: { contractId: existingContract.id },
-            });
-
-            const storages = await Promise.all(
-              contractProducts.map(async store => {
-                const storagespaces = await Storagespace.findAll({
-                  where: { contractproduct: store.id },
-                  include: [
-                    {
-                      model: ContractProduct,
-                      as: "contractp",
-                    },
-                    {
-                      model: SpaceDetails,
-                      as: "productSpaceDetails",
-                    },
-                  ],
-                });
-                return {
-                  contractp: storagespaces[0].contractp,
-                  productSpaceDetails: storagespaces.map(
-                    space => space.productSpaceDetails
-                  ),
-                };
-              })
-            );
-
-            const tableData = storages.map(product => ({
-              storagespace: Array.isArray(product.productSpaceDetails)
-                ? product.productSpaceDetails
-                    .map(detail => detail.space)
-                    .join(", ")
-                : product.productSpaceDetails.space,
-              qty: product.contractp.qty,
-              rate: product.contractp.rate,
-              amount: product.contractp.amount,
-            }));
-
-            const pdfFilePath = await generatePDF(
-              under,
-              existingContract.id,
-              tableData
-            );
-
-            const renewalDays = parseInt(contract.renewaldays, 10);
-            const contractStartDate = new Date(today);
-
-            const nextInvoiceDate = new Date(contractStartDate);
-            nextInvoiceDate.setDate(contractStartDate.getDate() + renewalDays);
-
-            (contract.nextinvoicedate = nextInvoiceDate.toISOString()),
-              console.log(nextInvoiceDate);
-            await contract.save();
-          }
-        })
-      );
-
-      console.log("Invoice generation completed.");
-    } catch (error) {
-      console.error("Error generating invoices:", error);
-    }
-  },
+  generateInvoices,
   {
     scheduled: true,
     timezone: "Asia/Kolkata",
   }
 );
+
+
+exports.trigger = async (req, res) => {
+  try {
+    await generateInvoices();
+    res.send("Invoice generation triggered successfully.");
+  } catch (error) {
+    res.status(500).send("Error triggering invoice generation: " + error.message);
+  }
+};
+
+
+
 
 cron.schedule(
   "*/5 * * * *",

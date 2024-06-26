@@ -13,9 +13,9 @@ function AddContract() {
     storage: "",
     party: "",
     storageType: "",
-    renewalDays: "",
+    renewalDays: "1",
     contractStartDate: "",
-    gstApplicable: "",
+    gstApplicable: "No",
     gstRate: "",
     gstType: "",
   };
@@ -89,49 +89,54 @@ function AddContract() {
     setLoading(true);
 
     try {
-      let dataToSend = {
-        storageId: values.storage,
-        storagetype: values.storageType,
-        renewaldays: values.renewalDays,
-        contractstartdate: values.contractStartDate,
-        Gstapplicable: values.gstApplicable === "Yes",
-      };
-
-      if (values.gstApplicable === "Yes") {
-        dataToSend = {
-          ...dataToSend,
-          gstrate: values.gstRate,
-          gsttype: values.gstType,
-        };
-      }
-
-      const selectedPartyId = values.party;
-
-      const selectedParty = partyOptions.find(
-        party => party.id == selectedPartyId
-      );
-
-      if (selectedParty && selectedParty.userTypeId) {
-        dataToSend.partyId = selectedPartyId;
-        dataToSend.partyidinpartytable = null;
-      } else {
-        dataToSend.partyId = null;
-        dataToSend.partyidinpartytable = selectedPartyId;
-      }
-
-      console.log(dataToSend);
-
-      const response = await axios.post(
-        `https://www.keepitcool.app/api/v1/contracts/${userId}`,
-        dataToSend
-      );
-
-      if (response.status === 201) {
-        toast.success("Contract added successfully!");
+      if (values.renewalDays === "0") {
+        toast.error("The value for renewal days cannot be 0.");
         setLoading(false);
-        navigate("/Contract");
       } else {
-        throw new Error("Failed to add contract");
+        let dataToSend = {
+          storageId: values.storage,
+          storagetype: values.storageType,
+          renewaldays: values.renewalDays,
+          contractstartdate: values.contractStartDate,
+          Gstapplicable: values.gstApplicable === "Yes",
+        };
+
+        if (values.gstApplicable === "Yes") {
+          dataToSend = {
+            ...dataToSend,
+            gstrate: values.gstRate,
+            gsttype: values.gstType,
+          };
+        }
+
+        const selectedPartyId = values.party;
+
+        const selectedParty = partyOptions.find(
+          party => party.id == selectedPartyId
+        );
+
+        if (selectedParty && selectedParty.userTypeId) {
+          dataToSend.partyId = selectedPartyId;
+          dataToSend.partyidinpartytable = null;
+        } else {
+          dataToSend.partyId = null;
+          dataToSend.partyidinpartytable = selectedPartyId;
+        }
+
+        console.log(dataToSend);
+
+        const response = await axios.post(
+          `https://www.keepitcool.app/api/v1/contracts/${userId}`,
+          dataToSend
+        );
+
+        if (response.status === 201) {
+          toast.success("Contract added successfully!");
+          setLoading(false);
+          navigate("/Contract");
+        } else {
+          throw new Error("Failed to add contract");
+        }
       }
     } catch (error) {
       console.error("Error adding contract:", error);
